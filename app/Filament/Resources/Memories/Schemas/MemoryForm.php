@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Memories\Schemas;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Form;
+use Filament\Schemas\Components\Image;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -49,7 +50,12 @@ class MemoryForm
                                 TextInput::make('photo_url')
                                     ->label('Photo URL')
                                     ->disabled(),
-                            ])->collapsed(),
+                                Image::make(
+                                    url: fn ($get) => $get('photo_url'),
+                                    alt: 'Memory photo',
+                                )
+                                    ->imageHeight('12rem'),
+                            ]),
                     ]),
             ]);
     }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Memories\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -20,19 +21,24 @@ class MemoriesTable
                     ->sortable(),
                 TextColumn::make('contact')
                     ->label('Contact')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('story')
                     ->label('Story')
                     ->limit(50)
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('year')
                     ->label('Year')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('relation')
-                    ->label('Relation'),
-                TextColumn::make('photo_url')
+                    ->label('Relation')
+                    ->sortable(),
+                ImageColumn::make('photo_url')
                     ->label('Photo')
-                    ->limit(30),
+                    ->imageHeight(60)
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Submitted')
                     ->dateTime()
