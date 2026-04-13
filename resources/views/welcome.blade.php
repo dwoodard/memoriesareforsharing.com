@@ -11,8 +11,7 @@
 <meta property="og:description" content="Come Celebrate Mellody's Birthday - May 2nd, 5:30-9pm, DON'T SPOIL THE SURPRISE">
 
 <title>Celebrating Mellody's 75th Birthday</title>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -480,14 +479,6 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: none; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  // ── REPLACE THESE THREE VALUES AFTER SETTING UP EMAILJS ──
-  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // Account → General → Public Key
-  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // Email Services → your Gmail service
-  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // Email Templates → your template
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-</script>
 </head>
 <body>
 
@@ -835,16 +826,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     ta.setSelectionRange(ta.value.length, ta.value.length);
   }
 
-  // ── EMAILJS CONFIG — fill in your 3 values from emailjs.com ──────────────
-  // 1. Sign up at https://emailjs.com using your Gmail
-  // 2. Email Services → Add Service → Gmail → connect shalyce@gmail.com → copy Service ID
-  // 3. Email Templates → Create Template → copy Template ID
-  // 4. Account → General → Public Key → copy Public Key
-  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';    // e.g. 'abc123XYZ'
-  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';    // e.g. 'service_xxxxxxx'
-  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';   // e.g. 'template_xxxxxxx'
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-  // ─────────────────────────────────────────────────────────────────────────
+ 
 
   document.getElementById('memory-form').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -873,7 +855,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
       all.push(m);
       localStorage.setItem('mellody_memories', JSON.stringify(all));
 
-      // Send via EmailJS
+      // Send via LARAVEL DEFAULT MAILER USING THE .ENV
       const params = {
         from_name:   name,
         contact:     contact,
