@@ -1007,11 +1007,6 @@ document.getElementById('memory-form').addEventListener('submit', async function
   }
 
   const photoFile = document.getElementById('f-photo').files[0];
-  if (photoFile && photoFile.size > 15 * 1024 * 1024) {
-    errEl.textContent = 'Photo is too large — please choose an image under 15 MB.';
-    errEl.style.display = 'block';
-    return;
-  }
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
