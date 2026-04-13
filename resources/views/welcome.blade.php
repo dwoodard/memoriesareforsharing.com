@@ -1,3 +1,119 @@
+{{--
+  ════════════════════════════════════════════════════════════════════
+  BACKEND REQUIREMENTS — READ THIS BEFORE DEPLOYING
+  ════════════════════════════════════════════════════════════════════
+
+  ── ROUTES (routes/web.php) ─────────────────────────────────────────
+    Route::post('/upload-video',   [MemoryController::class, 'uploadVideo']);
+    Route::post('/submit-memory',  [MemoryController::class, 'store']);
+
+  ── DIGITAL OCEAN SPACES SETUP ──────────────────────────────────────
+  Install the AWS S3 SDK (DO Spaces uses the S3 API):
+    composer require league/flysystem-aws-s3-v3
+
+  Add to .env:
+    DO_SPACES_KEY=your_spaces_key
+    DO_SPACES_SECRET=your_spaces_secret
+    DO_SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com   # change region if needed
+    DO_SPACES_REGION=nyc3
+    DO_SPACES_BUCKET=your-bucket-name
+    DO_SPACES_CDN=https://your-bucket.nyc3.cdn.digitaloceanspaces.com
+
+  Add disk to config/filesystems.php under 'disks':
+    'spaces' => [
+        'driver'   => 's3',
+        'key'      => env('DO_SPACES_KEY'),
+        'secret'   => env('DO_SPACES_SECRET'),
+        'endpoint' => env('DO_SPACES_ENDPOINT'),
+        'region'   => env('DO_SPACES_REGION'),
+        'bucket'   => env('DO_SPACES_BUCKET'),
+        'url'      => env('DO_SPACES_CDN'),
+        'throw'    => false,
+    ],
+
+  ── EMAIL SETUP (Laravel Symfony SMTP) ─────────────────────────────
+  Add to .env:
+    MAIL_MAILER=smtp
+    MAIL_SCHEME=smtps          ← Laravel 13 uses MAIL_SCHEME, NOT MAIL_ENCRYPTION
+    MAIL_HOST=your.smtp.host
+    MAIL_PORT=465
+    MAIL_USERNAME=your@email.com
+    MAIL_PASSWORD=your_password
+    MAIL_FROM_ADDRESS=your@email.com
+    MAIL_FROM_NAME="Mellody's Birthday"
+
+  ── MemoryController (app/Http/Controllers/MemoryController.php) ────
+
+    public function uploadVideo(Request $request): JsonResponse
+    {
+        $request->validate([
+            'name'  => 'required|string|max:120',
+            'video' => 'required|file|mimes:mp4,mov,avi,webm,m4v,3gp|max:512000', // 500MB
+        ]);
+
+        $name     = Str::slug($request->input('name'));
+        $ext      = $request->file('video')->getClientOriginalExtension();
+        $filename = 'videos/' . $name . '_' . time() . '.' . strtolower($ext);
+
+        Storage::disk('spaces')->put($filename, file_get_contents($request->file('video')), 'public');
+
+        // Optionally save to DB:
+        // DB::table('video_submissions')->insert([
+        //     'name'       => $request->input('name'),
+        //     'filename'   => $filename,
+        //     'url'        => Storage::disk('spaces')->url($filename),
+        //     'created_at' => now(),
+        // ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $request->validate([
+            'name'     => 'required|string|max:120',
+            'contact'  => 'required|string|max:200',
+            'story'    => 'required|string|max:10000',
+            'year'     => 'nullable|string|max:20',
+            'relation' => 'nullable|string|max:60',
+            'photo'    => 'nullable|file|image|max:15360', // 15MB
+        ]);
+
+        $photoUrl = null;
+
+        if ($request->hasFile('photo')) {
+            $name      = Str::slug($request->input('name'));
+            $ext       = $request->file('photo')->getClientOriginalExtension();
+            $filename  = 'photos/' . $name . '_' . time() . '.' . strtolower($ext);
+            Storage::disk('spaces')->put($filename, file_get_contents($request->file('photo')), 'public');
+            $photoUrl  = Storage::disk('spaces')->url($filename);
+        }
+
+        // Save to DB (use your emails table or a memories table):
+        // DB::table('memories')->insert([...]);
+
+        // Send email — text only, no attachments
+        Mail::to(config('mail.from.address'))->send(new \App\Mail\MemorySubmitted([
+            'name'      => $request->input('name'),
+            'contact'   => $request->input('contact'),
+            'story'     => $request->input('story'),
+            'year'      => $request->input('year', 'Unknown'),
+            'relation'  => $request->input('relation', ''),
+            'photo_url' => $photoUrl, // included as a link in the email body, not an attachment
+        ]));
+
+        return response()->json(['success' => true]);
+    }
+
+  ── MemorySubmitted Mailable (app/Mail/MemorySubmitted.php) ─────────
+    php artisan make:mail MemorySubmitted
+
+    In the build/content method, use a simple blade view or:
+    ->subject('New Memory from ' . $this->data['name'])
+    ->html(view('emails.memory-submitted', $this->data)->render())
+
+  ════════════════════════════════════════════════════════════════════
+--}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -185,6 +301,136 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .prompt-card::before { content: '"'; position: absolute; top: -0.3rem; left: 0.8rem; font-size: 2.5rem; color: var(--gold-pale); font-family: 'Cormorant Garamond', serif; line-height: 1; }
 
 /* ══════════════════════════════════════
+   VIDEO SECTION
+══════════════════════════════════════ */
+.video-section {
+  position: relative;
+  background: linear-gradient(150deg, #1A0A14 0%, #2C0E1E 50%, #1A0A14 100%);
+  padding: 5rem 1.5rem; text-align: center; overflow: hidden;
+}
+.video-section::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,174,92,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 100% 100%, rgba(181,25,90,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+.video-section::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent); }
+
+.video-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(181,25,90,0.3); color: var(--fuchsia-light);
+  border: 1px solid rgba(181,25,90,0.4); padding: 0.4rem 1.2rem; border-radius: 1px;
+  font-size: 0.65rem; font-weight: 900; letter-spacing: 0.3rem; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.video-main-title {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
+  font-size: clamp(2.5rem, 6vw, 4.5rem); color: white; line-height: 1.05; margin-bottom: 0.75rem;
+}
+.video-main-title em { font-style: normal; color: var(--gold-pale); }
+.video-sub { font-size: 1rem; color: rgba(255,255,255,0.6); max-width: 560px; margin: 0 auto 3rem; line-height: 1.8; }
+
+.video-card {
+  max-width: 720px; margin: 0 auto; background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212,174,92,0.2); border-radius: 2px; padding: 3rem 2.5rem;
+  box-shadow: 0 8px 60px rgba(0,0,0,0.3); position: relative; z-index: 1;
+}
+@media (max-width: 600px) { .video-card { padding: 2rem 1.25rem; } }
+
+.video-icon-ring {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: rgba(181,25,90,0.2); border: 2px solid rgba(181,25,90,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; margin: 0 auto 1.5rem;
+  animation: pulse-ring 2.5s ease-in-out infinite;
+}
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(181,25,90,0.3); }
+  50%       { box-shadow: 0 0 0 16px rgba(181,25,90,0.0); }
+}
+
+.example-video-wrap { color: white; margin-bottom: 1.5rem; }
+.example-video-label { font-size: 0.7rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gold-light); font-weight: 700; margin-bottom: 1rem; }
+.phone-frame { display: inline-block; border-radius: 12px; overflow: hidden; border: 3px solid rgba(255,255,255,0.15); box-shadow: 0 8px 40px rgba(0,0,0,0.5); margin-bottom: 0.75rem; }
+.phone-frame video { display: block; height: 350px; max-width: 100%; background: #000; }
+.video-placeholder-inner { height: 350px; width: 196px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); }
+.vp-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4; }
+.vp-text { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+.example-video-caption { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.9rem; color: rgba(255,255,255,0.5); }
+
+.video-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+.video-step { text-align: center; }
+.video-step-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(212,174,92,0.15); border: 1px solid rgba(212,174,92,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold-light); margin: 0 auto 0.6rem;
+}
+.video-step-text { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
+.video-step-text strong { color: rgba(255,255,255,0.9); display: block; margin-bottom: 0.2rem; font-size: 0.9rem; }
+.video-divider { height: 1px; background: rgba(212,174,92,0.15); margin: 2rem 0; }
+
+/* ── VIDEO UPLOAD FORM ── */
+.video-upload-form { text-align: left; }
+.video-form-label {
+  display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2rem;
+  text-transform: uppercase; color: var(--gold-light); margin-bottom: 0.4rem;
+}
+.video-form-label span { color: var(--fuchsia-light); }
+.video-form-input {
+  width: 100%; padding: 0.85rem 1rem; border: 1px solid rgba(212,174,92,0.25); border-radius: 2px;
+  background: rgba(255,255,255,0.07); color: white; font-family: 'Lato', sans-serif; font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s; outline: none; margin-bottom: 1.25rem;
+}
+.video-form-input::placeholder { color: rgba(255,255,255,0.3); }
+.video-form-input:focus { border-color: var(--gold-light); box-shadow: 0 0 0 3px rgba(180,146,42,0.15); }
+
+.video-drop-area {
+  position: relative; border: 2px dashed rgba(212,174,92,0.35); border-radius: 2px;
+  padding: 2.25rem 1.5rem; text-align: center; cursor: pointer; margin-bottom: 1.25rem;
+  background: rgba(255,255,255,0.03); transition: border-color 0.2s, background 0.2s;
+}
+.video-drop-area:hover, .video-drop-area.has-file { border-color: rgba(212,174,92,0.7); background: rgba(255,255,255,0.06); }
+.video-drop-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
+.vda-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5; }
+.vda-text { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+.vda-text strong { color: rgba(255,255,255,0.85); display: block; font-size: 1rem; margin-bottom: 0.25rem; }
+.vda-filename { display: none; font-size: 0.85rem; color: var(--gold-light); margin-top: 0.5rem; font-style: italic; word-break: break-all; }
+
+.v-progress-wrap { margin: 0.5rem 0 1rem; display: none; }
+.v-progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.v-progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--fuchsia), var(--gold-light)); border-radius: 3px; transition: width 0.15s; }
+.v-progress-text { font-size: 0.75rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: 0.4rem; letter-spacing: 0.05rem; }
+
+.btn-upload-video {
+  width: 100%; padding: 1.15rem 2rem;
+  background: linear-gradient(135deg, var(--fuchsia), #D63478); color: white; border: none;
+  border-radius: 2px; font-family: 'Lato', sans-serif; font-size: 0.85rem; font-weight: 900;
+  letter-spacing: 0.25rem; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(181,25,90,0.5);
+}
+.btn-upload-video:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(181,25,90,0.65); }
+.btn-upload-video:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); cursor: not-allowed; transform: none; box-shadow: none; }
+
+.video-error {
+  display: none; margin-top: 0.75rem; padding: 0.75rem 1rem;
+  background: rgba(181,25,90,0.2); border: 1px solid rgba(181,25,90,0.45); border-radius: 2px;
+  color: var(--fuchsia-light); font-size: 0.85rem; text-align: center;
+}
+.video-success { display: none; text-align: center; padding: 2.5rem 1.5rem; }
+.video-success .vs-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+.video-success h3 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold-pale); font-style: italic; margin-bottom: 0.5rem; }
+.video-success p { color: rgba(255,255,255,0.55); font-size: 0.9rem; line-height: 1.7; }
+.btn-upload-another {
+  display: inline-block; margin-top: 1.5rem; padding: 0.75rem 2rem;
+  background: rgba(181,25,90,0.3); color: var(--fuchsia-light); border: 1px solid rgba(181,25,90,0.5);
+  font-size: 0.75rem; letter-spacing: 0.2rem; text-transform: uppercase; cursor: pointer; border-radius: 1px;
+  font-family: 'Lato', sans-serif; font-weight: 900; transition: all 0.2s;
+}
+.btn-upload-another:hover { background: var(--fuchsia); color: white; }
+
+/* ══════════════════════════════════════
    SHARE A MEMORY
 ══════════════════════════════════════ */
 .memory-hero-section {
@@ -305,88 +551,6 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 }
 .btn-another:hover { background: var(--fuchsia); }
 
-/* ══════════════════════════════════════
-   VIDEO SECTION
-══════════════════════════════════════ */
-.video-section {
-  position: relative;
-  background: linear-gradient(150deg, #1A0A14 0%, #2C0E1E 50%, #1A0A14 100%);
-  padding: 5rem 1.5rem; text-align: center; overflow: hidden;
-}
-.video-section::before {
-  content: ''; position: absolute; inset: 0;
-  background-image:
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,174,92,0.1) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 100% 100%, rgba(181,25,90,0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-.video-section::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent); }
-
-.video-badge {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  background: rgba(181,25,90,0.3); color: var(--fuchsia-light);
-  border: 1px solid rgba(181,25,90,0.4); padding: 0.4rem 1.2rem; border-radius: 1px;
-  font-size: 0.65rem; font-weight: 900; letter-spacing: 0.3rem; text-transform: uppercase;
-  margin-bottom: 1.5rem;
-}
-.video-main-title {
-  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
-  font-size: clamp(2.5rem, 6vw, 4.5rem); color: white; line-height: 1.05; margin-bottom: 0.75rem;
-}
-.video-main-title em { font-style: normal; color: var(--gold-pale); }
-.video-sub { font-size: 1rem; color: rgba(255,255,255,0.6); max-width: 560px; margin: 0 auto 3rem; line-height: 1.8; }
-
-.video-card {
-  max-width: 720px; margin: 0 auto; background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(212,174,92,0.2); border-radius: 2px; padding: 3rem 2.5rem;
-  box-shadow: 0 8px 60px rgba(0,0,0,0.3); position: relative; z-index: 1;
-}
-@media (max-width: 600px) { .video-card { padding: 2rem 1.25rem; } }
-
-.video-icon-ring {
-  width: 90px; height: 90px; border-radius: 50%;
-  background: rgba(181,25,90,0.2); border: 2px solid rgba(181,25,90,0.4);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2.5rem; margin: 0 auto 1.5rem;
-  animation: pulse-ring 2.5s ease-in-out infinite;
-}
-@keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(181,25,90,0.3); }
-  50%       { box-shadow: 0 0 0 16px rgba(181,25,90,0.0); }
-}
-
-.example-video-wrap { color: white; margin-bottom: 1.5rem; }
-.example-video-label { font-size: 0.7rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gold-light); font-weight: 700; margin-bottom: 1rem; }
-.phone-frame { display: inline-block; border-radius: 12px; overflow: hidden; border: 3px solid rgba(255,255,255,0.15); box-shadow: 0 8px 40px rgba(0,0,0,0.5); margin-bottom: 0.75rem; }
-.phone-frame video { display: block; height: 350px; max-width: 100%; background: #000; }
-.video-placeholder-inner { height: 350px; width: 196px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); }
-.vp-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4; }
-.vp-text { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
-.example-video-caption { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.9rem; color: rgba(255,255,255,0.5); }
-
-.video-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
-.video-step { text-align: center; }
-.video-step-num {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: rgba(212,174,92,0.15); border: 1px solid rgba(212,174,92,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold-light); margin: 0 auto 0.6rem;
-}
-.video-step-text { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
-.video-step-text strong { color: rgba(255,255,255,0.9); display: block; margin-bottom: 0.2rem; font-size: 0.9rem; }
-.video-divider { height: 1px; background: rgba(212,174,92,0.15); margin: 2rem 0; }
-
-.btn-email-video {
-  display: inline-flex; align-items: center; gap: 0.75rem;
-  background: linear-gradient(135deg, var(--fuchsia), #D63478); color: white;
-  padding: 1.15rem 3rem; border-radius: 2px; text-decoration: none;
-  font-size: 0.85rem; font-weight: 900; letter-spacing: 0.2rem; text-transform: uppercase;
-  transition: all 0.2s; box-shadow: 0 4px 20px rgba(181,25,90,0.5);
-}
-.btn-email-video:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(181,25,90,0.6); }
-.video-email-note { margin-top: 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.4); }
-.video-email-note strong { color: var(--gold-light); }
-
 /* ── MEMORIES WALL ── */
 .memories-section { background: var(--cream-dark); padding: 5rem 1.5rem; border-top: 2px solid var(--gold-pale); }
 .memories-inner { max-width: 920px; margin: 0 auto; }
@@ -447,11 +611,11 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     </div>
   </div>
   <div class="hero-cta-row" style="margin-top:10px;">
-    <a href="#share-memory" class="hero-cta-primary">
-      &#10022; &nbsp; Share a Memory
+    <a href="#record-video" class="hero-cta-primary">
+      &#9654; &nbsp; Send a Video
     </a>
-    <a href="#record-video" class="hero-cta-secondary">
-      &#9654; &nbsp; Record a Video
+    <a href="#share-memory" class="hero-cta-secondary">
+      &#10022; &nbsp; Share a Memory
     </a>
   </div>
 </section>
@@ -524,11 +688,120 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     </div>
   </div>
   <div class="reveal" style="text-align:center;margin-top:2.5rem;">
-    <a href="#share-memory" class="hero-cta-primary" style="text-decoration:none;">
-      &#10022; &nbsp; I&rsquo;m Ready &mdash; Share My Memory
+    <a href="#record-video" class="hero-cta-primary" style="text-decoration:none;margin-right:0.75rem;">
+      &#9654; &nbsp; Send a Video
+    </a>
+    <a href="#share-memory" class="hero-cta-secondary" style="text-decoration:none;">
+      &#10022; &nbsp; Share a Memory
     </a>
   </div>
 </div>
+
+<!-- ═══════════════════════════════
+   VIDEO SECTION  (above memory form)
+═══════════════════════════════ -->
+<section id="record-video" class="video-section">
+  <div style="position:relative;z-index:1;">
+    <div class="reveal">
+      <span class="video-badge">&#9654; &nbsp; Video Message &nbsp; &#9654;</span>
+      <h2 class="video-main-title">Record a Video<br><em>for Mellody</em></h2>
+      <p class="video-sub">
+        We&rsquo;ll be playing personal video messages at the party.
+        Imagine Mellody watching your face, hearing your voice, seeing your smile &mdash;
+        that&rsquo;s a gift that no printed word can replace.
+      </p>
+    </div>
+
+    <div class="video-card reveal">
+      <div class="video-icon-ring">&#127909;</div>
+
+      <div class="example-video-wrap">
+        <p class="example-video-label">&#9654; &nbsp; Watch an Example &nbsp; &#9654;</p>
+        <div class="phone-frame">
+          <video style="height: 350px;"
+            src="/Shelcee-Funny.MOV"
+            controls
+            playsinline
+            preload="metadata"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+          ></video>
+          <div class="video-placeholder-inner" style="display:none;">
+            <div class="vp-icon">&#127909;</div>
+            <p class="vp-text">Example video coming soon!</p>
+          </div>
+        </div>
+        <p class="example-video-caption">Yours doesn&rsquo;t have to be perfect &mdash; just from the heart</p>
+      </div>
+
+      <div class="video-divider" style="margin-top:0;"></div>
+
+      <div class="video-steps">
+        <div class="video-step">
+          <div class="video-step-num">1</div>
+          <div class="video-step-text"><strong>Open your camera</strong>Record a selfie video on your phone or computer</div>
+        </div>
+        <div class="video-step">
+          <div class="video-step-num">2</div>
+          <div class="video-step-text"><strong>Speak from the heart</strong>Any length, any format &mdash; we want to see <em style="color:var(--gold-light);">you</em></div>
+        </div>
+        <div class="video-step">
+          <div class="video-step-num">3</div>
+          <div class="video-step-text"><strong>Upload it below</strong>Enter your name, choose your video, and tap Upload</div>
+        </div>
+      </div>
+
+      <div class="video-divider"></div>
+
+      {{-- ── VIDEO UPLOAD FORM ── --}}
+      <div id="video-form-wrap">
+        <div id="video-form-content">
+          <div class="video-upload-form">
+
+            <div style="margin-bottom:1.25rem;">
+              <label class="video-form-label" for="v-name">Your Name <span>*</span></label>
+              <input type="text" id="v-name" class="video-form-input" placeholder="First &amp; last name" autocomplete="name">
+            </div>
+
+            <div style="margin-bottom:1.25rem;">
+              <label class="video-form-label">Your Video <span>*</span></label>
+              <div class="video-drop-area" id="video-drop-area">
+                <input type="file" id="v-file" accept="video/*,video/mp4,video/quicktime,video/x-msvideo,video/webm">
+                <div class="vda-icon" id="vda-icon">&#127909;</div>
+                <div class="vda-text" id="vda-text">
+                  <strong>Tap here to choose your video</strong>
+                  MP4, MOV, or any format &mdash; up to 500 MB
+                </div>
+                <div class="vda-filename" id="vda-filename"></div>
+              </div>
+            </div>
+
+            <div class="v-progress-wrap" id="v-progress-wrap">
+              <div class="v-progress-track">
+                <div class="v-progress-bar" id="v-progress-bar"></div>
+              </div>
+              <p class="v-progress-text" id="v-progress-text">Uploading&hellip;</p>
+            </div>
+
+            <button class="btn-upload-video" id="v-submit-btn" type="button">
+              &#9654; &nbsp; Upload Video
+            </button>
+            <div class="video-error" id="video-error"></div>
+
+          </div>
+        </div>
+
+        <div class="video-success" id="video-success">
+          <div class="vs-icon">&#127881;</div>
+          <h3>Video received!</h3>
+          <p>Thank you so much. Your video will be treasured<br>and played for Mellody on her special day.</p>
+          <p style="margin-top:0.5rem;color:var(--gold-light);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;">We can&rsquo;t wait to see you on May 2nd!</p>
+          <button class="btn-upload-another" onclick="resetVideoForm()">&#43; &nbsp; Upload Another Video</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <!-- ═══════════════════════════════
    SHARE A MEMORY — BIG SECTION
@@ -539,8 +812,8 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
       <span class="memory-hero-badge">&#10022; &nbsp; The Memory Book &nbsp; &#10022;</span>
       <h2 class="memory-hero-title">Share a Memory<br>with Mellody</h2>
       <p class="memory-hero-sub">
-      Over the years the most treasured keepsakes Mom has kept have been the notes, cards, and memories shared wih her.  The greatest gift we can give her is for her to know she made a lasting impact.
-      <br>Every story you share will be beautifully printed and bound into a keepsake book
+        Over the years the most treasured keepsakes Mom has kept have been the notes, cards, and memories shared with her. The greatest gift we can give her is for her to know she made a lasting impact.
+        <br>Every story you share will be beautifully printed and bound into a keepsake book
         presented to Mellody on her birthday. Don&rsquo;t hold back &mdash;
         share as many memories as you&rsquo;d like!
       </p>
@@ -560,7 +833,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="f-name">Your Name <span>*</span></label>
-                <input type="text" id="f-name" class="form-input" placeholder="First & last name" required>
+                <input type="text" id="f-name" class="form-input" placeholder="First &amp; last name" required autocomplete="name">
               </div>
               <div class="form-group">
                 <label class="form-label" for="f-contact">Phone or Email <span>*</span></label>
@@ -615,12 +888,12 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
                 placeholder="Take your time... This is your gift to Mellody. Every word will be treasured.&#10;&#10;Feel free to share more than one story &mdash; just separate them with a line break!"></textarea>
             </div>
 
-            <div class="form-section-label">Your Photo</div>
+            <div class="form-section-label">Your Photo <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:0.7rem;color:var(--text-light);font-family:'Cormorant Garamond',serif;font-style:italic;">(Optional — appears next to your memory in the printed book)</span></div>
             <div class="form-group">
               <div class="photo-upload-area" id="upload-area">
                 <input type="file" id="f-photo" accept="image/*">
                 <div class="upload-icon">&#128247;</div>
-                <p class="upload-text">Tap to upload a selfie or photo of yourself<br /><small style="opacity:0.7;">Appears next to your memory in the printed book</small></p>
+                <p class="upload-text">Tap to upload a selfie or photo of yourself<br><small style="opacity:0.7;">Saved securely &mdash; not attached to any email</small></p>
                 <img class="upload-preview" id="photo-preview" src="" alt="Preview">
               </div>
             </div>
@@ -648,74 +921,8 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
 </section>
 
 <!-- ═══════════════════════════════
-   VIDEO SECTION
+   MEMORIES WALL (hidden until ready)
 ═══════════════════════════════ -->
-<section id="record-video" class="video-section">
-  <div style="position:relative;z-index:1;">
-    <div class="reveal">
-      <span class="video-badge">&#9654; &nbsp; Video Message &nbsp; &#9654;</span>
-      <h2 class="video-main-title">Record a Video<br><em>for Mellody</em></h2>
-      <p class="video-sub">
-        We&rsquo;ll be playing personal video messages at the party.
-        Imagine Mellody watching your face, hearing your voice, seeing your smile &mdash;
-        that&rsquo;s a gift that no printed word can replace.
-      </p>
-    </div>
-
-    <div class="video-card reveal">
-      <div class="video-icon-ring">&#127909;</div>
-
-      <div class="example-video-wrap" style="color: white;">
-        <p class="example-video-label">&#9654; &nbsp; Watch an Example &nbsp; &#9654;</p>
-        <div class="phone-frame">
-          <video style="height: 350px;"
-            src="/Shelcee-Funny.MOV"
-            controls
-            playsinline
-            preload="metadata"
-            poster=""
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-          ></video>
-          <div class="video-placeholder-inner" style="display:none;">
-            <div class="vp-icon">&#127909;</div>
-            <p class="vp-text">Example video coming soon!</p>
-          </div>
-        </div>
-        <p class="example-video-caption">Yours doesn&rsquo;t have to be perfect &mdash; just from the heart</p>
-      </div>
-
-      <div class="video-divider" style="margin-top:0;"></div>
-
-      <div class="video-steps">
-        <div class="video-step">
-          <div class="video-step-num">1</div>
-          <div class="video-step-text"><strong>Open your camera</strong>Take a selfie video on your phone or computer</div>
-        </div>
-        <div class="video-step">
-          <div class="video-step-num">2</div>
-          <div class="video-step-text"><strong>Tell your story</strong>Read your memory, or just speak from the heart</div>
-        </div>
-        <div class="video-step">
-          <div class="video-step-num">3</div>
-          <div class="video-step-text"><strong>Send it to us</strong>Email the video file to the address below</div>
-        </div>
-      </div>
-
-      <div class="video-divider"></div>
-
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:rgba(255,255,255,0.7);margin-bottom:1.5rem;">
-        Any length, any format &mdash; we want to see <em style="color:var(--gold-pale);">you</em>.
-      </p>
-
-      <a class="btn-email-video" href="mailto:shalyce@gmail.com?subject=Video%20for%20Mellody%27s%20Birthday">
-        &#9993; &nbsp; Email My Video Now
-      </a>
-      <p class="video-email-note">Send to: <strong>shalyce@gmail.com</strong> &nbsp;&mdash;&nbsp; MP4, MOV, or any format welcome</p>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ MEMORIES WALL (hidden until you're ready to show it) ═══ -->
 <div class="memories-section" style="display:none;">
   <div class="memories-inner">
     <div class="reveal" style="text-align:center;">
@@ -740,135 +947,246 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
 </footer>
 
 <script>
-  // ── Scroll-reveal ────────────────────────────────────────────────────────
-  const revealEls = document.querySelectorAll('.reveal');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.08 });
-  revealEls.forEach(el => obs.observe(el));
-
-  // ── Photo preview ────────────────────────────────────────────────────────
-  document.getElementById('f-photo').addEventListener('change', function() {
-    if (!this.files[0]) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      document.getElementById('photo-preview').src = e.target.result;
-      document.getElementById('photo-preview').style.display = 'block';
-      document.querySelector('.upload-icon').style.display = 'none';
-      document.querySelector('.upload-text').style.display = 'none';
-    };
-    reader.readAsDataURL(this.files[0]);
+// ── Scroll-reveal ───────────────────────────────────────────────────
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
   });
+}, { threshold: 0.08 });
+revealEls.forEach(el => obs.observe(el));
 
-  // ── Prompt chips ─────────────────────────────────────────────────────────
-  function usePrompt(el) {
-    const ta = document.getElementById('f-story');
-    const text = el.textContent.replace(/\u2019/g, "'").replace(/\u2018/g, "'");
-    ta.value = text + ' ';
-    ta.focus();
-    ta.setSelectionRange(ta.value.length, ta.value.length);
+// ── Photo preview ───────────────────────────────────────────────────
+document.getElementById('f-photo').addEventListener('change', function() {
+  if (!this.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('photo-preview').src = e.target.result;
+    document.getElementById('photo-preview').style.display = 'block';
+    document.querySelector('.upload-icon').style.display = 'none';
+    document.querySelector('.upload-text').style.display = 'none';
+  };
+  reader.readAsDataURL(this.files[0]);
+});
+
+// ── Video file picker display ────────────────────────────────────────
+document.getElementById('v-file').addEventListener('change', function() {
+  const file = this.files[0];
+  const area  = document.getElementById('video-drop-area');
+  const fname = document.getElementById('vda-filename');
+  const icon  = document.getElementById('vda-icon');
+  const text  = document.getElementById('vda-text');
+  if (file) {
+    area.classList.add('has-file');
+    fname.textContent = '✔ ' + file.name + ' (' + (file.size / (1024*1024)).toFixed(1) + ' MB)';
+    fname.style.display = 'block';
+    icon.textContent = '🎬';
+    text.innerHTML = '<strong>Video selected!</strong>Tap Upload Video when you\'re ready';
+  }
+});
+
+// ── Prompt chips ─────────────────────────────────────────────────────
+function usePrompt(el) {
+  const ta   = document.getElementById('f-story');
+  const text = el.textContent.replace(/\u2019/g, "'").replace(/\u2018/g, "'");
+  ta.value   = text + ' ';
+  ta.focus();
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+}
+
+// ── VIDEO UPLOAD ─────────────────────────────────────────────────────
+// Backend route: POST /upload-video → MemoryController@uploadVideo
+// Uploads file to DigitalOcean Spaces, returns { success: true }
+// Filename format: videos/{slug-name}_{timestamp}.{ext}
+// ─────────────────────────────────────────────────────────────────────
+document.getElementById('v-submit-btn').addEventListener('click', function() {
+  const name    = document.getElementById('v-name').value.trim();
+  const file    = document.getElementById('v-file').files[0];
+  const errEl   = document.getElementById('video-error');
+  const btn     = this;
+
+  errEl.style.display = 'none';
+
+  if (!name) {
+    errEl.textContent = 'Please enter your name before uploading.';
+    errEl.style.display = 'block';
+    document.getElementById('v-name').focus();
+    return;
+  }
+  if (!file) {
+    errEl.textContent = 'Please choose a video file first.';
+    errEl.style.display = 'block';
+    return;
+  }
+  const MAX_MB = 500;
+  if (file.size > MAX_MB * 1024 * 1024) {
+    errEl.textContent = 'Video is too large (max ' + MAX_MB + ' MB). Try trimming it or text Shalyce at 801-645-1948.';
+    errEl.style.display = 'block';
+    return;
   }
 
-  // ── Memory form → Laravel mail ───────────────────────────────────────────
-  // Requires in routes/web.php:
-  //   Route::post('/submit-memory', [MemoryController::class, 'store']);
-  //
-  // MemoryController@store should validate, then:
-  //   Mail::to(config('mail.from.address'))->send(new MemorySubmitted($validated));
-  //   return response()->json(['success' => true]);
-  //
-  // Mail config lives in your .env:
-  //   MAIL_MAILER, MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS
-  // ─────────────────────────────────────────────────────────────────────────
-  document.getElementById('memory-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'Uploading…';
 
-    const name     = document.getElementById('f-name').value.trim();
-    const contact  = document.getElementById('f-contact').value.trim();
-    const story    = document.getElementById('f-story').value.trim();
-    const year     = document.getElementById('f-year').value     || 'Unknown';
-    const relation = document.getElementById('f-relation').value || '';
-    const errEl    = document.getElementById('form-error');
+  const progressWrap = document.getElementById('v-progress-wrap');
+  const progressBar  = document.getElementById('v-progress-bar');
+  const progressText = document.getElementById('v-progress-text');
+  progressWrap.style.display = 'block';
+  progressBar.style.width    = '0%';
+  progressText.textContent   = '0%';
 
-    errEl.style.display = 'none';
+  const formData = new FormData();
+  formData.append('name',  name);
+  formData.append('video', file);
 
-    if (!name || !contact || !story) {
-      errEl.textContent = 'Please fill in your name, contact info, and memory before submitting.';
-      errEl.style.display = 'block';
-      return;
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/upload-video');
+  xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+  xhr.setRequestHeader('Accept', 'application/json');
+
+  xhr.upload.addEventListener('progress', function(e) {
+    if (e.lengthComputable) {
+      const pct = Math.round((e.loaded / e.total) * 100);
+      progressBar.style.width  = pct + '%';
+      progressText.textContent = pct < 100 ? pct + '% uploaded…' : 'Processing…';
     }
+  });
 
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    btn.innerHTML = '&#10004; &nbsp; Sending&hellip;';
-
-    const formData = new FormData();
-    formData.append('name',     name);
-    formData.append('contact',  contact);
-    formData.append('story',    story);
-    formData.append('year',     year);
-    formData.append('relation', relation);
-
-    const photoFile = document.getElementById('f-photo').files[0];
-
-    if (photoFile && photoFile.size > 15 * 1024 * 1024) {
-      errEl.textContent = 'Photo is too large — please choose an image under 15MB and try again or text Shalyce at 801-645-1948.';
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
-      return;
-    }
-
-    if (photoFile) formData.append('photo', photoFile);
-
+  xhr.onload = function() {
     try {
-      const res = await fetch('/submit-memory', {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          'Accept': 'application/json',
-        },
-        body: formData,
-      });
-
-      const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) {
-        if (res.status === 413) {
-          throw new Error('Photo is too large — please choose an image under 15MB and try again or text Shalyce at 801-645-1948.');
-        }
-        throw new Error('Something went wrong. Please try again or text Shalyce at 801-645-1948.');
-      }
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        document.getElementById('form-content').style.display = 'none';
-        document.getElementById('success-msg').style.display  = 'block';
+      const data = JSON.parse(xhr.responseText);
+      if (xhr.status === 200 && data.success) {
+        document.getElementById('video-form-content').style.display = 'none';
+        document.getElementById('video-success').style.display      = 'block';
       } else {
-        throw new Error(data.message || 'Something went wrong.');
+        throw new Error(data.message || 'Upload failed. Please try again.');
       }
     } catch (err) {
-      errEl.textContent = err.message || 'Something went wrong. Please try again.';
+      progressWrap.style.display = 'none';
+      errEl.textContent = err.message || 'Something went wrong. Please try again or text Shalyce at 801-645-1948.';
       errEl.style.display = 'block';
       btn.disabled = false;
-      btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
+      btn.innerHTML = '&#9654; &nbsp; Upload Video';
     }
-  });
+  };
 
-  // ── Reset for "Add Another Memory" ──────────────────────────────────────
-  function resetForm() {
-    document.getElementById('memory-form').reset();
-    document.getElementById('photo-preview').style.display = 'none';
-    document.querySelector('.upload-icon').style.display = 'block';
-    document.querySelector('.upload-text').style.display = 'block';
-    document.getElementById('form-error').style.display  = 'none';
-    const btn = document.getElementById('submit-btn');
+  xhr.onerror = function() {
+    progressWrap.style.display = 'none';
+    errEl.textContent = 'Network error. Please check your connection and try again, or text Shalyce at 801-645-1948.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '&#9654; &nbsp; Upload Video';
+  };
+
+  xhr.send(formData);
+});
+
+function resetVideoForm() {
+  document.getElementById('v-name').value        = '';
+  document.getElementById('v-file').value        = '';
+  document.getElementById('vda-filename').style.display = 'none';
+  document.getElementById('vda-icon').textContent = '🎥';
+  document.getElementById('vda-text').innerHTML  = '<strong>Tap here to choose your video</strong>MP4, MOV, or any format — up to 500 MB';
+  document.getElementById('video-drop-area').classList.remove('has-file');
+  document.getElementById('v-progress-wrap').style.display = 'none';
+  document.getElementById('v-progress-bar').style.width    = '0%';
+  document.getElementById('video-error').style.display     = 'none';
+  const btn = document.getElementById('v-submit-btn');
+  btn.disabled = false;
+  btn.innerHTML = '&#9654; &nbsp; Upload Video';
+  document.getElementById('video-form-content').style.display = 'block';
+  document.getElementById('video-success').style.display      = 'none';
+}
+
+// ── MEMORY / STORY FORM ──────────────────────────────────────────────
+// Backend route: POST /submit-memory → MemoryController@store
+// - Photo (if included) is uploaded to DO Spaces, URL saved to DB
+// - Email sent via Laravel SMTP contains only text fields + photo URL link
+// - No attachments are emailed
+// ─────────────────────────────────────────────────────────────────────
+document.getElementById('memory-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const name     = document.getElementById('f-name').value.trim();
+  const contact  = document.getElementById('f-contact').value.trim();
+  const story    = document.getElementById('f-story').value.trim();
+  const year     = document.getElementById('f-year').value     || 'Unknown';
+  const relation = document.getElementById('f-relation').value || '';
+  const errEl    = document.getElementById('form-error');
+
+  errEl.style.display = 'none';
+
+  if (!name || !contact || !story) {
+    errEl.textContent = 'Please fill in your name, contact info, and memory before submitting.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const photoFile = document.getElementById('f-photo').files[0];
+  if (photoFile && photoFile.size > 15 * 1024 * 1024) {
+    errEl.textContent = 'Photo is too large — please choose an image under 15 MB.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '&#10004; &nbsp; Sending&hellip;';
+
+  const formData = new FormData();
+  formData.append('name',     name);
+  formData.append('contact',  contact);
+  formData.append('story',    story);
+  formData.append('year',     year);
+  formData.append('relation', relation);
+  if (photoFile) formData.append('photo', photoFile);
+
+  try {
+    const res = await fetch('/submit-memory', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        'Accept': 'application/json',
+      },
+      body: formData,
+    });
+
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      if (res.status === 413) {
+        throw new Error('The photo is too large. Please try a smaller image.');
+      }
+      throw new Error('Something went wrong. Please try again or text Shalyce at 801-645-1948.');
+    }
+
+    const data = await res.json();
+    if (res.ok && data.success) {
+      document.getElementById('form-content').style.display = 'none';
+      document.getElementById('success-msg').style.display  = 'block';
+    } else {
+      throw new Error(data.message || 'Something went wrong.');
+    }
+  } catch (err) {
+    errEl.textContent = err.message || 'Something went wrong. Please try again.';
+    errEl.style.display = 'block';
     btn.disabled = false;
     btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
-    document.getElementById('form-content').style.display = 'block';
-    document.getElementById('success-msg').style.display  = 'none';
   }
+});
+
+// ── Reset memory form for "Add Another Memory" ───────────────────────
+function resetForm() {
+  document.getElementById('memory-form').reset();
+  document.getElementById('photo-preview').style.display = 'none';
+  document.querySelector('.upload-icon').style.display   = 'block';
+  document.querySelector('.upload-text').style.display   = 'block';
+  document.getElementById('form-error').style.display    = 'none';
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = false;
+  btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
+  document.getElementById('form-content').style.display  = 'block';
+  document.getElementById('success-msg').style.display   = 'none';
+}
 </script>
 </body>
 </html>
