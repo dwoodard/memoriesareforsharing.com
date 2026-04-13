@@ -57,7 +57,7 @@
         .hero {
             position: relative;
             background-color: var(--cream);
-            padding: 3rem 1.5rem 5rem;
+            padding: 1.5rem 1.5rem 3rem;
             text-align: center;
             overflow: visible;
         }
@@ -78,7 +78,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
 
         .hero-top-border .line {
@@ -101,6 +101,16 @@
             transform: rotate(45deg);
         }
 
+        .hero-surprise {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: clamp(0.85rem, 2vw, 1.1rem);
+            letter-spacing: 0.25rem;
+            text-transform: uppercase;
+            color: var(--fuchsia);
+            margin-bottom: 0.5rem;
+        }
+
         .hero-eyebrow {
             font-family: 'Lato', sans-serif;
             font-weight: 300;
@@ -115,7 +125,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-weight: 300;
             font-style: italic;
-            font-size: clamp(3.5rem, 9vw, 7rem);
+            font-size: clamp(3rem, 7vw, 5.5rem);
             color: var(--burgundy);
             line-height: 1;
             margin-bottom: 0.2rem;
@@ -206,14 +216,14 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            height: 320px;
+            height: 260px;
             margin: 0 auto;
             max-width: 680px;
         }
 
         @media (min-width: 768px) {
             .photos-stage {
-                height: 460px;
+                height: 360px;
                 max-width: 900px;
             }
         }
@@ -299,8 +309,8 @@
             }
 
             .photo-frame.past img {
-                width: 230px;
-                height: 295px;
+                width: 180px;
+                height: 230px;
                 border-width: 8px;
             }
 
@@ -313,8 +323,8 @@
             }
 
             .photo-frame.present img {
-                width: 285px;
-                height: 365px;
+                width: 220px;
+                height: 285px;
                 border-width: 8px;
             }
 
@@ -327,8 +337,8 @@
             }
 
             .photo-frame.recent img {
-                width: 230px;
-                height: 295px;
+                width: 180px;
+                height: 230px;
                 border-width: 8px;
             }
 
@@ -1639,10 +1649,11 @@
             <div class="diamond-sm"></div>
             <div class="line"></div>
         </div>
+        <p class="hero-surprise">&#x1F389; Surprise Party &#x1F389;</p>
         <p class="hero-eyebrow">You are invited to celebrate</p>
         <h1 class="hero-title">Mellody</h1>
         <div class="hero-75-wrap">
-            <img src="/75.png" alt="75" class="hero-75-img" style="width: 100px;">
+            <img src="/75.png" alt="75" class="hero-75-img" style="width: 75px;">
         </div>
         <p class="hero-subtitle" style="margin-bottom:5px;">Beautiful Years</p>
 
