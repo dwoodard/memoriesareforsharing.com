@@ -17,7 +17,7 @@ class MemoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:120',
-            'video' => 'required|file|mimes:mp4,mov,avi,webm,m4v,3gp|max:512000', // 500MB
+            'video' => 'required|file|mimes:mp4,mov,avi,webm,m4v,3gp|max:1048576', // 1024MB
         ]);
 
         $name = Str::slug($request->input('name'));
