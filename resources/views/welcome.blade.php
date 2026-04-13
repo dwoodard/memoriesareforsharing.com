@@ -104,7 +104,7 @@
         .hero-surprise {
             font-family: 'Lato', sans-serif;
             font-weight: 700;
-            font-size: clamp(0.85rem, 2vw, 1.1rem);
+            font-size: clamp(1.2rem, 2vw, 1.2rem);
             letter-spacing: 0.25rem;
             text-transform: uppercase;
             color: var(--fuchsia);
@@ -216,14 +216,14 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            height: 260px;
+            height: 320px;
             margin: 0 auto;
             max-width: 680px;
         }
 
         @media (min-width: 768px) {
             .photos-stage {
-                height: 360px;
+                height: 420px;
                 max-width: 900px;
             }
         }
@@ -309,8 +309,8 @@
             }
 
             .photo-frame.past img {
-                width: 180px;
-                height: 230px;
+                width: 230px;
+                height: 295px;
                 border-width: 8px;
             }
 
@@ -323,8 +323,8 @@
             }
 
             .photo-frame.present img {
-                width: 220px;
-                height: 285px;
+                width: 285px;
+                height: 365px;
                 border-width: 8px;
             }
 
@@ -337,8 +337,8 @@
             }
 
             .photo-frame.recent img {
-                width: 180px;
-                height: 230px;
+                width: 230px;
+                height: 295px;
                 border-width: 8px;
             }
 
