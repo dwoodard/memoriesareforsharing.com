@@ -603,7 +603,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
         <p class="example-video-label">&#9654; &nbsp; Watch an Example &nbsp; &#9654;</p>
         <div class="phone-frame">
           <video style="height: 350px;"
-            src="/Shelcee-Funny.MOV"
+            src="/Shelcee-Funny.MOV.mp4"
             controls
             playsinline
             preload="metadata"
