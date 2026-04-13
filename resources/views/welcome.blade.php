@@ -826,11 +826,11 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
 
   // Guard against non-JSON responses (413, 500, etc.)
   const contentType = res.headers.get('content-type') || '';
-  if (!contentType.includes('application/json')) {
-    throw new Error(res.status === 413
-      ? 'Photo is too large. Please choose a smaller image and try again.'
-      : 'Server error (' + res.status + '). Please try again or text Shalyce at 801-645-1948.');
-  }
+  if (photoFile && photoFile.size > 15 * 1024 * 1024) {
+  errEl.textContent = 'Photo is too large — please choose an image under 15MB and try again or text Shalyce at 801-645-1948.';
+  errEl.style.display = 'block';
+  return;
+}
 
   const data = await res.json();
   if (res.ok && data.success) {
@@ -842,11 +842,6 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
 } catch (err) {
   errEl.textContent = err.message || 'Something went wrong. Please try again.';
   errEl.style.display = 'block';
-  if (photoFile && photoFile.size > 15 * 1024 * 1024) {
-  errEl.textContent = 'Photo is too large — please choose an image under 15MB.';
-  errEl.style.display = 'block';
-  return;
-}
   btn.disabled = false;
   btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
 }

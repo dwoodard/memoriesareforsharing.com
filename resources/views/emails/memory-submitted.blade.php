@@ -65,7 +65,7 @@
       <div class="story-text">{{ $data['story'] }}</div>
     </div>
 
-    @if($data['photoPath'])
+    @if($photo)
     <div class="photo-note">
       📷 &nbsp; A photo was attached to this email. Check the attachment above!
     </div>
