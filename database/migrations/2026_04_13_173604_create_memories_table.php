@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 120);
             $table->string('contact', 200);
-            $table->text('story');
+            $table->mediumtext('story');
             $table->string('year', 20)->nullable();
             $table->string('relation', 60)->nullable();
             $table->string('photo_url')->nullable();

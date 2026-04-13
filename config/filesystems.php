@@ -58,8 +58,8 @@ return [
             'root' => ltrim(env('DO_SPACES_DIRECTORY', ''), '/'),
             'use_path_style_endpoint' => false,
             'visibility' => 'public',
-            'throw' => false,
-            'report' => false,
+            'throw' => true,
+            'report' => true,
         ],
 
         's3' => [

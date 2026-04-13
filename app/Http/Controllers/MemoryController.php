@@ -24,7 +24,8 @@ class MemoryController extends Controller
         $ext = $request->file('video')->getClientOriginalExtension();
         $filename = 'videos/'.$name.'_'.time().'.'.$ext;
 
-        Storage::disk('spaces')->put($filename, file_get_contents($request->file('video')), 'public');
+        // Ensure directory exists and upload file
+        $this->uploadToSpaces($filename, $request->file('video'));
 
         $url = Storage::disk('spaces')->url($filename);
 
@@ -41,7 +42,11 @@ class MemoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:120',
-            'contact' => 'required|string|max:200',
+            'contact' => ['required', 'string', 'max:200', function ($attribute, $value, $fail) {
+                if (! filter_var($value, FILTER_VALIDATE_EMAIL) && ! preg_match('/^[\+\d\s\.\-\(\)]{7,}$/', $value)) {
+                    $fail('The '.$attribute.' must be a valid email address or phone number.');
+                }
+            }],
             'story' => 'required|string|max:10000',
             'year' => 'nullable|string|max:20',
             'relation' => 'nullable|string|max:60',
@@ -54,7 +59,10 @@ class MemoryController extends Controller
             $name = Str::slug($request->input('name'));
             $ext = $request->file('photo')->getClientOriginalExtension();
             $filename = 'photos/'.$name.'_'.time().'.'.$ext;
-            Storage::disk('spaces')->put($filename, file_get_contents($request->file('photo')), 'public');
+
+            // Ensure directory exists and upload file
+            $this->uploadToSpaces($filename, $request->file('photo'));
+
             $photoUrl = Storage::disk('spaces')->url($filename);
         }
 
@@ -67,7 +75,7 @@ class MemoryController extends Controller
             'photo_url' => $photoUrl,
         ]);
 
-        Mail::to(config('mail.from.address'))->send(new MemorySubmitted([
+        Mail::to(env('MEMORY_SUBMISSION_EMAIL', 'shalyce@gmail.com'))->send(new MemorySubmitted([
             'name' => $memory->name,
             'contact' => $memory->contact,
             'story' => $memory->story,
@@ -77,5 +85,12 @@ class MemoryController extends Controller
         ]));
 
         return response()->json(['success' => true]);
+    }
+
+    private function uploadToSpaces(string $path, $file): void
+    {
+        // Upload file to Digital Ocean Spaces
+        // Note: S3/DO Spaces automatically creates path prefixes, no need to create directories
+        Storage::disk('spaces')->put($path, file_get_contents($file), 'public');
     }
 }
