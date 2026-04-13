@@ -5,7 +5,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta property="og:type" content="website">
-<meta property="og:title" content="It's Mellody's 75th Birthday">
+<meta property="og:title" content="It's Mellody's 75th Birthday"> 
 <meta property="og:url" content="https://memoriesareforsharing.com/">
 <meta property="og:image" content="/OG-PartyImg2.png">
 <meta property="og:description" content="Come Celebrate Mellody's Birthday - May 2nd, 5:30-9pm, DON'T SPOIL THE SURPRISE">
@@ -503,7 +503,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
       <p class="photo-caption">Always Stunning</p>
     </div>
     <div class="photo-frame recent">
-      <img src="/Mom-Now-75.png" alt="Mellody Now">
+      <img src="/Mom-Now-75.PNG" alt="Mellody Now">
       <p class="photo-caption">Our Mellody</p>
     </div>
   </div>
