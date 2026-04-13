@@ -39,7 +39,7 @@
 
   <div class="body">
 
-    <p class="submitted-at">Submitted {{ $data['submittedAt'] }}</p>
+    <p class="submitted-at">Submitted {{ now()->format('F j, Y \a\t g:i A') }}</p>
 
     <div class="meta-grid">
       <div class="meta-item">
@@ -65,9 +65,9 @@
       <div class="story-text">{{ $data['story'] }}</div>
     </div>
 
-    @if($photo)
+    @if($photo_url)
     <div class="photo-note">
-      📷 &nbsp; A photo was attached to this email. Check the attachment above!
+      📷 &nbsp; <a href="{{ $photo_url }}" style="color: #7B1A3A; text-decoration: none;">View photo</a> &nbsp; (stored in Digital Ocean Spaces)
     </div>
     @else
     <div class="photo-note" style="opacity:0.6;">

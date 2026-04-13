@@ -6,7 +6,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Queue\SerializesModels;
 
 class MemorySubmitted extends Mailable
@@ -15,13 +14,12 @@ class MemorySubmitted extends Mailable
 
     public function __construct(
         public array $data,
-        public $photo = null
     ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Memory from ' . $this->data['name'],
+            subject: 'New Memory from '.$this->data['name'],
         );
     }
 
@@ -29,18 +27,7 @@ class MemorySubmitted extends Mailable
     {
         return new Content(
             view: 'emails.memory-submitted',
+            with: $this->data,
         );
-    }
-
-    public function attachments(): array
-    {
-        if ($this->photo) {
-            return [
-                Attachment::fromPath($this->photo->getRealPath())
-                    ->as($this->photo->getClientOriginalName())
-                    ->withMime($this->photo->getMimeType()),
-            ];
-        }
-        return [];
     }
 }

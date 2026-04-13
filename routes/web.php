@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemoryController;
+use Illuminate\Support\Facades\Route;
 
 // ── Main birthday site ──
 Route::get('/', function () {
@@ -13,9 +13,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // ── Memory form submission ──
-//Route::post('/submit-memory', [MemoryController::class, 'submit'])
-  //  ->name('memory.submit');
-
-
+Route::post('/upload-video', [MemoryController::class, 'uploadVideo']);
 Route::post('/submit-memory', [MemoryController::class, 'store']);
-
