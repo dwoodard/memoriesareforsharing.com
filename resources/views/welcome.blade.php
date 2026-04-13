@@ -7,7 +7,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="It's Mellody's 75th Birthday">
 <meta property="og:url" content="https://memoriesareforsharing.com/">
-<meta property="og:image" content="/OG-PartyImg.png">
+<meta property="og:image" content="/OG-PartyImg2.png">
 <meta property="og:description" content="Come Celebrate Mellody's Birthday - May 2nd, 5:30-9pm, DON'T SPOIL THE SURPRISE">
 
 <title>Celebrating Mellody's 75th Birthday</title>
@@ -90,24 +90,33 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 /* ── PHOTOS ── */
 .photos-stage {
   position: relative; display: flex; align-items: flex-end;
-  justify-content: center; height: 320px; margin: 0 auto; max-width: 560px;
+  justify-content: center; height: 320px; margin: 0 auto; max-width: 680px;
 }
-@media (min-width: 768px) { .photos-stage { height: 460px; max-width: 740px; } }
+@media (min-width: 768px) { .photos-stage { height: 460px; max-width: 900px; } }
 .photo-frame { position: absolute; display: flex; flex-direction: column; align-items: center; transition: transform 0.4s ease; }
 .photo-frame img { display: block; object-fit: cover; border-radius: 3px; }
-.photo-frame.past { left: 50%; bottom: 0; transform: translateX(-108%) rotate(-5deg); z-index: 1; }
-.photo-frame.past img { width: 180px; height: 230px; border: 6px solid white; box-shadow: -4px 6px 30px rgba(42,26,16,0.22), 0 0 0 1px rgba(180,146,42,0.2); filter: sepia(0.15); }
-.photo-frame.past:hover { transform: translateX(-108%) rotate(-3deg) scale(1.03); z-index: 3; }
-.photo-frame.present { left: 50%; bottom: 0; transform: translateX(-12%) rotate(3.5deg); z-index: 2; }
-.photo-frame.present img { width: 210px; height: 270px; border: 6px solid white; box-shadow: 6px 8px 36px rgba(42,26,16,0.28), 0 0 0 1px rgba(180,146,42,0.25); }
-.photo-frame.present:hover { transform: translateX(-12%) rotate(1.5deg) scale(1.03); z-index: 3; }
+/* Left — youngest photo */
+.photo-frame.past { left: 50%; bottom: 0; transform: translateX(-175%) rotate(-6deg); z-index: 1; }
+.photo-frame.past img { width: 155px; height: 200px; border: 6px solid white; box-shadow: -4px 6px 30px rgba(42,26,16,0.22), 0 0 0 1px rgba(180,146,42,0.2); filter: sepia(0.2); }
+.photo-frame.past:hover { transform: translateX(-175%) rotate(-4deg) scale(1.04); z-index: 4; }
+/* Center — front and tallest */
+.photo-frame.present { left: 50%; bottom: 0; transform: translateX(-50%) rotate(0deg); z-index: 3; }
+.photo-frame.present img { width: 195px; height: 255px; border: 6px solid white; box-shadow: 0 10px 40px rgba(42,26,16,0.32), 0 0 0 1px rgba(180,146,42,0.3); }
+.photo-frame.present:hover { transform: translateX(-50%) rotate(0deg) scale(1.04); z-index: 4; }
+/* Right — birthday photo */
+.photo-frame.recent { left: 50%; bottom: 0; transform: translateX(72%) rotate(5.5deg); z-index: 2; }
+.photo-frame.recent img { width: 155px; height: 200px; border: 6px solid white; box-shadow: 4px 6px 30px rgba(42,26,16,0.22), 0 0 0 1px rgba(180,146,42,0.2); }
+.photo-frame.recent:hover { transform: translateX(72%) rotate(3.5deg) scale(1.04); z-index: 4; }
 @media (min-width: 768px) {
-  .photo-frame.past { transform: translateX(-118%) rotate(-6deg); }
-  .photo-frame.past img { width: 270px; height: 340px; border-width: 8px; }
-  .photo-frame.past:hover { transform: translateX(-118%) rotate(-4deg) scale(1.03); }
-  .photo-frame.present { transform: translateX(-5%) rotate(4deg); }
-  .photo-frame.present img { width: 310px; height: 390px; border-width: 8px; }
-  .photo-frame.present:hover { transform: translateX(-5%) rotate(2deg) scale(1.03); }
+  .photo-frame.past { transform: translateX(-185%) rotate(-7deg); }
+  .photo-frame.past img { width: 230px; height: 295px; border-width: 8px; }
+  .photo-frame.past:hover { transform: translateX(-185%) rotate(-5deg) scale(1.04); }
+  .photo-frame.present { transform: translateX(-50%) rotate(0deg); }
+  .photo-frame.present img { width: 285px; height: 365px; border-width: 8px; }
+  .photo-frame.present:hover { transform: translateX(-50%) rotate(0deg) scale(1.04); }
+  .photo-frame.recent { transform: translateX(82%) rotate(6deg); }
+  .photo-frame.recent img { width: 230px; height: 295px; border-width: 8px; }
+  .photo-frame.recent:hover { transform: translateX(82%) rotate(4deg) scale(1.04); }
 }
 .photo-caption { margin-top: 0.6rem; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.82rem; color: var(--text-light); white-space: nowrap; }
 .photo-connector { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 60px; height: 2px; background: linear-gradient(90deg, var(--gold-pale), var(--gold-light), var(--gold-pale)); z-index: 0; border-radius: 1px; }
@@ -491,6 +500,10 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     </div>
     <div class="photo-frame present">
       <img src="/Now-Mom.jpg" alt="Mellody today">
+      <p class="photo-caption">Always Stunning</p>
+    </div>
+    <div class="photo-frame recent">
+      <img src="/Mom-Now-75.png" alt="Mellody Now">
       <p class="photo-caption">Our Mellody</p>
     </div>
   </div>
