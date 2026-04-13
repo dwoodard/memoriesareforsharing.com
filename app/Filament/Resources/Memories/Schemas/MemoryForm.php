@@ -51,8 +51,8 @@ class MemoryForm
                                     ->label('Photo URL')
                                     ->disabled(),
                                 Image::make(
-                                    url: fn ($get) => $get('photo_url'),
-                                    alt: 'Memory photo',
+                                    fn ($get) => $get('photo_url'),
+                                    'Memory photo',
                                 )
                                     ->imageHeight('12rem'),
                             ]),

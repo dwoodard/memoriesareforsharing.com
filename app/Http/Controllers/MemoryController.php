@@ -50,8 +50,7 @@ class MemoryController extends Controller
             'story' => 'required|string|max:10000',
             'year' => 'nullable|string|max:20',
             'relation' => 'nullable|string|max:60',
-            // 1024MB
-            'photo' => 'nullable|file|image',
+            'photo' => 'nullable|file|image|max:1048576', // 1024MB
         ]);
 
         $photoUrl = null;
