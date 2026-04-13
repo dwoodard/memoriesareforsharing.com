@@ -7,8 +7,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="It's Mellody's 75th Birthday">
 <meta property="og:url" content="https://memoriesareforsharing.com/">
-<meta property="og:image" content="https://memoriesareforsharing.com/OG-PartyImg.png">
-<meta property="og:description" content="Come Celebrate Mellody's Birthday - May 2nd, 6-9pm, DON'T SPOIL THE SURPRISE">
+<meta property="og:image" content="/OG-PartyImg.png">
+<meta property="og:description" content="Come Celebrate Mellody's Birthday - May 2nd, 5:30-9pm, DON'T SPOIL THE SURPRISE">
 
 <title>Celebrating Mellody's 75th Birthday</title>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
