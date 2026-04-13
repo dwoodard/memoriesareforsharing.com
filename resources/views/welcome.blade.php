@@ -11,7 +11,6 @@
 <meta property="og:description" content="Come Celebrate Mellody's Birthday - May 2nd, 5:30-9pm, DON'T SPOIL THE SURPRISE">
 
 <title>Celebrating Mellody's 75th Birthday</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,60 +60,37 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 
 /* ── HERO CTA BUTTONS ── */
 .hero-cta-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 3rem;
-  position: relative;
-  z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem;
+  position: relative; z-index: 2;
 }
 .hero-cta-primary {
   display: inline-flex; align-items: center; gap: 0.6rem;
-  background: var(--burgundy);
-  color: white;
-  padding: 1rem 2.2rem;
-  border-radius: 2px;
-  text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
+  background: var(--burgundy); color: white;
+  padding: 1rem 2.2rem; border-radius: 2px; text-decoration: none;
+  font-size: 0.8rem; font-weight: 900; letter-spacing: 0.2rem; text-transform: uppercase;
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 20px rgba(123,26,58,0.35);
 }
 .hero-cta-primary:hover { background: var(--fuchsia); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(181,25,90,0.4); }
 .hero-cta-secondary {
   display: inline-flex; align-items: center; gap: 0.6rem;
-  background: transparent;
-  color: var(--fuchsia);
-  padding: 1rem 2.2rem;
-  border-radius: 2px;
-  text-decoration: none;
-  font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
-  border: 2px solid var(--fuchsia);
-  transition: all 0.2s;
+  background: transparent; color: var(--fuchsia);
+  padding: 1rem 2.2rem; border-radius: 2px; text-decoration: none;
+  font-size: 0.8rem; font-weight: 900; letter-spacing: 0.2rem; text-transform: uppercase;
+  border: 2px solid var(--fuchsia); transition: all 0.2s;
 }
 .hero-cta-secondary:hover { background: var(--fuchsia); color: white; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(181,25,90,0.3); }
 .hero-cta-label {
-  font-size: 0.7rem;
-  color: var(--text-light);
-  letter-spacing: 0.05rem;
-  margin-top: -0.5rem;
-  margin-bottom: 0.5rem;
-  font-style: italic;
-  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.7rem; color: var(--text-light); letter-spacing: 0.05rem;
+  margin-top: -0.5rem; margin-bottom: 0.5rem;
+  font-style: italic; font-family: 'Cormorant Garamond', serif;
 }
 
 /* ── PHOTOS ── */
 .photos-stage {
   position: relative; display: flex; align-items: flex-end;
-  justify-content: center; height: 320px; margin: 0 auto;
-  max-width: 560px;
+  justify-content: center; height: 320px; margin: 0 auto; max-width: 560px;
 }
 @media (min-width: 768px) { .photos-stage { height: 460px; max-width: 740px; } }
 .photo-frame { position: absolute; display: flex; flex-direction: column; align-items: center; transition: transform 0.4s ease; }
@@ -140,15 +116,10 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .details-band {
   position: relative;
   background: linear-gradient(160deg, #6A1030 0%, #7B1A3A 40%, #5C0E28 100%);
-  color: white;
-  padding: 5rem 1.5rem 4rem;
-  text-align: center;
-  margin-top: 80px;
-  overflow: hidden;
+  color: white; padding: 5rem 1.5rem 4rem; text-align: center; margin-top: 80px; overflow: hidden;
 }
 .details-band::before {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background-image:
     radial-gradient(ellipse 80% 50% at 50% 100%, rgba(212,174,92,0.14) 0%, transparent 70%),
     radial-gradient(ellipse 30% 30% at 0% 0%, rgba(255,255,255,0.04) 0%, transparent 50%);
@@ -158,28 +129,17 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .band-title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: 1rem; color: var(--gold-pale); letter-spacing: 0.35rem; text-transform: uppercase; margin-bottom: 2.5rem; opacity: 0.9; }
 
 .details-grid {
-  display: flex; justify-content: center; gap: 0;
-  flex-wrap: wrap; max-width: 860px; margin: 0 auto 3rem;
-  background: rgba(0,0,0,0.2);
-  border: 1px solid rgba(212,174,92,0.25);
-  border-radius: 2px; overflow: hidden;
+  display: flex; justify-content: center; gap: 0; flex-wrap: wrap;
+  max-width: 860px; margin: 0 auto 3rem;
+  background: rgba(0,0,0,0.2); border: 1px solid rgba(212,174,92,0.25); border-radius: 2px; overflow: hidden;
 }
 .detail-item {
-  flex: 1; min-width: 220px;
-  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-  padding: 2.5rem 1.5rem; position: relative;
-  background: rgba(0,0,0,0.1);
+  flex: 1; min-width: 220px; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  padding: 2.5rem 1.5rem; position: relative; background: rgba(0,0,0,0.1);
 }
 .detail-item + .detail-item::before { content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 1px; background: rgba(212,174,92,0.2); }
 .detail-icon { font-size: 1rem; color: var(--gold-light); margin-bottom: 0.2rem; opacity: 0.8; }
-.detail-label {
-  font-size: 0.85rem;
-  font-weight: 900;
-  letter-spacing: 0.25rem;
-  text-transform: uppercase;
-  color: var(--gold-light);
-  margin-bottom: 0.2rem;
-}
+.detail-label { font-size: 0.85rem; font-weight: 900; letter-spacing: 0.25rem; text-transform: uppercase; color: var(--gold-light); margin-bottom: 0.2rem; }
 .detail-value { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 500; color: white; line-height: 1.15; }
 .detail-sub { font-size: 0.85rem; color: var(--gold-pale); opacity: 0.85; letter-spacing: 0.05rem; }
 
@@ -200,11 +160,18 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .arrive-notice-main em { font-style: normal; color: var(--gold-pale); }
 .arrive-notice-sub { margin-top: 0.4rem; font-size: 0.78rem; color: rgba(255,255,255,0.65); letter-spacing: 0.15rem; text-transform: uppercase; }
 
+/* ── RSVP ── */
+.rsvp-box { margin-top: 0.5rem; }
+.rsvp-label { font-size: 0.6rem; letter-spacing: 0.35rem; text-transform: uppercase; color: rgba(255,255,255,0.65); font-weight: 700; margin-bottom: 0.4rem; }
+.rsvp-main { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 500; color: white; line-height: 1.2; }
+.rsvp-phone { color: var(--gold-pale); text-decoration: none; border-bottom: 1px solid rgba(240,224,176,0.4); }
+.rsvp-phone:hover { color: white; border-bottom-color: white; }
+.rsvp-note { margin-top: 0.75rem; font-size: 0.82rem; color: rgba(255,255,255,0.65); line-height: 1.6; max-width: 380px; margin-left: auto; margin-right: auto; }
+
 /* ── INSPIRATION / PROMPTS ── */
 .prompts-section { max-width: 920px; margin: 0 auto; padding: 4rem 1.5rem 2rem; }
 .section-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(2rem, 4vw, 3rem); color: var(--burgundy); text-align: center; line-height: 1.15; margin-bottom: 0.5rem; }
 .section-sub { text-align: center; color: var(--text-light); font-size: 0.95rem; font-weight: 300; max-width: 580px; margin: 0 auto 2rem; line-height: 1.8; }
-.gold-line { height: 2px; background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent); }
 
 .prompts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
 .prompt-card {
@@ -218,19 +185,16 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .prompt-card::before { content: '"'; position: absolute; top: -0.3rem; left: 0.8rem; font-size: 2.5rem; color: var(--gold-pale); font-family: 'Cormorant Garamond', serif; line-height: 1; }
 
 /* ══════════════════════════════════════
-   SHARE A MEMORY — HERO SECTION
+   SHARE A MEMORY
 ══════════════════════════════════════ */
 .memory-hero-section {
   position: relative;
   background: linear-gradient(150deg, #FDF7EE 0%, #F5EDD8 50%, #FDF7EE 100%);
-  border-top: 3px solid var(--gold);
-  border-bottom: 3px solid var(--gold);
-  padding: 5rem 1.5rem 4rem;
-  overflow: hidden;
+  border-top: 3px solid var(--gold); border-bottom: 3px solid var(--gold);
+  padding: 5rem 1.5rem 4rem; overflow: hidden;
 }
 .memory-hero-section::before {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background-image:
     radial-gradient(ellipse 50% 60% at 0% 50%, rgba(123,26,58,0.05) 0%, transparent 60%),
     radial-gradient(ellipse 50% 60% at 100% 50%, rgba(181,25,90,0.04) 0%, transparent 60%);
@@ -244,42 +208,26 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
   margin-bottom: 1.5rem;
 }
 .memory-hero-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 300; font-style: italic;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  color: var(--burgundy);
-  line-height: 1.05; margin-bottom: 0.75rem;
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
+  font-size: clamp(2.5rem, 6vw, 4.5rem); color: var(--burgundy); line-height: 1.05; margin-bottom: 0.75rem;
 }
-.memory-hero-sub {
-  font-size: 1rem; color: var(--text-light); max-width: 560px;
-  margin: 0 auto 2.5rem; line-height: 1.8; font-weight: 300;
-}
-/* Animated pulse ring on the section */
-.memory-hero-accent {
-  display: flex; align-items: center; justify-content: center; gap: 1.5rem;
-  margin-bottom: 2rem;
-}
+.memory-hero-sub { font-size: 1rem; color: var(--text-light); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.8; font-weight: 300; }
+.memory-hero-accent { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; }
 .memory-hero-accent .pulse-dot {
-  width: 12px; height: 12px; border-radius: 50%;
-  background: var(--fuchsia);
-  box-shadow: 0 0 0 4px rgba(181,25,90,0.2);
-  animation: pulse 2s ease-in-out infinite;
+  width: 12px; height: 12px; border-radius: 50%; background: var(--fuchsia);
+  box-shadow: 0 0 0 4px rgba(181,25,90,0.2); animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 4px rgba(181,25,90,0.2); }
-  50% { box-shadow: 0 0 0 10px rgba(181,25,90,0.05); }
+  50%       { box-shadow: 0 0 0 10px rgba(181,25,90,0.05); }
 }
 .memory-hero-accent .acc-line { height: 1px; width: 80px; background: linear-gradient(90deg, transparent, var(--gold-light)); }
 .memory-hero-accent .acc-line.r { background: linear-gradient(90deg, var(--gold-light), transparent); }
 
-/* THE FORM ITSELF */
 .memory-form-container { max-width: 820px; margin: 0 auto; position: relative; z-index: 1; }
 .form-card {
-  background: white;
-  border: 1px solid var(--gold-pale);
-  border-top: 4px solid var(--burgundy);
-  border-radius: 2px;
-  padding: 3rem 2.5rem;
+  background: white; border: 1px solid var(--gold-pale); border-top: 4px solid var(--burgundy);
+  border-radius: 2px; padding: 3rem 2.5rem;
   box-shadow: 0 8px 60px rgba(42,26,16,0.12), 0 2px 0 var(--gold-pale);
 }
 @media (max-width: 600px) { .form-card { padding: 2rem 1.25rem; } }
@@ -295,10 +243,8 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .form-label { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
 .form-label span { color: var(--fuchsia); }
 .form-input, .form-select, .form-textarea {
-  width: 100%; padding: 0.75rem 1rem;
-  border: 1px solid #E8D8C0; border-radius: 2px;
-  background: #FDFAF5; color: var(--text);
-  font-family: 'Lato', sans-serif; font-size: 0.95rem;
+  width: 100%; padding: 0.75rem 1rem; border: 1px solid #E8D8C0; border-radius: 2px;
+  background: #FDFAF5; color: var(--text); font-family: 'Lato', sans-serif; font-size: 0.95rem;
   transition: border-color 0.2s, box-shadow 0.2s; outline: none; appearance: none;
 }
 .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold-light); box-shadow: 0 0 0 3px rgba(180,146,42,0.1); }
@@ -306,14 +252,11 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
 
-/* Prompt chips above textarea */
 .prompt-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
 .prompt-chip {
-  background: var(--fuchsia-pale); border: 1px solid rgba(181,25,90,0.2);
-  border-radius: 1px; padding: 0.3rem 0.75rem;
-  font-size: 0.72rem; color: var(--burgundy); cursor: pointer;
-  transition: all 0.15s; font-style: italic;
-  font-family: 'Cormorant Garamond', serif; font-size: 0.9rem;
+  background: var(--fuchsia-pale); border: 1px solid rgba(181,25,90,0.2); border-radius: 1px;
+  padding: 0.3rem 0.75rem; color: var(--burgundy); cursor: pointer; transition: all 0.15s;
+  font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem;
 }
 .prompt-chip:hover { background: var(--burgundy); color: var(--gold-pale); border-color: var(--burgundy); }
 
@@ -330,23 +273,25 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 
 .btn-submit {
   width: 100%; margin-top: 0.5rem; padding: 1.15rem 2rem;
-  background: linear-gradient(135deg, var(--burgundy), #9B2248);
-  color: white; border: none; border-radius: 2px;
-  font-family: 'Lato', sans-serif; font-size: 0.85rem; font-weight: 900;
-  letter-spacing: 0.25rem; text-transform: uppercase; cursor: pointer;
-  transition: all 0.2s; position: relative;
+  background: linear-gradient(135deg, var(--burgundy), #9B2248); color: white; border: none;
+  border-radius: 2px; font-family: 'Lato', sans-serif; font-size: 0.85rem; font-weight: 900;
+  letter-spacing: 0.25rem; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
   box-shadow: 0 4px 20px rgba(123,26,58,0.35);
 }
 .btn-submit:hover { background: linear-gradient(135deg, var(--fuchsia), #D63478); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(181,25,90,0.4); }
 .btn-submit:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* Another memory prompt */
 .add-another-teaser {
   text-align: center; margin-top: 1.25rem;
-  font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 0.95rem; color: var(--text-light);
+  font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.95rem; color: var(--text-light);
 }
 .add-another-teaser a { color: var(--fuchsia); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+.form-error {
+  display: none; margin-top: 1rem; padding: 0.75rem 1rem;
+  background: #FFF0F3; border: 1px solid rgba(181,25,90,0.3); border-radius: 2px;
+  color: var(--fuchsia); font-size: 0.85rem; text-align: center;
+}
 
 .success-message { display: none; text-align: center; padding: 3rem 2rem; }
 .success-message .success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
@@ -354,9 +299,9 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .success-message p { color: var(--text-light); font-size: 0.95rem; }
 .btn-another {
   display: inline-block; margin-top: 1.5rem; padding: 0.75rem 2rem;
-  background: var(--burgundy); color: white; border: none;
-  font-size: 0.75rem; letter-spacing: 0.2rem; text-transform: uppercase; cursor: pointer;
-  border-radius: 1px; font-family: 'Lato', sans-serif; font-weight: 900; transition: all 0.2s;
+  background: var(--burgundy); color: white; border: none; font-size: 0.75rem;
+  letter-spacing: 0.2rem; text-transform: uppercase; cursor: pointer; border-radius: 1px;
+  font-family: 'Lato', sans-serif; font-weight: 900; transition: all 0.2s;
 }
 .btn-another:hover { background: var(--fuchsia); }
 
@@ -366,13 +311,10 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .video-section {
   position: relative;
   background: linear-gradient(150deg, #1A0A14 0%, #2C0E1E 50%, #1A0A14 100%);
-  padding: 5rem 1.5rem;
-  text-align: center;
-  overflow: hidden;
+  padding: 5rem 1.5rem; text-align: center; overflow: hidden;
 }
 .video-section::before {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background-image:
     radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,174,92,0.1) 0%, transparent 60%),
     radial-gradient(ellipse 40% 40% at 100% 100%, rgba(181,25,90,0.1) 0%, transparent 50%);
@@ -383,67 +325,63 @@ body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: v
 .video-badge {
   display: inline-flex; align-items: center; gap: 0.5rem;
   background: rgba(181,25,90,0.3); color: var(--fuchsia-light);
-  border: 1px solid rgba(181,25,90,0.4);
-  padding: 0.4rem 1.2rem; border-radius: 1px;
+  border: 1px solid rgba(181,25,90,0.4); padding: 0.4rem 1.2rem; border-radius: 1px;
   font-size: 0.65rem; font-weight: 900; letter-spacing: 0.3rem; text-transform: uppercase;
   margin-bottom: 1.5rem;
 }
 .video-main-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 300; font-style: italic;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  color: white; line-height: 1.05; margin-bottom: 0.75rem;
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
+  font-size: clamp(2.5rem, 6vw, 4.5rem); color: white; line-height: 1.05; margin-bottom: 0.75rem;
 }
 .video-main-title em { font-style: normal; color: var(--gold-pale); }
 .video-sub { font-size: 1rem; color: rgba(255,255,255,0.6); max-width: 560px; margin: 0 auto 3rem; line-height: 1.8; }
 
 .video-card {
-  max-width: 720px; margin: 0 auto;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(212,174,92,0.2);
-  border-radius: 2px; padding: 3rem 2.5rem;
-  box-shadow: 0 8px 60px rgba(0,0,0,0.3);
-  position: relative; z-index: 1;
+  max-width: 720px; margin: 0 auto; background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212,174,92,0.2); border-radius: 2px; padding: 3rem 2.5rem;
+  box-shadow: 0 8px 60px rgba(0,0,0,0.3); position: relative; z-index: 1;
 }
 @media (max-width: 600px) { .video-card { padding: 2rem 1.25rem; } }
 
 .video-icon-ring {
   width: 90px; height: 90px; border-radius: 50%;
-  background: rgba(181,25,90,0.2);
-  border: 2px solid rgba(181,25,90,0.4);
+  background: rgba(181,25,90,0.2); border: 2px solid rgba(181,25,90,0.4);
   display: flex; align-items: center; justify-content: center;
   font-size: 2.5rem; margin: 0 auto 1.5rem;
   animation: pulse-ring 2.5s ease-in-out infinite;
 }
 @keyframes pulse-ring {
   0%, 100% { box-shadow: 0 0 0 0 rgba(181,25,90,0.3); }
-  50% { box-shadow: 0 0 0 16px rgba(181,25,90,0.0); }
+  50%       { box-shadow: 0 0 0 16px rgba(181,25,90,0.0); }
 }
-.video-steps {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem; margin: 2rem 0;
-}
+
+.example-video-wrap { color: white; margin-bottom: 1.5rem; }
+.example-video-label { font-size: 0.7rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gold-light); font-weight: 700; margin-bottom: 1rem; }
+.phone-frame { display: inline-block; border-radius: 12px; overflow: hidden; border: 3px solid rgba(255,255,255,0.15); box-shadow: 0 8px 40px rgba(0,0,0,0.5); margin-bottom: 0.75rem; }
+.phone-frame video { display: block; height: 350px; max-width: 100%; background: #000; }
+.video-placeholder-inner { height: 350px; width: 196px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); }
+.vp-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4; }
+.vp-text { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+.example-video-caption { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.9rem; color: rgba(255,255,255,0.5); }
+
+.video-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
 .video-step { text-align: center; }
 .video-step-num {
   width: 36px; height: 36px; border-radius: 50%;
   background: rgba(212,174,92,0.15); border: 1px solid rgba(212,174,92,0.3);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem;
-  color: var(--gold-light); margin: 0 auto 0.6rem;
+  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--gold-light); margin: 0 auto 0.6rem;
 }
 .video-step-text { font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
 .video-step-text strong { color: rgba(255,255,255,0.9); display: block; margin-bottom: 0.2rem; font-size: 0.9rem; }
-
 .video-divider { height: 1px; background: rgba(212,174,92,0.15); margin: 2rem 0; }
 
 .btn-email-video {
   display: inline-flex; align-items: center; gap: 0.75rem;
-  background: linear-gradient(135deg, var(--fuchsia), #D63478);
-  color: white; padding: 1.15rem 3rem; border-radius: 2px;
-  text-decoration: none; font-size: 0.85rem; font-weight: 900;
-  letter-spacing: 0.2rem; text-transform: uppercase;
-  transition: all 0.2s;
-  box-shadow: 0 4px 20px rgba(181,25,90,0.5);
+  background: linear-gradient(135deg, var(--fuchsia), #D63478); color: white;
+  padding: 1.15rem 3rem; border-radius: 2px; text-decoration: none;
+  font-size: 0.85rem; font-weight: 900; letter-spacing: 0.2rem; text-transform: uppercase;
+  transition: all 0.2s; box-shadow: 0 4px 20px rgba(181,25,90,0.5);
 }
 .btn-email-video:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(181,25,90,0.6); }
 .video-email-note { margin-top: 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.4); }
@@ -471,10 +409,10 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
 /* ── ANIMATIONS ── */
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 .hero-eyebrow { animation: fadeInUp 0.6s ease both 0.1s; }
-.hero-title { animation: fadeInUp 0.7s ease both 0.25s; }
+.hero-title    { animation: fadeInUp 0.7s ease both 0.25s; }
 .hero-subtitle { animation: fadeInUp 0.7s ease both 0.38s; }
-.hero-cta-row { animation: fadeInUp 0.7s ease both 0.5s; }
-.photos-stage { animation: fadeInUp 0.9s ease both 0.6s; }
+.hero-cta-row  { animation: fadeInUp 0.7s ease both 0.5s; }
+.photos-stage  { animation: fadeInUp 0.9s ease both 0.6s; }
 
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: none; }
@@ -491,12 +429,11 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
   <p class="hero-eyebrow">You are invited to celebrate</p>
   <h1 class="hero-title">Mellody</h1>
   <div class="hero-75-wrap">
-    <img src="/75.png" alt="75" class="hero-75-img" style="height: 100px;">
+    <img src="/75.png" alt="75" class="hero-75-img" style="width: 100px;">
   </div>
   <p class="hero-subtitle" style="margin-bottom:5px;">Beautiful Years</p>
 
   <p class="hero-cta-label">Help us make her birthday unforgettable</p>
-  
 
   <div class="photos-stage">
     <div class="photo-connector"></div>
@@ -550,23 +487,23 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     <p class="arrive-notice-main">Please arrive by <em>5:30 PM</em></p>
     <p class="arrive-notice-sub">Mellody arrives at 6:00 &mdash; let&rsquo;s all be there first</p>
 
-  <!-- RSVP -->
-  <div style="margin-top:2.5rem;">
-    <div class="arrive-diamonds" style="margin-bottom:1.25rem;">
-      <div class="line-g"></div><div class="d"></div><div class="d lg"></div><div class="d"></div><div class="line-g r"></div>
+    <!-- RSVP -->
+    <div style="margin-top:2.5rem;">
+      <div class="arrive-diamonds" style="margin-bottom:1.25rem;">
+        <div class="line-g"></div><div class="d"></div><div class="d lg"></div><div class="d"></div><div class="line-g r"></div>
+      </div>
+      <div class="rsvp-box">
+        <p class="rsvp-label">Please RSVP</p>
+        <p class="rsvp-main">Shalyce &nbsp;&mdash;&nbsp;
+          <a href="tel:8016451948" class="rsvp-phone">801&#8209;645&#8209;1948</a>
+        </p>
+        <p class="rsvp-note">
+          We&rsquo;ll provide dinner &mdash; we just want to make sure we have enough for everyone! <br>
+          If you think you&rsquo;ll be there, please let us know.
+          We&rsquo;d rather have extra than not enough!&nbsp; &#128150;
+        </p>
+      </div>
     </div>
-    <div class="rsvp-box">
-      <p class="rsvp-label">Please RSVP</p>
-      <p class="rsvp-main">Shalyce &nbsp;&mdash;&nbsp;
-        <a href="tel:8016451948" class="rsvp-phone">801&#8209;645&#8209;1948</a>
-      </p>
-      <p class="rsvp-note">
-        We&rsquo;ll provide dinner &mdash; we just want to make sure we have enough for everyone! <br>
-        If you think you&rsquo;ll be there, please let us know.
-        We&rsquo;d rather have extra than not enough!&nbsp; &#128150;
-      </p>
-    </div>
-  </div>
   </div>
 </div>
 
@@ -602,7 +539,8 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
       <span class="memory-hero-badge">&#10022; &nbsp; The Memory Book &nbsp; &#10022;</span>
       <h2 class="memory-hero-title">Share a Memory<br>with Mellody</h2>
       <p class="memory-hero-sub">
-        Every story you share will be beautifully printed and bound into a keepsake book
+      Over the years the most treasured keepsakes Mom has kept have been the notes, cards, and memories shared wih her.  The greatest gift we can give her is for her to know she made a lasting impact.
+      <br>Every story you share will be beautifully printed and bound into a keepsake book
         presented to Mellody on her birthday. Don&rsquo;t hold back &mdash;
         share as many memories as you&rsquo;d like!
       </p>
@@ -690,6 +628,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
             <button type="submit" class="btn-submit" id="submit-btn">
               &#10022; &nbsp; Submit My Memory &nbsp; &#10022;
             </button>
+            <div class="form-error" id="form-error"></div>
             <p class="add-another-teaser">
               Have more than one story? <a onclick="void(0)">You can submit as many as you like!</a> After submitting, you&rsquo;ll be able to add another.
             </p>
@@ -726,11 +665,11 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     <div class="video-card reveal">
       <div class="video-icon-ring">&#127909;</div>
 
-      <div class="example-video-wrap">
+      <div class="example-video-wrap" style="color: white;">
         <p class="example-video-label">&#9654; &nbsp; Watch an Example &nbsp; &#9654;</p>
         <div class="phone-frame">
-          <video
-            src="Shelcee-Funny.MOV"
+          <video style="height: 350px;"
+            src="/Shelcee-Funny.MOV"
             controls
             playsinline
             preload="metadata"
@@ -768,8 +707,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
         Any length, any format &mdash; we want to see <em style="color:var(--gold-pale);">you</em>.
       </p>
 
-      <a class="btn-email-video"
-         href="mailto:shalyce@gmail.com?subject=Video%20Memory%20for%20Mellody%27s%2075th%20Birthday&body=Hi!%20I%27m%20sending%20a%20video%20memory%20for%20Mellody%27s%20birthday%20celebration.%0A%0AMy%20name%20is%3A%20%5BYOUR%20NAME%5D%0A%0AAttached%20is%20my%20video%20message.">
+      <a class="btn-email-video" href="mailto:shalyce@gmail.com?subject=Video%20for%20Mellody%27s%20Birthday">
         &#9993; &nbsp; Email My Video Now
       </a>
       <p class="video-email-note">Send to: <strong>shalyce@gmail.com</strong> &nbsp;&mdash;&nbsp; MP4, MOV, or any format welcome</p>
@@ -777,8 +715,8 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
   </div>
 </section>
 
-<!-- ═══ MEMORIES WALL ═══ -->
-<div class="memories-section">
+<!-- ═══ MEMORIES WALL (hidden until you're ready to show it) ═══ -->
+<div class="memories-section" style="display:none;">
   <div class="memories-inner">
     <div class="reveal" style="text-align:center;">
       <h2 class="section-heading">Memories Already Shared</h2>
@@ -802,10 +740,16 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
 </footer>
 
 <script>
+  // ── Scroll-reveal ────────────────────────────────────────────────────────
   const revealEls = document.querySelectorAll('.reveal');
-  const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} }), {threshold:0.08});
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
   revealEls.forEach(el => obs.observe(el));
 
+  // ── Photo preview ────────────────────────────────────────────────────────
   document.getElementById('f-photo').addEventListener('change', function() {
     if (!this.files[0]) return;
     const reader = new FileReader();
@@ -818,6 +762,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     reader.readAsDataURL(this.files[0]);
   });
 
+  // ── Prompt chips ─────────────────────────────────────────────────────────
   function usePrompt(el) {
     const ta = document.getElementById('f-story');
     const text = el.textContent.replace(/\u2019/g, "'").replace(/\u2018/g, "'");
@@ -826,102 +771,87 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     ta.setSelectionRange(ta.value.length, ta.value.length);
   }
 
- 
-
+  // ── Memory form → Laravel mail ───────────────────────────────────────────
+  // Requires in routes/web.php:
+  //   Route::post('/submit-memory', [MemoryController::class, 'store']);
+  //
+  // MemoryController@store should validate, then:
+  //   Mail::to(config('mail.from.address'))->send(new MemorySubmitted($validated));
+  //   return response()->json(['success' => true]);
+  //
+  // Mail config lives in your .env:
+  //   MAIL_MAILER, MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_ADDRESS
+  // ─────────────────────────────────────────────────────────────────────────
   document.getElementById('memory-form').addEventListener('submit', async function(e) {
     e.preventDefault();
+
     const name     = document.getElementById('f-name').value.trim();
     const contact  = document.getElementById('f-contact').value.trim();
     const story    = document.getElementById('f-story').value.trim();
-    const year     = document.getElementById('f-year').value    || 'Unknown';
+    const year     = document.getElementById('f-year').value     || 'Unknown';
     const relation = document.getElementById('f-relation').value || '';
+    const errEl    = document.getElementById('form-error');
+
+    errEl.style.display = 'none';
 
     if (!name || !contact || !story) {
-      alert('Please fill in your name, contact info, and memory before submitting.');
+      errEl.textContent = 'Please fill in your name, contact info, and memory before submitting.';
+      errEl.style.display = 'block';
       return;
     }
 
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
-    btn.innerHTML = '&#10004; &nbsp; Sending...';
+    btn.innerHTML = '&#10004; &nbsp; Sending&hellip;';
+
+    const formData = new FormData();
+    formData.append('name',     name);
+    formData.append('contact',  contact);
+    formData.append('story',    story);
+    formData.append('year',     year);
+    formData.append('relation', relation);
 
     const photoFile = document.getElementById('f-photo').files[0];
+    if (photoFile) formData.append('photo', photoFile);
 
-    const doSend = (photoData) => {
-      // Save to local wall display
-      const m = { id: Date.now(), name, contact, story, year, relation,
-        photo: photoData || null, submittedAt: new Date().toISOString() };
-      const all = JSON.parse(localStorage.getItem('mellody_memories') || '[]');
-      all.push(m);
-      localStorage.setItem('mellody_memories', JSON.stringify(all));
+    try {
+      const res  = await fetch('/submit-memory', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json',
+        },
+        body: formData,
+      });
+      const data = await res.json();
 
-      // Send via LARAVEL DEFAULT MAILER USING THE .ENV
-      const params = {
-        from_name:   name,
-        contact:     contact,
-        memory_year: year,
-        relation:    relation,
-        message:     story,
-        reply_to:    contact.includes('@') ? contact : 'no-reply@memoriesareforsharing.com',
-        to_email:    'shalyce@gmail.com',
-      };
-
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-        .then(() => {
-          loadMemories();
-          document.getElementById('form-content').style.display = 'none';
-          document.getElementById('success-msg').style.display  = 'block';
-        })
-        .catch((err) => {
-          console.error('EmailJS error:', err);
-          if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-            // Dev mode — still show success, just not emailing yet
-            loadMemories();
-            document.getElementById('form-content').style.display = 'none';
-            document.getElementById('success-msg').style.display  = 'block';
-          } else {
-            alert('Something went wrong sending the email. Please try again or text Shalyce at 801-645-1948.');
-            btn.disabled = false;
-            btn.innerHTML = '&#10022; &nbsp; Try Again &nbsp; &#10022;';
-          }
-        });
-    };
-
-    if (photoFile) {
-      const reader = new FileReader();
-      reader.onload = ev => doSend(ev.target.result);
-      reader.readAsDataURL(photoFile);
-    } else {
-      doSend(null);
+      if (res.ok && data.success) {
+        document.getElementById('form-content').style.display = 'none';
+        document.getElementById('success-msg').style.display  = 'block';
+      } else {
+        throw new Error(data.message || 'Something went wrong.');
+      }
+    } catch (err) {
+      errEl.textContent = err.message || 'Something went wrong. Please try again or text Shalyce at 801-645-1948.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
     }
-  })
+  });
 
+  // ── Reset for "Add Another Memory" ──────────────────────────────────────
   function resetForm() {
     document.getElementById('memory-form').reset();
     document.getElementById('photo-preview').style.display = 'none';
     document.querySelector('.upload-icon').style.display = 'block';
     document.querySelector('.upload-text').style.display = 'block';
+    document.getElementById('form-error').style.display  = 'none';
     const btn = document.getElementById('submit-btn');
     btn.disabled = false;
     btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
     document.getElementById('form-content').style.display = 'block';
-    document.getElementById('success-msg').style.display = 'none';
+    document.getElementById('success-msg').style.display  = 'none';
   }
-
-  function loadMemories() {
-    const grid = document.getElementById('memories-grid');
-    const mems = JSON.parse(localStorage.getItem('mellody_memories') || '[]');
-    if (!mems.length) { grid.innerHTML = '<p class="no-memories">Be the first to share a memory! &#10022;</p>'; return; }
-    const sorted = [...mems].sort((a,b) => (parseInt(a.year)||9999) - (parseInt(b.year)||9999));
-    grid.innerHTML = sorted.map(m => {
-      const init = m.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-      const av = m.photo ? `<img src="${m.photo}" class="memory-avatar" alt="${m.name}">` : `<div class="memory-avatar-placeholder">${init}</div>`;
-      const prev = m.story.length > 200 ? m.story.slice(0,197)+'...' : m.story;
-      return `<div class="memory-card"><div class="memory-corner"></div><div class="memory-card-header">${av}<div><div class="memory-name">${esc(m.name)}</div><div class="memory-year">${esc(m.year)}${m.relation?' &middot; '+esc(m.relation):''}</div></div></div><div class="memory-text">${esc(prev)}</div></div>`;
-    }).join('');
-  }
-  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  loadMemories();
 </script>
 </body>
 </html>

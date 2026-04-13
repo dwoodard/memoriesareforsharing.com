@@ -13,5 +13,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // ── Memory form submission ──
-Route::post('/submit-memory', [MemoryController::class, 'submit'])
-    ->name('memory.submit');
+//Route::post('/submit-memory', [MemoryController::class, 'submit'])
+  //  ->name('memory.submit');
+
+
+Route::post('/submit-memory', [MemoryController::class, 'store']);
+

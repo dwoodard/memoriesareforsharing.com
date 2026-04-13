@@ -9,6 +9,23 @@ use App\Mail\MemorySubmitted;
 
 class MemoryController extends Controller
 {
+
+    public function store(Request $request)
+{
+    $data = $request->validate([
+        'name'     => 'required|string|max:255',
+        'contact'  => 'required|string|max:255',
+        'story'    => 'required|string',
+        'year'     => 'nullable|string',
+        'relation' => 'nullable|string',
+        'photo'    => 'nullable|image|max:5120',
+    ]);
+
+    Mail::to('shalyce@gmail.com')->send(new MemorySubmitted($data));
+
+    return response()->json(['success' => true]);
+}
+
     public function submit(Request $request)
     {
         $validated = $request->validate([
