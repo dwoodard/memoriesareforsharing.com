@@ -620,7 +620,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
               <div class="photo-upload-area" id="upload-area">
                 <input type="file" id="f-photo" accept="image/*">
                 <div class="upload-icon">&#128247;</div>
-                <p class="upload-text">Tap to upload a selfie or photo of yourself<br><small style="opacity:0.7;">Appears next to your memory in the printed book</small></p>
+                <p class="upload-text">Tap to upload a selfie or photo of yourself<br /><small style="opacity:0.7;">Appears next to your memory in the printed book</small></p>
                 <img class="upload-preview" id="photo-preview" src="" alt="Preview">
               </div>
             </div>
@@ -815,28 +815,41 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     if (photoFile) formData.append('photo', photoFile);
 
     try {
-      const res  = await fetch('/submit-memory', {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          'Accept': 'application/json',
-        },
-        body: formData,
-      });
-      const data = await res.json();
+  const res = await fetch('/submit-memory', {
+    method: 'POST',
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+      'Accept': 'application/json',
+    },
+    body: formData,
+  });
 
-      if (res.ok && data.success) {
-        document.getElementById('form-content').style.display = 'none';
-        document.getElementById('success-msg').style.display  = 'block';
-      } else {
-        throw new Error(data.message || 'Something went wrong.');
-      }
-    } catch (err) {
-      errEl.textContent = err.message || 'Something went wrong. Please try again or text Shalyce at 801-645-1948.';
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
-    }
+  // Guard against non-JSON responses (413, 500, etc.)
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(res.status === 413
+      ? 'Photo is too large. Please choose a smaller image and try again.'
+      : 'Server error (' + res.status + '). Please try again or text Shalyce at 801-645-1948.');
+  }
+
+  const data = await res.json();
+  if (res.ok && data.success) {
+    document.getElementById('form-content').style.display = 'none';
+    document.getElementById('success-msg').style.display  = 'block';
+  } else {
+    throw new Error(data.message || 'Something went wrong.');
+  }
+} catch (err) {
+  errEl.textContent = err.message || 'Something went wrong. Please try again.';
+  errEl.style.display = 'block';
+  if (photoFile && photoFile.size > 15 * 1024 * 1024) {
+  errEl.textContent = 'Photo is too large — please choose an image under 15MB.';
+  errEl.style.display = 'block';
+  return;
+}
+  btn.disabled = false;
+  btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
+}
   });
 
   // ── Reset for "Add Another Memory" ──────────────────────────────────────
