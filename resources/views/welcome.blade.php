@@ -1350,8 +1350,8 @@
 
         .upload-preview {
             display: none;
-            max-width: 100px;
-            max-height: 100px;
+            max-width: 100%;
+            max-height: 100%;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--gold-light);
