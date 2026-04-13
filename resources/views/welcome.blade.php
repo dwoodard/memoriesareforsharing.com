@@ -812,39 +812,48 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     formData.append('relation', relation);
 
     const photoFile = document.getElementById('f-photo').files[0];
+
+    if (photoFile && photoFile.size > 15 * 1024 * 1024) {
+      errEl.textContent = 'Photo is too large — please choose an image under 15MB and try again or text Shalyce at 801-645-1948.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
+      return;
+    }
+
     if (photoFile) formData.append('photo', photoFile);
 
     try {
-  const res = await fetch('/submit-memory', {
-    method: 'POST',
-    headers: {
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-      'Accept': 'application/json',
-    },
-    body: formData,
-  });
+      const res = await fetch('/submit-memory', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json',
+        },
+        body: formData,
+      });
 
-  // Guard against non-JSON responses (413, 500, etc.)
-  const contentType = res.headers.get('content-type') || '';
-  if (photoFile && photoFile.size > 15 * 1024 * 1024) {
-  errEl.textContent = 'Photo is too large — please choose an image under 15MB and try again or text Shalyce at 801-645-1948.';
-  errEl.style.display = 'block';
-  return;
-}
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        if (res.status === 413) {
+          throw new Error('Photo is too large — please choose an image under 15MB and try again or text Shalyce at 801-645-1948.');
+        }
+        throw new Error('Something went wrong. Please try again or text Shalyce at 801-645-1948.');
+      }
 
-  const data = await res.json();
-  if (res.ok && data.success) {
-    document.getElementById('form-content').style.display = 'none';
-    document.getElementById('success-msg').style.display  = 'block';
-  } else {
-    throw new Error(data.message || 'Something went wrong.');
-  }
-} catch (err) {
-  errEl.textContent = err.message || 'Something went wrong. Please try again.';
-  errEl.style.display = 'block';
-  btn.disabled = false;
-  btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
-}
+      const data = await res.json();
+      if (res.ok && data.success) {
+        document.getElementById('form-content').style.display = 'none';
+        document.getElementById('success-msg').style.display  = 'block';
+      } else {
+        throw new Error(data.message || 'Something went wrong.');
+      }
+    } catch (err) {
+      errEl.textContent = err.message || 'Something went wrong. Please try again.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
+    }
   });
 
   // ── Reset for "Add Another Memory" ──────────────────────────────────────
