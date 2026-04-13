@@ -1,14 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
+use App\Http\Controllers\MemoryController;
 
-Route::inertia('/', 'Welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+// ── Main birthday site ──
+Route::get('/', function () {
+    return view('welcome');
 });
 
-require __DIR__.'/settings.php';
+// ── Memory form submission ──
+Route::post('/submit-memory', [MemoryController::class, 'submit'])
+    ->name('memory.submit');
