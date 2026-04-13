@@ -517,7 +517,7 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
     <div class="detail-item">
       <div class="detail-icon">&#10022;</div>
       <div class="detail-label">Time</div>
-      <div class="detail-value">6:00 &ndash; 9:00 PM</div>
+      <div class="detail-value">5:30 &ndash; 9:00 PM</div>
       <div class="detail-sub">Party begins at 6 PM</div>
     </div>
     <div class="detail-item">
@@ -563,12 +563,12 @@ footer .footer-title { font-family: 'Cormorant Garamond', serif; font-style: ita
   </div>
   <div class="reveal">
     <div class="prompts-grid">
-      <div class="prompt-card">When you think of Mellody, what&rsquo;s the very first thing that comes to mind?</div>
       <div class="prompt-card">How has Mellody changed or blessed your life?</div>
-      <div class="prompt-card">Tell a story about a time she helped you when you needed it most.</div>
-      <div class="prompt-card">What&rsquo;s a small, quiet moment with Mellody you&rsquo;ve never forgotten?</div>
-      <div class="prompt-card">Share a funny story, or something embarrassing, school-related, or church calling related!</div>
-      <div class="prompt-card">What&rsquo;s something you&rsquo;ve learned from Mellody &mdash; whether she realized it or not?</div>
+      <div class="prompt-card">Tell a funny or embarassing story you&rsquo;ve had with Mellody?</div>
+      <div class="prompt-card">Tell a story about a time she helped you when you needed it.</div>
+      <div class="prompt-card">What&rsquo;s a moment you had with Mellody you&rsquo;ve never forgotten?</div>
+      <div class="prompt-card">Share a story about school, some fun activity, a service project, or church related!</div>
+      <div class="prompt-card">What&rsquo;s something you&rsquo;ve learned from Mellody?</div>
     </div>
   </div>
   <div class="reveal" style="text-align:center;margin-top:2.5rem;">
