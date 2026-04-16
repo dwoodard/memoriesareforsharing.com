@@ -1691,7 +1691,7 @@
             <div class="detail-item">
                 <div class="detail-icon">&#10022;</div>
                 <div class="detail-label">Date</div>
-                <div class="detail-value">Friday, May 2nd</div>
+                <div class="detail-value">Saturday, May 2nd</div>
                 <div class="detail-sub">2026</div>
             </div>
             <div class="detail-item">
