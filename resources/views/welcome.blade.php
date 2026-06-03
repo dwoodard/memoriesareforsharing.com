@@ -1,1287 +1,939 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="It's Mellody's 75th Birthday">
-    <meta property="og:url" content="https://memoriesareforsharing.com/">
-    <meta property="og:image" content="/OG-PartyImg2.PNG">
-    <meta property="og:description"
-        content="Come Celebrate Mellody's Birthday - May 2nd, 5:30-9pm, DON'T SPOIL THE SURPRISE">
+    <meta name="description" content="Preserve your memories, your voice, and your legacy for the people you love. Legacy preservation services by Shalyce — professional interviews, films, and heirloom documentaries.">
+    <title>Memories Are For Sharing | Legacy Preservation by Shalyce</title>
 
-    <title>Celebrating Mellody's 75th Birthday</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Lato:wght@300;400;700;900&display=swap"
-        rel="stylesheet">
+    {{-- Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    {{-- CSRF for contact form --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* ============================================================
+           CSS CUSTOM PROPERTIES
+        ============================================================ */
         :root {
-            --cream: #FDF7EE;
-            --cream-dark: #F5EDD8;
-            --gold: #B8922A;
-            --gold-light: #D4AE5C;
-            --gold-pale: #F0E0B0;
-            --fuchsia: #B5195A;
-            --fuchsia-light: #D63478;
-            --fuchsia-pale: #F9E8EF;
-            --burgundy: #7B1A3A;
-            --burgundy-deep: #5C0E28;
-            --dark: #2A1A10;
-            --text: #3A2518;
-            --text-light: #7A5C4A;
+            --navy:       #1a2744;
+            --navy-light: #243260;
+            --forest:     #3d5c3a;
+            --forest-mid: #4e7549;
+            --sage:       #7a9e76;
+            --sage-light: #a8c4a4;
+            --cream:      #f7f3ec;
+            --parchment:  #ede8de;
+            --warm-white: #faf8f4;
+            --gold:       #b8955a;
+            --gold-light: #d4af7a;
+            --text-dark:  #1e1a14;
+            --text-mid:   #3d3628;
+            --text-soft:  #6b6254;
+
+            --serif: 'Cormorant Garamond', Georgia, serif;
+            --sans:  'Jost', system-ui, sans-serif;
+
+            --section-pad: clamp(4rem, 8vw, 7rem);
+            --container:   min(1180px, 92vw);
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
 
         body {
-            font-family: 'Lato', sans-serif;
-            background-color: var(--cream);
-            color: var(--text);
-            line-height: 1.7;
+            font-family: var(--sans);
+            background: var(--warm-white);
+            color: var(--text-dark);
             overflow-x: hidden;
+            line-height: 1.7;
         }
 
-        /* ── HERO ── */
-        .hero {
-            position: relative;
-            background-color: var(--cream);
-            padding: 1.5rem 1.5rem 3rem;
-            text-align: center;
-            overflow: visible;
+        img { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; }
+
+        .container {
+            width: var(--container);
+            margin-inline: auto;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(ellipse 60% 40% at 50% 0%, rgba(180, 146, 42, 0.13) 0%, transparent 70%),
-                radial-gradient(ellipse 30% 20% at 10% 90%, rgba(181, 25, 90, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse 30% 20% at 90% 90%, rgba(181, 25, 90, 0.06) 0%, transparent 60%);
-            pointer-events: none;
+        /* ============================================================
+           NAVIGATION
+        ============================================================ */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(26, 39, 68, 0.96);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(184, 149, 90, 0.25);
+            transition: box-shadow 0.3s;
         }
 
-        .hero-top-border {
+        nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.18); }
+
+        .nav-inner {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            justify-content: space-between;
+            height: 68px;
+            width: var(--container);
+            margin-inline: auto;
         }
 
-        .hero-top-border .line {
-            height: 1px;
-            width: 60px;
-            background: var(--gold-light);
-        }
-
-        .hero-top-border .diamond {
-            width: 8px;
-            height: 8px;
-            background: var(--gold);
-            transform: rotate(45deg);
-        }
-
-        .hero-top-border .diamond-sm {
-            width: 5px;
-            height: 5px;
-            background: var(--gold-light);
-            transform: rotate(45deg);
-        }
-
-        .hero-surprise {
-            font-family: 'Lato', sans-serif;
-            font-weight: 700;
-            font-size: clamp(1.2rem, 2vw, 1.2rem);
-            letter-spacing: 0.25rem;
-            text-transform: uppercase;
-            color: var(--fuchsia);
-            margin-bottom: 0.5rem;
-        }
-
-        .hero-eyebrow {
-            font-family: 'Lato', sans-serif;
-            font-weight: 300;
-            font-size: 0.75rem;
-            letter-spacing: 0.35rem;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 0.75rem;
-        }
-
-        .hero-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 300;
-            font-style: italic;
-            font-size: clamp(3rem, 7vw, 5.5rem);
-            color: var(--burgundy);
-            line-height: 1;
-            margin-bottom: 0.2rem;
-        }
-
-        .hero-subtitle {
-            font-family: 'Cormorant Garamond', serif;
+        .nav-logo {
+            font-family: var(--serif);
+            font-size: 1.2rem;
             font-weight: 500;
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            color: var(--text-light);
-            letter-spacing: 0.15rem;
-            text-transform: uppercase;
-            margin-bottom: 2.5rem;
-        }
-
-        /* ── HERO CTA BUTTONS ── */
-        .hero-cta-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 3rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-cta-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: var(--burgundy);
-            color: white;
-            padding: 1rem 2.2rem;
-            border-radius: 2px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 900;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(123, 26, 58, 0.35);
-        }
-
-        .hero-cta-primary:hover {
-            background: var(--fuchsia);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(181, 25, 90, 0.4);
-        }
-
-        .hero-cta-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: transparent;
-            color: var(--fuchsia);
-            padding: 1rem 2.2rem;
-            border-radius: 2px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 900;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            border: 2px solid var(--fuchsia);
-            transition: all 0.2s;
-        }
-
-        .hero-cta-secondary:hover {
-            background: var(--fuchsia);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(181, 25, 90, 0.3);
-        }
-
-        .hero-cta-label {
-            font-size: 0.7rem;
-            color: var(--text-light);
-            letter-spacing: 0.05rem;
-            margin-top: -0.5rem;
-            margin-bottom: 0.5rem;
-            font-style: italic;
-            font-family: 'Cormorant Garamond', serif;
-        }
-
-        /* ── PHOTOS ── */
-        .photos-stage {
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            height: 320px;
-            margin: 0 auto;
-            max-width: 680px;
-        }
-
-        @media (min-width: 768px) {
-            .photos-stage {
-                height: 420px;
-                max-width: 900px;
-            }
-        }
-
-        .photo-frame {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.4s ease;
-        }
-
-        .photo-frame img {
-            display: block;
-            object-fit: cover;
-            border-radius: 3px;
-        }
-
-        /* Left — youngest photo */
-        .photo-frame.past {
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-175%) rotate(-6deg);
-            z-index: 1;
-        }
-
-        .photo-frame.past img {
-            width: 155px;
-            height: 200px;
-            border: 6px solid white;
-            box-shadow: -4px 6px 30px rgba(42, 26, 16, 0.22), 0 0 0 1px rgba(180, 146, 42, 0.2);
-            filter: sepia(0.2);
-        }
-
-        .photo-frame.past:hover {
-            transform: translateX(-175%) rotate(-4deg) scale(1.04);
-            z-index: 4;
-        }
-
-        /* Center — front and tallest */
-        .photo-frame.present {
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%) rotate(0deg);
-            z-index: 3;
-        }
-
-        .photo-frame.present img {
-            width: 195px;
-            height: 255px;
-            border: 6px solid white;
-            box-shadow: 0 10px 40px rgba(42, 26, 16, 0.32), 0 0 0 1px rgba(180, 146, 42, 0.3);
-        }
-
-        .photo-frame.present:hover {
-            transform: translateX(-50%) rotate(0deg) scale(1.04);
-            z-index: 4;
-        }
-
-        /* Right — birthday photo */
-        .photo-frame.recent {
-            left: 50%;
-            bottom: 0;
-            transform: translateX(72%) rotate(5.5deg);
-            z-index: 2;
-        }
-
-        .photo-frame.recent img {
-            width: 155px;
-            height: 200px;
-            border: 6px solid white;
-            box-shadow: 4px 6px 30px rgba(42, 26, 16, 0.22), 0 0 0 1px rgba(180, 146, 42, 0.2);
-        }
-
-        .photo-frame.recent:hover {
-            transform: translateX(72%) rotate(3.5deg) scale(1.04);
-            z-index: 4;
-        }
-
-        @media (min-width: 768px) {
-            .photo-frame.past {
-                transform: translateX(-185%) rotate(-7deg);
-            }
-
-            .photo-frame.past img {
-                width: 230px;
-                height: 295px;
-                border-width: 8px;
-            }
-
-            .photo-frame.past:hover {
-                transform: translateX(-185%) rotate(-5deg) scale(1.04);
-            }
-
-            .photo-frame.present {
-                transform: translateX(-50%) rotate(0deg);
-            }
-
-            .photo-frame.present img {
-                width: 285px;
-                height: 365px;
-                border-width: 8px;
-            }
-
-            .photo-frame.present:hover {
-                transform: translateX(-50%) rotate(0deg) scale(1.04);
-            }
-
-            .photo-frame.recent {
-                transform: translateX(82%) rotate(6deg);
-            }
-
-            .photo-frame.recent img {
-                width: 230px;
-                height: 295px;
-                border-width: 8px;
-            }
-
-            .photo-frame.recent:hover {
-                transform: translateX(82%) rotate(4deg) scale(1.04);
-            }
-        }
-
-        .photo-caption {
-            margin-top: 0.6rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 0.82rem;
-            color: var(--text-light);
-            white-space: nowrap;
-        }
-
-        .photo-connector {
-            position: absolute;
-            bottom: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold-pale), var(--gold-light), var(--gold-pale));
-            z-index: 0;
-            border-radius: 1px;
-        }
-
-        /* ── DETAILS BAND ── */
-        .details-band {
-            position: relative;
-            background: linear-gradient(160deg, #6A1030 0%, #7B1A3A 40%, #5C0E28 100%);
-            color: white;
-            padding: 5rem 1.5rem 4rem;
-            text-align: center;
-            margin-top: 80px;
-            overflow: hidden;
-        }
-
-        .details-band::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(ellipse 80% 50% at 50% 100%, rgba(212, 174, 92, 0.14) 0%, transparent 70%),
-                radial-gradient(ellipse 30% 30% at 0% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .details-band::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent);
-        }
-
-        .band-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 300;
-            font-style: italic;
-            font-size: 1rem;
-            color: var(--gold-pale);
-            letter-spacing: 0.35rem;
-            text-transform: uppercase;
-            margin-bottom: 2.5rem;
-            opacity: 0.9;
-        }
-
-        .details-grid {
-            display: flex;
-            justify-content: center;
-            gap: 0;
-            flex-wrap: wrap;
-            max-width: 860px;
-            margin: 0 auto 3rem;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(212, 174, 92, 0.25);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .detail-item {
-            flex: 1;
-            min-width: 220px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 2.5rem 1.5rem;
-            position: relative;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .detail-item+.detail-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 15%;
-            bottom: 15%;
-            width: 1px;
-            background: rgba(212, 174, 92, 0.2);
-        }
-
-        .detail-icon {
-            font-size: 1rem;
-            color: var(--gold-light);
-            margin-bottom: 0.2rem;
-            opacity: 0.8;
-        }
-
-        .detail-label {
-            font-size: 0.85rem;
-            font-weight: 900;
-            letter-spacing: 0.25rem;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            margin-bottom: 0.2rem;
-        }
-
-        .detail-value {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(1.6rem, 3vw, 2.2rem);
-            font-weight: 500;
-            color: white;
-            line-height: 1.15;
-        }
-
-        .detail-sub {
-            font-size: 0.85rem;
-            color: var(--gold-pale);
-            opacity: 0.85;
-            letter-spacing: 0.05rem;
-        }
-
-        .arrive-diamonds {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .arrive-diamonds .d {
-            width: 6px;
-            height: 6px;
-            background: var(--gold-light);
-            transform: rotate(45deg);
-            opacity: 0.7;
-        }
-
-        .arrive-diamonds .d.lg {
-            width: 9px;
-            height: 9px;
-            opacity: 1;
-        }
-
-        .arrive-diamonds .line-g {
-            height: 1px;
-            width: 50px;
-            background: linear-gradient(90deg, transparent, var(--gold-light));
-        }
-
-        .arrive-diamonds .line-g.r {
-            background: linear-gradient(90deg, var(--gold-light), transparent);
-        }
-
-        .arrive-notice {
-            position: relative;
-            display: inline-block;
-            padding: 1.6rem 3.5rem;
-            background: linear-gradient(135deg, rgba(181, 25, 90, 0.55), rgba(181, 25, 90, 0.3));
-            border: 1px solid var(--fuchsia-light);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .arrive-notice::before {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1px;
-            pointer-events: none;
-        }
-
-        .arrive-notice-eyebrow {
-            font-size: 0.6rem;
-            letter-spacing: 0.35rem;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.65);
-            margin-bottom: 0.4rem;
-            font-weight: 700;
-        }
-
-        .arrive-notice-main {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            font-weight: 500;
-            color: white;
-            line-height: 1.1;
-        }
-
-        .arrive-notice-main em {
-            font-style: normal;
-            color: var(--gold-pale);
-        }
-
-        .arrive-notice-sub {
-            margin-top: 0.4rem;
-            font-size: 0.78rem;
-            color: rgba(255, 255, 255, 0.65);
-            letter-spacing: 0.15rem;
-            text-transform: uppercase;
-        }
-
-        /* ── RSVP ── */
-        .rsvp-box {
-            margin-top: 0.5rem;
-        }
-
-        .rsvp-label {
-            font-size: 0.6rem;
-            letter-spacing: 0.35rem;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.65);
-            font-weight: 700;
-            margin-bottom: 0.4rem;
-        }
-
-        .rsvp-main {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(1.4rem, 3vw, 2rem);
-            font-weight: 500;
-            color: white;
+            color: var(--cream);
+            letter-spacing: 0.03em;
             line-height: 1.2;
         }
 
-        .rsvp-phone {
-            color: var(--gold-pale);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(240, 224, 176, 0.4);
+        .nav-logo span {
+            display: block;
+            font-size: 0.65rem;
+            font-family: var(--sans);
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-top: 1px;
         }
 
-        .rsvp-phone:hover {
-            color: white;
-            border-bottom-color: white;
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
         }
 
-        .rsvp-note {
-            margin-top: 0.75rem;
-            font-size: 0.82rem;
-            color: rgba(255, 255, 255, 0.65);
-            line-height: 1.6;
-            max-width: 380px;
-            margin-left: auto;
-            margin-right: auto;
+        .nav-links a {
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(247, 243, 236, 0.8);
+            transition: color 0.2s;
+            font-weight: 500;
         }
 
-        /* ── INSPIRATION / PROMPTS ── */
-        .prompts-section {
-            max-width: 920px;
-            margin: 0 auto;
-            padding: 4rem 1.5rem 2rem;
+        .nav-links a:hover { color: var(--gold-light); }
+
+        .nav-cta {
+            background: var(--gold);
+            color: var(--navy) !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2px;
+            font-weight: 600 !important;
+            transition: background 0.2s !important;
         }
 
-        .section-heading {
-            font-family: 'Cormorant Garamond', serif;
+        .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy) !important; }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--cream);
+            transition: all 0.3s;
+        }
+
+        /* ============================================================
+           HERO
+        ============================================================ */
+        #hero {
+            min-height: 100svh;
+            background: var(--navy);
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg-pattern {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(ellipse 80% 60% at 70% 50%, rgba(61, 92, 58, 0.22) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 80% at 20% 80%, rgba(184, 149, 90, 0.08) 0%, transparent 60%);
+        }
+
+        /* Decorative corner flourishes */
+        .hero-bg-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 40%, rgba(61,92,58,0.12) 100%);
+            clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            width: var(--container);
+            margin-inline: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-text { animation: fadeUp 1s ease both; }
+
+        .hero-eyebrow {
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: '';
+            display: block;
+            height: 1px;
+            width: 36px;
+            background: var(--gold);
+            opacity: 0.6;
+        }
+
+        .hero-headline {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 5.5vw, 5.2rem);
+            font-weight: 600;
+            line-height: 1.05;
+            color: var(--cream);
+            margin-bottom: 0.4rem;
+        }
+
+        .hero-headline em {
+            font-style: italic;
+            font-weight: 300;
+            color: var(--sage-light);
+        }
+
+        .hero-subhead {
+            font-family: var(--serif);
+            font-size: clamp(1.15rem, 2vw, 1.5rem);
             font-weight: 300;
             font-style: italic;
-            font-size: clamp(2rem, 4vw, 3rem);
-            color: var(--burgundy);
-            text-align: center;
-            line-height: 1.15;
-            margin-bottom: 0.5rem;
+            color: var(--gold-light);
+            margin-bottom: 2rem;
+            letter-spacing: 0.02em;
         }
 
-        .section-sub {
-            text-align: center;
-            color: var(--text-light);
-            font-size: 0.95rem;
-            font-weight: 300;
-            max-width: 580px;
-            margin: 0 auto 2rem;
+        .hero-body {
+            color: rgba(247, 243, 236, 0.75);
+            font-size: 1.05rem;
+            max-width: 480px;
+            margin-bottom: 2.8rem;
             line-height: 1.8;
         }
 
-        .prompts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        .hero-actions {
+            display: flex;
             gap: 1rem;
-            margin: 1.5rem 0;
+            flex-wrap: wrap;
         }
 
-        .prompt-card {
-            background: white;
-            border: 1px solid var(--gold-pale);
-            border-left: 3px solid var(--gold-light);
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: var(--sans);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.95rem 2rem;
             border-radius: 2px;
-            padding: 1.1rem 1.2rem 1.1rem 1.5rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1rem;
-            color: var(--text);
-            line-height: 1.6;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(184, 149, 90, 0.35);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--cream);
+            font-family: var(--sans);
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.95rem 2rem;
+            border-radius: 2px;
+            border: 1px solid rgba(247, 243, 236, 0.35);
+            cursor: pointer;
+            transition: all 0.25s;
+            text-decoration: none;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--cream);
+            background: rgba(247, 243, 236, 0.06);
+        }
+
+        .hero-visual {
+            animation: fadeUp 1s 0.2s ease both;
             position: relative;
-            cursor: default;
-            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .prompt-card:hover {
-            border-left-color: var(--fuchsia);
-            box-shadow: 0 2px 12px rgba(181, 25, 90, 0.08);
+        .hero-photo-frame {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            background: var(--navy-light);
         }
 
-        .prompt-card::before {
-            content: '"';
+        .hero-photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.88;
+        }
+
+        /* Decorative frame border */
+        .hero-photo-frame::after {
+            content: '';
             position: absolute;
-            top: -0.3rem;
-            left: 0.8rem;
-            font-size: 2.5rem;
-            color: var(--gold-pale);
-            font-family: 'Cormorant Garamond', serif;
+            inset: 12px;
+            border: 1px solid rgba(184, 149, 90, 0.4);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        .hero-photo-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(26,39,68,0.9));
+            padding: 3rem 1.5rem 1.5rem;
+        }
+
+        .hero-photo-caption p {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--cream);
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        /* Decorative offset accent box */
+        .hero-accent-box {
+            position: absolute;
+            top: -16px; right: -16px;
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(184, 149, 90, 0.3);
+            border-radius: 2px;
+            z-index: -1;
+        }
+
+        .hero-stats {
+            position: absolute;
+            bottom: -24px;
+            left: -24px;
+            background: var(--forest);
+            color: var(--cream);
+            padding: 1.2rem 1.6rem;
+            border-radius: 3px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .hero-stats strong {
+            display: block;
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 600;
             line-height: 1;
         }
 
-        /* ══════════════════════════════════════
-   VIDEO SECTION
-══════════════════════════════════════ */
-        .video-section {
-            position: relative;
-            background: linear-gradient(150deg, #1A0A14 0%, #2C0E1E 50%, #1A0A14 100%);
-            padding: 5rem 1.5rem;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .video-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212, 174, 92, 0.1) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 100% 100%, rgba(181, 25, 90, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .video-section::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent);
-        }
-
-        .video-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(181, 25, 90, 0.3);
-            color: var(--fuchsia-light);
-            border: 1px solid rgba(181, 25, 90, 0.4);
-            padding: 0.4rem 1.2rem;
-            border-radius: 1px;
-            font-size: 0.65rem;
-            font-weight: 900;
-            letter-spacing: 0.3rem;
+        .hero-stats span {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            margin-bottom: 1.5rem;
+            opacity: 0.8;
         }
 
-        .video-main-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 300;
-            font-style: italic;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            color: white;
-            line-height: 1.05;
-            margin-bottom: 0.75rem;
+        /* ============================================================
+           VALUES STRIP
+        ============================================================ */
+        #values {
+            background: var(--forest);
+            padding: 2.5rem 0;
         }
 
-        .video-main-title em {
-            font-style: normal;
-            color: var(--gold-pale);
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
         }
 
-        .video-sub {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.6);
-            max-width: 560px;
-            margin: 0 auto 3rem;
-            line-height: 1.8;
-        }
-
-        .video-card {
-            max-width: 720px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 174, 92, 0.2);
-            border-radius: 2px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 8px 60px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (max-width: 600px) {
-            .video-card {
-                padding: 2rem 1.25rem;
-            }
-        }
-
-        .video-icon-ring {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: rgba(181, 25, 90, 0.2);
-            border: 2px solid rgba(181, 25, 90, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            margin: 0 auto 1.5rem;
-            animation: pulse-ring 2.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse-ring {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(181, 25, 90, 0.3);
-            }
-
-            50% {
-                box-shadow: 0 0 0 16px rgba(181, 25, 90, 0.0);
-            }
-        }
-
-        .example-video-wrap {
-            color: white;
-            margin-bottom: 1.5rem;
-        }
-
-        .example-video-label {
-            font-size: 0.7rem;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .phone-frame {
-            display: inline-block;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 3px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
-            margin-bottom: 0.75rem;
-        }
-
-        .phone-frame video {
-            display: block;
-            height: 350px;
-            max-width: 100%;
-            background: #000;
-        }
-
-        .video-placeholder-inner {
-            height: 350px;
-            width: 196px;
+        .value-item {
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+            padding: 1.5rem 1.5rem;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            gap: 0.7rem;
+        }
+
+        .value-item:last-child { border-right: none; }
+
+        .value-icon {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
+            color: var(--cream);
         }
 
-        .vp-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.4;
+        .value-icon svg { width: 20px; height: 20px; }
+
+        .value-label {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.85);
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            line-height: 1.4;
         }
 
-        .vp-text {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.4);
+        /* ============================================================
+           ABOUT / INTRO
+        ============================================================ */
+        #about {
+            padding: var(--section-pad) 0;
+            background: var(--warm-white);
         }
 
-        .example-video-caption {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .video-steps {
+        .about-inner {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .video-step {
-            text-align: center;
-        }
-
-        .video-step-num {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(212, 174, 92, 0.15);
-            border: 1px solid rgba(212, 174, 92, 0.3);
-            display: flex;
+            grid-template-columns: 1fr 1.1fr;
+            gap: clamp(3rem, 6vw, 7rem);
             align-items: center;
-            justify-content: center;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
-            color: var(--gold-light);
-            margin: 0 auto 0.6rem;
         }
 
-        .video-step-text {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.65);
+        .about-photo-wrap {
+            position: relative;
+        }
+
+        .about-photo {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            border-radius: 3px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.14);
+        }
+
+        .about-photo-bg {
+            position: absolute;
+            inset: -16px -16px 16px 16px;
+            background: var(--parchment);
+            border-radius: 3px;
+            z-index: -1;
+        }
+
+        .about-quote-card {
+            position: absolute;
+            bottom: -2rem;
+            right: -2rem;
+            background: var(--navy);
+            color: var(--cream);
+            padding: 1.4rem 1.6rem;
+            border-radius: 3px;
+            max-width: 200px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+        }
+
+        .about-quote-card blockquote {
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 1rem;
             line-height: 1.5;
+            color: var(--cream);
         }
 
-        .video-step-text strong {
-            color: rgba(255, 255, 255, 0.9);
+        .about-quote-card cite {
             display: block;
-            margin-bottom: 0.2rem;
-            font-size: 0.9rem;
-        }
-
-        .video-divider {
-            height: 1px;
-            background: rgba(212, 174, 92, 0.15);
-            margin: 2rem 0;
-        }
-
-        /* ── VIDEO UPLOAD FORM ── */
-        .video-upload-form {
-            text-align: left;
-        }
-
-        .video-form-label {
-            display: block;
+            margin-top: 0.6rem;
             font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.2rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--gold-light);
-            margin-bottom: 0.4rem;
+            font-style: normal;
         }
 
-        .video-form-label span {
-            color: var(--fuchsia-light);
-        }
-
-        .video-form-input {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            border: 1px solid rgba(212, 174, 92, 0.25);
-            border-radius: 2px;
-            background: rgba(255, 255, 255, 0.07);
-            color: white;
-            font-family: 'Lato', sans-serif;
-            font-size: 0.95rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-            margin-bottom: 1.25rem;
-        }
-
-        .video-form-input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        .video-form-input:focus {
-            border-color: var(--gold-light);
-            box-shadow: 0 0 0 3px rgba(180, 146, 42, 0.15);
-        }
-
-        .video-drop-area {
-            position: relative;
-            border: 2px dashed rgba(212, 174, 92, 0.35);
-            border-radius: 2px;
-            padding: 2.25rem 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 1.25rem;
-            background: rgba(255, 255, 255, 0.03);
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .video-drop-area:hover,
-        .video-drop-area.has-file {
-            border-color: rgba(212, 174, 92, 0.7);
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .video-drop-area input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-        }
-
-        .vda-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.5;
-        }
-
-        .vda-text {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
-            line-height: 1.6;
-        }
-
-        .vda-text strong {
-            color: rgba(255, 255, 255, 0.85);
-            display: block;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .vda-filename {
-            display: none;
-            font-size: 0.85rem;
-            color: var(--gold-light);
-            margin-top: 0.5rem;
-            font-style: italic;
-            word-break: break-all;
-        }
-
-        .v-progress-wrap {
-            margin: 0.5rem 0 1rem;
-            display: none;
-        }
-
-        .v-progress-track {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .v-progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--fuchsia), var(--gold-light));
-            border-radius: 3px;
-            transition: width 0.15s;
-        }
-
-        .v-progress-text {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.45);
-            text-align: center;
-            margin-top: 0.4rem;
-            letter-spacing: 0.05rem;
-        }
-
-        .btn-upload-video {
-            width: 100%;
-            padding: 1.15rem 2rem;
-            background: linear-gradient(135deg, var(--fuchsia), #D63478);
-            color: white;
-            border: none;
-            border-radius: 2px;
-            font-family: 'Lato', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 900;
-            letter-spacing: 0.25rem;
+        .section-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(181, 25, 90, 0.5);
+            color: var(--forest-mid);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
         }
 
-        .btn-upload-video:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(181, 25, 90, 0.65);
-        }
-
-        .btn-upload-video:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.3);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .video-error {
-            display: none;
-            margin-top: 0.75rem;
-            padding: 0.75rem 1rem;
-            background: rgba(181, 25, 90, 0.2);
-            border: 1px solid rgba(181, 25, 90, 0.45);
-            border-radius: 2px;
-            color: var(--fuchsia-light);
-            font-size: 0.85rem;
-            text-align: center;
-        }
-
-        .video-success {
-            display: none;
-            text-align: center;
-            padding: 2.5rem 1.5rem;
-        }
-
-        .video-success .vs-icon {
-            font-size: 3rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .video-success h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            color: var(--gold-pale);
-            font-style: italic;
-            margin-bottom: 0.5rem;
-        }
-
-        .video-success p {
-            color: rgba(255, 255, 255, 0.55);
-            font-size: 0.9rem;
-            line-height: 1.7;
-        }
-
-        .btn-upload-another {
-            display: inline-block;
-            margin-top: 1.5rem;
-            padding: 0.75rem 2rem;
-            background: rgba(181, 25, 90, 0.3);
-            color: var(--fuchsia-light);
-            border: 1px solid rgba(181, 25, 90, 0.5);
-            font-size: 0.75rem;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 1px;
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            transition: all 0.2s;
-        }
-
-        .btn-upload-another:hover {
-            background: var(--fuchsia);
-            color: white;
-        }
-
-        /* ══════════════════════════════════════
-   SHARE A MEMORY
-══════════════════════════════════════ */
-        .memory-hero-section {
-            position: relative;
-            background: linear-gradient(150deg, #FDF7EE 0%, #F5EDD8 50%, #FDF7EE 100%);
-            border-top: 3px solid var(--gold);
-            border-bottom: 3px solid var(--gold);
-            padding: 5rem 1.5rem 4rem;
-            overflow: hidden;
-        }
-
-        .memory-hero-section::before {
+        .section-eyebrow::after {
             content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(ellipse 50% 60% at 0% 50%, rgba(123, 26, 58, 0.05) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 60% at 100% 50%, rgba(181, 25, 90, 0.04) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .memory-hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--burgundy);
-            color: var(--gold-pale);
-            padding: 0.4rem 1.2rem;
-            border-radius: 1px;
-            font-size: 0.65rem;
-            font-weight: 900;
-            letter-spacing: 0.3rem;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-        }
-
-        .memory-hero-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 300;
-            font-style: italic;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            color: var(--burgundy);
-            line-height: 1.05;
-            margin-bottom: 0.75rem;
-        }
-
-        .memory-hero-sub {
-            font-size: 1rem;
-            color: var(--text-light);
-            max-width: 560px;
-            margin: 0 auto 2.5rem;
-            line-height: 1.8;
-            font-weight: 300;
-        }
-
-        .memory-hero-accent {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .memory-hero-accent .pulse-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--fuchsia);
-            box-shadow: 0 0 0 4px rgba(181, 25, 90, 0.2);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 0 4px rgba(181, 25, 90, 0.2);
-            }
-
-            50% {
-                box-shadow: 0 0 0 10px rgba(181, 25, 90, 0.05);
-            }
-        }
-
-        .memory-hero-accent .acc-line {
+            display: block;
             height: 1px;
-            width: 80px;
-            background: linear-gradient(90deg, transparent, var(--gold-light));
+            width: 32px;
+            background: var(--sage);
         }
 
-        .memory-hero-accent .acc-line.r {
-            background: linear-gradient(90deg, var(--gold-light), transparent);
+        .section-title {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--navy);
+            margin-bottom: 1.2rem;
         }
 
-        .memory-form-container {
-            max-width: 820px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+        .section-title em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--forest);
         }
 
-        .form-card {
-            background: white;
-            border: 1px solid var(--gold-pale);
-            border-top: 4px solid var(--burgundy);
-            border-radius: 2px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 8px 60px rgba(42, 26, 16, 0.12), 0 2px 0 var(--gold-pale);
+        .section-body {
+            color: var(--text-soft);
+            font-size: 1.05rem;
+            line-height: 1.85;
+            margin-bottom: 1.4rem;
         }
 
-        @media (max-width: 600px) {
-            .form-card {
-                padding: 2rem 1.25rem;
-            }
-        }
-
-        .form-section-label {
+        .ornament {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 0.65rem;
-            font-weight: 900;
-            letter-spacing: 0.3rem;
-            text-transform: uppercase;
-            color: var(--burgundy);
-            margin-bottom: 1.5rem;
+            gap: 0.8rem;
+            margin: 1.8rem 0;
+            color: var(--gold);
         }
 
-        .form-section-label::after {
+        .ornament::before,
+        .ornament::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: var(--gold-pale);
+            background: linear-gradient(to right, transparent, var(--gold-light));
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
+        .ornament::after {
+            background: linear-gradient(to left, transparent, var(--gold-light));
         }
 
-        .form-label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.2rem;
+        .ornament svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        /* ============================================================
+           PACKAGES / PRICING
+        ============================================================ */
+        #packages {
+            padding: var(--section-pad) 0;
+            background: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #packages::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--navy), var(--forest), var(--gold));
+        }
+
+        .packages-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .package-card {
+            background: var(--warm-white);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .package-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+        }
+
+        .package-card.featured {
+            border-color: var(--forest);
+            box-shadow: 0 8px 40px rgba(61,92,58,0.18);
+        }
+
+        .package-badge {
+            background: var(--forest);
+            color: var(--cream);
+            text-align: center;
+            padding: 0.45rem 1rem;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: var(--gold);
+        }
+
+        .package-card:not(.featured) .package-badge {
+            background: var(--navy);
+        }
+
+        .package-body {
+            padding: 2rem 1.8rem 2.2rem;
+        }
+
+        .package-number {
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-soft);
             margin-bottom: 0.4rem;
         }
 
-        .form-label span {
-            color: var(--fuchsia);
+        .package-name {
+            font-family: var(--serif);
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.1;
+            margin-bottom: 0.6rem;
         }
 
-        .form-input,
-        .form-select,
-        .form-textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #E8D8C0;
-            border-radius: 2px;
-            background: #FDFAF5;
-            color: var(--text);
-            font-family: 'Lato', sans-serif;
-            font-size: 0.95rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-            appearance: none;
+        .package-divider {
+            width: 32px;
+            height: 2px;
+            background: var(--gold);
+            margin: 0.8rem 0;
         }
 
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-            border-color: var(--gold-light);
-            box-shadow: 0 0 0 3px rgba(180, 146, 42, 0.1);
+        .package-price {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--forest);
+            margin-bottom: 1.4rem;
+            line-height: 1;
         }
 
-        .form-textarea {
-            min-height: 180px;
-            resize: vertical;
-            line-height: 1.7;
+        .package-price span {
             font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-soft);
+        }
+
+        .package-features {
+            list-style: none;
+            margin-bottom: 1.8rem;
+        }
+
+        .package-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            font-size: 0.92rem;
+            color: var(--text-mid);
+            padding: 0.42rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            line-height: 1.5;
+        }
+
+        .package-features li:last-child { border-bottom: none; }
+
+        .feature-check {
+            color: var(--forest-mid);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .package-tagline {
+            text-align: center;
+            font-family: var(--serif);
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--text-soft);
+            padding-top: 1rem;
+            border-top: 1px solid var(--parchment);
+        }
+
+        /* ============================================================
+           HOW IT WORKS
+        ============================================================ */
+        #process {
+            padding: var(--section-pad) 0;
+            background: var(--navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #process::after {
+            content: '"';
+            position: absolute;
+            right: -2%;
+            top: -10%;
+            font-family: var(--serif);
+            font-size: 40vw;
+            color: rgba(255,255,255,0.02);
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .process-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+
+        .process-header .section-title { color: var(--cream); }
+        .process-header .section-eyebrow { color: var(--gold-light); }
+        .process-header .section-eyebrow::after { background: var(--gold); }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .step {
+            background: var(--navy);
+            padding: 2.2rem 1.8rem;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .step:hover { background: var(--navy-light); }
+
+        .step-number {
+            font-family: var(--serif);
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: rgba(184, 149, 90, 0.18);
+            line-height: 1;
+            margin-bottom: 0.8rem;
+        }
+
+        .step-title {
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--cream);
+            margin-bottom: 0.7rem;
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: rgba(247, 243, 236, 0.6);
+            line-height: 1.7;
+        }
+
+        /* ============================================================
+           TESTIMONIAL / PULL QUOTE
+        ============================================================ */
+        #testimonials {
+            padding: var(--section-pad) 0;
+            background: var(--parchment);
+        }
+
+        .testimonials-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3.5rem;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .testimonial-card {
+            background: var(--warm-white);
+            padding: 2rem;
+            border-radius: 3px;
+            border-left: 3px solid var(--forest);
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+        }
+
+        .testimonial-quote {
+            font-family: var(--serif);
+            font-size: 1.08rem;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--text-mid);
+            margin-bottom: 1.2rem;
+        }
+
+        .testimonial-quote::before {
+            content: '\201C';
+            font-size: 2.5rem;
+            line-height: 0;
+            vertical-align: -0.5rem;
+            color: var(--gold);
+            margin-right: 0.2rem;
+        }
+
+        .testimonial-author {
+            font-size: 0.78rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-soft);
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           CONTACT
+        ============================================================ */
+        #contact {
+            padding: var(--section-pad) 0;
+            background: var(--warm-white);
+        }
+
+        .contact-inner {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: clamp(3rem, 6vw, 6rem);
+            align-items: start;
+        }
+
+        .contact-info .section-title { font-size: clamp(1.8rem, 3.2vw, 2.8rem); }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--parchment);
+            color: var(--text-mid);
+            font-size: 0.98rem;
+            transition: color 0.2s;
+        }
+
+        .contact-detail:hover { color: var(--forest); }
+
+        .contact-detail:last-of-type { border-bottom: none; }
+
+        .contact-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--parchment);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--forest);
+        }
+
+        .contact-icon svg { width: 18px; height: 18px; }
+
+        .contact-person {
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .contact-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--gold-light);
+        }
+
+        .contact-name {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .contact-title-text {
+            font-size: 0.78rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-soft);
+        }
+
+        /* Form */
+        .contact-form {
+            background: var(--cream);
+            padding: 2.5rem;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .form-title {
+            font-family: var(--serif);
+            font-size: 1.6rem;
+            color: var(--navy);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-soft);
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
         }
 
         .form-row {
@@ -1290,1059 +942,818 @@
             gap: 1rem;
         }
 
-        @media (max-width: 560px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .prompt-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .prompt-chip {
-            background: var(--fuchsia-pale);
-            border: 1px solid rgba(181, 25, 90, 0.2);
-            border-radius: 1px;
-            padding: 0.3rem 0.75rem;
-            color: var(--burgundy);
-            cursor: pointer;
-            transition: all 0.15s;
-            font-style: italic;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
-        }
-
-        .prompt-chip:hover {
-            background: var(--burgundy);
-            color: var(--gold-pale);
-            border-color: var(--burgundy);
-        }
-
-        .photo-upload-area {
-            border: 2px dashed var(--gold-pale);
-            border-radius: 2px;
-            padding: 1.75rem;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-            background: #FDFAF5;
-            position: relative;
-        }
-
-        .photo-upload-area:hover {
-            border-color: var(--gold-light);
-            background: white;
-        }
-
-        .photo-upload-area input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-
-        .upload-icon {
-            font-size: 1.8rem;
-            margin-bottom: 0.4rem;
-            opacity: 0.45;
-        }
-
-        .upload-text {
-            font-size: 0.82rem;
-            color: var(--text-light);
-        }
-
-        .upload-preview {
-            display: none;
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--gold-light);
-            margin: 0.5rem auto 0;
-        }
-
-        .btn-submit {
-            width: 100%;
-            margin-top: 0.5rem;
-            padding: 1.15rem 2rem;
-            background: linear-gradient(135deg, var(--burgundy), #9B2248);
-            color: white;
-            border: none;
-            border-radius: 2px;
-            font-family: 'Lato', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 900;
-            letter-spacing: 0.25rem;
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 20px rgba(123, 26, 58, 0.35);
+            color: var(--text-mid);
+            margin-bottom: 0.4rem;
         }
 
-        .btn-submit:hover {
-            background: linear-gradient(135deg, var(--fuchsia), #D63478);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(181, 25, 90, 0.4);
-        }
-
-        .btn-submit:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .add-another-teaser {
-            text-align: center;
-            margin-top: 1.25rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
+        input, select, textarea {
+            width: 100%;
+            padding: 0.78rem 1rem;
+            background: var(--warm-white);
+            border: 1px solid rgba(0,0,0,0.12);
+            border-radius: 3px;
+            font-family: var(--sans);
             font-size: 0.95rem;
-            color: var(--text-light);
+            color: var(--text-dark);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            -webkit-appearance: none;
         }
 
-        .add-another-teaser a {
-            color: var(--fuchsia);
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            cursor: pointer;
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--forest);
+            box-shadow: 0 0 0 3px rgba(61, 92, 58, 0.1);
+        }
+
+        textarea { resize: vertical; min-height: 110px; }
+
+        .form-success, .form-error {
+            display: none;
+            padding: 0.9rem 1.2rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .form-success {
+            background: rgba(61, 92, 58, 0.1);
+            border: 1px solid var(--forest);
+            color: var(--forest);
         }
 
         .form-error {
-            display: none;
-            margin-top: 1rem;
-            padding: 0.75rem 1rem;
-            background: #FFF0F3;
-            border: 1px solid rgba(181, 25, 90, 0.3);
-            border-radius: 2px;
-            color: var(--fuchsia);
-            font-size: 0.85rem;
-            text-align: center;
+            background: rgba(180, 60, 60, 0.08);
+            border: 1px solid rgba(180, 60, 60, 0.4);
+            color: #8b2c2c;
         }
 
-        .success-message {
-            display: none;
-            text-align: center;
-            padding: 3rem 2rem;
-        }
-
-        .success-message .success-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .success-message h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            color: var(--burgundy);
-            font-style: italic;
-            margin-bottom: 0.5rem;
-        }
-
-        .success-message p {
-            color: var(--text-light);
-            font-size: 0.95rem;
-        }
-
-        .btn-another {
-            display: inline-block;
-            margin-top: 1.5rem;
-            padding: 0.75rem 2rem;
-            background: var(--burgundy);
-            color: white;
-            border: none;
-            font-size: 0.75rem;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 1px;
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            transition: all 0.2s;
-        }
-
-        .btn-another:hover {
-            background: var(--fuchsia);
-        }
-
-        /* ── MEMORIES WALL ── */
-        .memories-section {
-            background: var(--cream-dark);
-            padding: 5rem 1.5rem;
-            border-top: 2px solid var(--gold-pale);
-        }
-
-        .memories-inner {
-            max-width: 920px;
-            margin: 0 auto;
-        }
-
-        .memories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.25rem;
-            margin-top: 2.5rem;
-        }
-
-        .memory-card {
-            background: white;
-            border: 1px solid var(--gold-pale);
-            border-radius: 2px;
-            padding: 1.25rem;
-            position: relative;
-            transition: box-shadow 0.2s;
-        }
-
-        .memory-card:hover {
-            box-shadow: 0 4px 20px rgba(42, 26, 16, 0.1);
-        }
-
-        .memory-card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .memory-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--gold-pale);
-            flex-shrink: 0;
-        }
-
-        .memory-avatar-placeholder {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--gold-pale);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            color: var(--gold);
-            font-weight: 500;
-            flex-shrink: 0;
-        }
-
-        .memory-name {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--text);
-        }
-
-        .memory-year {
-            font-size: 0.75rem;
-            color: var(--gold);
-            letter-spacing: 0.05rem;
-        }
-
-        .memory-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            line-height: 1.7;
-            color: var(--text);
-            font-style: italic;
-        }
-
-        .memory-corner {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 20px 20px 0;
-            border-color: transparent var(--gold-pale) transparent transparent;
-        }
-
-        .no-memories {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
-            font-style: italic;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-        }
-
-        /* ── FOOTER ── */
+        /* ============================================================
+           FOOTER
+        ============================================================ */
         footer {
-            background: var(--dark);
-            color: rgba(255, 255, 255, 0.55);
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
+            background: var(--navy);
+            color: rgba(247, 243, 236, 0.6);
         }
 
-        footer .footer-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 1.2rem;
-            color: var(--gold-light);
+        .footer-main {
+            padding: 3.5rem 0 2.5rem;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand-name {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            color: var(--cream);
+            font-weight: 500;
             margin-bottom: 0.3rem;
         }
 
-        /* ── ANIMATIONS ── */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .footer-brand-tag {
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 1rem;
         }
 
-        .hero-eyebrow {
-            animation: fadeInUp 0.6s ease both 0.1s;
+        .footer-brand p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            max-width: 280px;
         }
 
-        .hero-title {
-            animation: fadeInUp 0.7s ease both 0.25s;
+        .footer-heading {
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--cream);
+            font-weight: 600;
+            margin-bottom: 1.2rem;
         }
 
-        .hero-subtitle {
-            animation: fadeInUp 0.7s ease both 0.38s;
+        .footer-links { list-style: none; }
+
+        .footer-links li { margin-bottom: 0.55rem; }
+
+        .footer-links a {
+            font-size: 0.88rem;
+            color: rgba(247, 243, 236, 0.6);
+            transition: color 0.2s;
         }
 
-        .hero-cta-row {
-            animation: fadeInUp 0.7s ease both 0.5s;
+        .footer-links a:hover { color: var(--gold-light); }
+
+        .footer-contact-line {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.88rem;
+            margin-bottom: 0.6rem;
         }
 
-        .photos-stage {
-            animation: fadeInUp 0.9s ease both 0.6s;
+        .footer-contact-line svg { width: 14px; height: 14px; color: var(--gold); flex-shrink: 0; }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 1.4rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+        }
+
+        .footer-tagline {
+            font-family: var(--serif);
+            font-style: italic;
+            color: var(--gold-light);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================================
+           ANIMATIONS
+        ============================================================ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(24px);
             transition: opacity 0.7s ease, transform 0.7s ease;
         }
 
         .reveal.visible {
             opacity: 1;
-            transform: none;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 1024px) {
+            .packages-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+        }
+
+        @media (max-width: 860px) {
+            .hero-inner { grid-template-columns: 1fr; }
+            .hero-visual { display: none; }
+            .about-inner { grid-template-columns: 1fr; }
+            .about-photo-wrap { max-width: 380px; margin-inline: auto; }
+            .contact-inner { grid-template-columns: 1fr; }
+            .footer-main { grid-template-columns: 1fr; gap: 2rem; }
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+            .value-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .value-item:nth-child(2) { border-right: none; }
+            .value-item:nth-child(3) { border-bottom: none; border-right: none; }
+            .value-item:nth-child(4) { border-right: none; border-bottom: none; }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 68px; left: 0; right: 0;
+                background: rgba(26,39,68,0.98);
+                padding: 1.5rem;
+                gap: 1.2rem;
+                z-index: 99;
+            }
+            .hamburger { display: flex; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 0.6rem; text-align: center; }
+        }
+
+        /* ============================================================
+           PLACEHOLDER PHOTO TREATMENT
+           (replace background-image with actual photos)
+        ============================================================ */
+        .photo-placeholder {
+            background: linear-gradient(135deg, var(--parchment) 0%, var(--sage-light) 60%, var(--forest) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-family: var(--serif);
+            font-size: 0.85rem;
+            text-align: center;
+            letter-spacing: 0.06em;
         }
     </style>
 </head>
-
 <body>
 
-    <!-- ═══ HERO ═══ -->
-    <section class="hero">
-        <div class="hero-top-border">
-            <div class="line"></div>
-            <div class="diamond-sm"></div>
-            <div class="diamond"></div>
-            <div class="diamond-sm"></div>
-            <div class="line"></div>
-        </div>
-        <p class="hero-surprise">&#x1F389; Surprise Party &#x1F389;</p>
-        <p class="hero-eyebrow">You are invited to celebrate</p>
-        <h1 class="hero-title">Mellody</h1>
-        <div class="hero-75-wrap">
-            <img src="/75.png" alt="75" class="hero-75-img" style="width: 75px;">
-        </div>
-        <p class="hero-subtitle" style="margin-bottom:5px;">Beautiful Years</p>
-
-        <p class="hero-cta-label">Help us make her birthday unforgettable</p>
-
-        <div class="photos-stage">
-            <div class="photo-connector"></div>
-            <div class="photo-frame past">
-                <img src="/Young-Mom.jpg" alt="Mellody as a little girl">
-                <p class="photo-caption">Little Mellody</p>
-            </div>
-            <div class="photo-frame present">
-                <img src="/Now-Mom.jpg" alt="Mellody today">
-                <p class="photo-caption">Always Stunning</p>
-            </div>
-            <div class="photo-frame recent">
-                <img src="/Mom-Now-75.PNG" alt="Mellody Now">
-                <p class="photo-caption">Our Mellody</p>
-            </div>
-        </div>
-        <div class="hero-cta-row" style="margin-top:10px;">
-            <a href="#record-video" class="hero-cta-primary">
-                &#9654; &nbsp; Send a Video
+    {{-- ============================================================
+         NAVIGATION
+    ============================================================ --}}
+    <nav id="main-nav">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo">
+                Memories Are For Sharing
+                <span>Legacy Preservation</span>
             </a>
-            <a href="#share-memory" class="hero-cta-secondary">
-                &#10022; &nbsp; Share a Memory
-            </a>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#packages">Packages</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#contact" class="nav-cta">Get Started</a></li>
+            </ul>
+
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    {{-- ============================================================
+         HERO
+    ============================================================ --}}
+    <section id="hero">
+        <div class="hero-bg-pattern"></div>
+        <div class="hero-inner container">
+            <div class="hero-text">
+                <p class="hero-eyebrow">Legacy Preservation</p>
+                <h1 class="hero-headline">
+                    Your Life.<br>
+                    Your Story.<br>
+                    <em>Forever.</em>
+                </h1>
+                <p class="hero-subhead">A Legacy Worth Sharing.</p>
+                <p class="hero-body">
+                    Let's preserve your memories, your voice, and your legacy
+                    for the people you love — captured in your own words,
+                    beautifully filmed and delivered as a timeless family keepsake.
+                </p>
+                <div class="hero-actions">
+                    <a href="#packages" class="btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        View Packages
+                    </a>
+                    <a href="#contact" class="btn-outline">Start a Conversation</a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-accent-box"></div>
+                <div class="hero-photo-frame photo-placeholder" style="height:520px;">
+                        <img src="{{ asset('images/Ladywithphotosfromyouth.png') }}" alt="An sweet old lady sharing their story">
+                    <p style="padding:2rem;">Add your<br>hero photo here</p>
+                </div>
+                <div class="hero-stats">
+                    <strong>Your</strong>
+                    <span>Story Matters</span>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- ═══ DETAILS BAND ═══ -->
-    <div class="details-band">
-        <p class="band-title">Join Us</p>
-        <div class="details-grid">
-            <div class="detail-item">
-                <div class="detail-icon">&#10022;</div>
-                <div class="detail-label">Date</div>
-                <div class="detail-value">Saturday, May 2nd</div>
-                <div class="detail-sub">2026</div>
-            </div>
-            <div class="detail-item">
-                <div class="detail-icon">&#10022;</div>
-                <div class="detail-label">Time</div>
-                <div class="detail-value">5:30 &ndash; 9:00 PM</div>
-                <div class="detail-sub">Party begins at 6 PM</div>
-            </div>
-            <div class="detail-item">
-                <div class="detail-icon">&#10022;</div>
-                <div class="detail-label">Location</div>
-                <div class="detail-value"><a
-                        href="https://www.google.com/maps/dir/?api=1&destination=5500+S+1175+W+Ogden+UT+84405"
-                        target="_blank" rel="noopener"
-                        style="color:white;text-decoration:underline;text-underline-offset:3px;">5500 S 1175 W</a></div>
-                <div class="detail-sub"><a
-                        href="https://www.google.com/maps/dir/?api=1&destination=5500+S+1175+W+Ogden+UT+84405"
-                        target="_blank" rel="noopener"
-                        style="color:var(--gold-pale);opacity:0.85;text-decoration:underline;text-underline-offset:3px;">Ogden,
-                        UT 84405 &#8599;</a></div>
-            </div>
-        </div>
-        <div class="arrive-diamonds">
-            <div class="line-g"></div>
-            <div class="d"></div>
-            <div class="d lg"></div>
-            <div class="d"></div>
-            <div class="line-g r"></div>
-        </div>
-        <div class="arrive-notice">
-            <p class="arrive-notice-eyebrow">Important &mdash; it&rsquo;s a surprise!</p>
-            <p class="arrive-notice-main">Please arrive by <em>5:30 PM</em></p>
-            <p class="arrive-notice-sub">Mellody arrives at 6:00 &mdash; let&rsquo;s all be there first</p>
-
-            <!-- RSVP -->
-            <div style="margin-top:2.5rem;">
-                <div class="arrive-diamonds" style="margin-bottom:1.25rem;">
-                    <div class="line-g"></div>
-                    <div class="d"></div>
-                    <div class="d lg"></div>
-                    <div class="d"></div>
-                    <div class="line-g r"></div>
+    {{-- ============================================================
+         VALUES STRIP
+    ============================================================ --}}
+    <section id="values">
+        <div class="container">
+            <div class="values-grid">
+                <div class="value-item reveal">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    <p class="value-label">Share your memories</p>
                 </div>
-                <div class="rsvp-box">
-                    <p class="rsvp-label">Please RSVP</p>
-                    <p class="rsvp-main">Shalyce &nbsp;&mdash;&nbsp;
-                        <a href="tel:8016451948" class="rsvp-phone">801&#8209;645&#8209;1948</a>
-                    </p>
-                    <p class="rsvp-note">
-                        We&rsquo;ll provide dinner &mdash; we just want to make sure we have enough for everyone! <br>
-                        If you think you&rsquo;ll be there, please let us know.
-                        We&rsquo;d rather have extra than not enough!&nbsp; &#128150;
-                    </p>
+                <div class="value-item reveal" style="transition-delay:0.1s">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    </div>
+                    <p class="value-label">Be heard and remembered</p>
+                </div>
+                <div class="value-item reveal" style="transition-delay:0.2s">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <p class="value-label">A legacy for your loved ones</p>
+                </div>
+                <div class="value-item reveal" style="transition-delay:0.3s">
+                    <div class="value-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    </div>
+                    <p class="value-label">A beautiful way to connect generations</p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- ═══ INSPIRATION / PROMPTS ═══ -->
-    <div class="prompts-section">
-        <div class="reveal">
-            <h2 class="section-heading">Need a Little Inspiration?</h2>
-            <p class="section-sub">Pick any one of these prompts and let it guide you. There are no wrong answers
-                &mdash; every memory matters.</p>
-        </div>
-        <div class="reveal">
-            <div class="prompts-grid">
-                <div class="prompt-card">How has Mellody changed or blessed your life?</div>
-                <div class="prompt-card">Tell a funny or embarassing story you&rsquo;ve had with Mellody?</div>
-                <div class="prompt-card">Tell a story about a time she helped you when you needed it.</div>
-                <div class="prompt-card">What&rsquo;s a moment you had with Mellody you&rsquo;ve never forgotten?</div>
-                <div class="prompt-card">Share a story about school, some fun activity, a service project, or church
-                    related!</div>
-                <div class="prompt-card">What&rsquo;s something you&rsquo;ve learned from Mellody?</div>
+    {{-- ============================================================
+         ABOUT
+    ============================================================ --}}
+    <section id="about">
+        <div class="container">
+            <div class="about-inner">
+                <div class="about-photo-wrap reveal">
+                    <div class="about-photo-bg"></div>
+                    <div class="photo-placeholder about-photo" style="height:460px; border-radius:3px;">
+                        {{--
+                            Replace with:
+                            <img src="{{ asset('images/shalyce-portrait.jpg') }}"
+                                 alt="Shalyce" class="about-photo">
+                        --}}
+                        <p style="padding:2rem;">Add Shalyce's<br>portrait here</p>
+                    </div>
+                    <div class="about-quote-card">
+                        <blockquote>Every life is a story worth telling beautifully.</blockquote>
+                        <cite>— Shalyce</cite>
+                    </div>
+                </div>
+
+                <div class="about-text reveal" style="transition-delay:0.15s">
+                    <p class="section-eyebrow">About Shalyce</p>
+                    <h2 class="section-title">Preserving Stories <em>with Care & Heart</em></h2>
+                    <p class="section-body">
+                        Every person carries a world of stories — hard-won wisdom, tender memories,
+                        and a voice that deserves to be heard by the people they love most. I created
+                        Memories Are For Sharing because I believe those stories shouldn't fade.
+                    </p>
+                    <p class="section-body">
+                        Through warm, unhurried interviews and professional video production,
+                        I help you — or the person you love — share their life on their own terms.
+                        The result is a beautifully crafted film your family will return to for
+                        generations.
+                    </p>
+
+                    <div class="ornament">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
+                    </div>
+
+                    <p class="section-body">
+                        Based in Utah and serving families near and far, I bring a gentle,
+                        professional approach to every session — making the experience as meaningful
+                        as the finished film itself.
+                    </p>
+
+                    <a href="#contact" class="btn-primary" style="margin-top:1.4rem;">
+                        Let's Preserve Your Story
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="reveal" style="text-align:center;margin-top:2.5rem;">
-            <a href="#record-video" class="hero-cta-primary" style="text-decoration:none;margin-right:0.75rem;">
-                &#9654; &nbsp; Send a Video
-            </a>
-            <a href="#share-memory" class="hero-cta-secondary" style="text-decoration:none;">
-                &#10022; &nbsp; Share a Memory
-            </a>
-        </div>
-    </div>
+    </section>
 
-    <!-- ═══════════════════════════════
-   VIDEO SECTION  (above memory form)
-═══════════════════════════════ -->
-    <section id="record-video" class="video-section">
-        <div style="position:relative;z-index:1;">
-            <div class="reveal">
-                <span class="video-badge">&#9654; &nbsp; Video Message &nbsp; &#9654;</span>
-                <h2 class="video-main-title">Record a Video<br><em>for Mellody</em></h2>
-                <p class="video-sub">
-                    We&rsquo;ll be playing personal video messages at the party.
-                    Imagine Mellody watching your face, hearing your voice, seeing your smile &mdash;
-                    that&rsquo;s a gift that no printed word can replace.
+    {{-- ============================================================
+         PACKAGES
+    ============================================================ --}}
+    <section id="packages">
+        <div class="container">
+            <div class="packages-header reveal">
+                <p class="section-eyebrow" style="justify-content:center; margin-bottom:0.8rem;">Pricing & Packages</p>
+                <h2 class="section-title" style="text-align:center;">Choose the Experience <em>That's Right for You</em></h2>
+                <p class="section-body" style="text-align:center; max-width:520px; margin-inline:auto;">
+                    Every family and every story is unique. Choose the package that fits your vision —
+                    from a single legacy session to a full heirloom documentary.
                 </p>
             </div>
 
-            <div class="video-card reveal">
-                <div class="video-icon-ring">&#127909;</div>
+            <div class="packages-grid">
 
-                <div class="example-video-wrap">
-                    <p class="example-video-label">&#9654; &nbsp; Watch an Example &nbsp; &#9654;</p>
-                    <div class="phone-frame">
-                        <video style="height: 350px;" src="/Shelcee-Funny.MOV.mp4" controls playsinline
-                            preload="metadata"
-                            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"></video>
-                        <div class="video-placeholder-inner" style="display:none;">
-                            <div class="vp-icon">&#127909;</div>
-                            <p class="vp-text">Example video coming soon!</p>
+                {{-- Package 1 --}}
+                <div class="package-card reveal">
+                    <div class="package-badge">Package 1</div>
+                    <div class="package-body">
+                        <p class="package-number">Option One</p>
+                        <h3 class="package-name">Legacy Session</h3>
+                        <div class="package-divider"></div>
+                        <p class="package-price">$800 – $1,200</p>
+                        <ul class="package-features">
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                3–4 hour interview
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Professional audio &amp; video recording
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Lightly edited full interview
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Organized into topic chapters
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Files delivered on a flash drive
+                            </li>
+                        </ul>
+                        <a href="#contact" class="btn-outline" style="width:100%; justify-content:center;">Inquire About This Package</a>
+                        <p class="package-tagline">A wonderful way to preserve your memories.</p>
+                    </div>
+                </div>
+
+                {{-- Package 2 (Featured) --}}
+                <div class="package-card featured reveal" style="transition-delay:0.12s">
+                    <div class="package-badge">Most Popular — Package 2</div>
+                    <div class="package-body">
+                        <p class="package-number">Option Two</p>
+                        <h3 class="package-name">Family Legacy Film</h3>
+                        <div class="package-divider"></div>
+                        <p class="package-price">$1,500 – $3,000</p>
+                        <ul class="package-features">
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                2–3 interview days
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Pre-interview planning
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Professionally edited story chapters
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Photos &amp; memorabilia woven throughout
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Music, titles &amp; smooth transitions
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Files delivered on a flash drive
+                            </li>
+                        </ul>
+                        <a href="#contact" class="btn-primary" style="width:100%; justify-content:center;">Inquire About This Package</a>
+                        <p class="package-tagline">A lasting keepsake your family will treasure.</p>
+                    </div>
+                </div>
+
+                {{-- Package 3 --}}
+                <div class="package-card reveal" style="transition-delay:0.24s">
+                    <div class="package-badge">Package 3</div>
+                    <div class="package-body">
+                        <p class="package-number">Option Three</p>
+                        <h3 class="package-name">Heirloom Documentary</h3>
+                        <div class="package-divider"></div>
+                        <p class="package-price">$3,500 – $7,000</p>
+                        <ul class="package-features">
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Multiple interview sessions
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Family members included
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                B-roll of home, places &amp; memories
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Integration of photos, documents &amp; cherished items
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Custom storytelling &amp; timeline
+                            </li>
+                            <li>
+                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                Up to 10 flash drives for family members
+                            </li>
+                        </ul>
+                        <a href="#contact" class="btn-outline" style="width:100%; justify-content:center;">Inquire About This Package</a>
+                        <p class="package-tagline">A timeless legacy for generations to come.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <p style="text-align:center; margin-top:2.2rem; font-family:var(--serif); font-style:italic; color:var(--text-soft); font-size:1rem;">
+                Not sure which package fits your story? Reach out — we'll figure it out together.
+            </p>
+        </div>
+    </section>
+
+    {{-- ============================================================
+         PROCESS
+    ============================================================ --}}
+    <section id="process">
+        <div class="container">
+            <div class="process-header reveal">
+                <p class="section-eyebrow">How It Works</p>
+                <h2 class="section-title" style="color:var(--cream);">Simple, <em style="color:var(--sage-light);">Warm,</em> Meaningful</h2>
+                <p class="section-body" style="color:rgba(247,243,236,0.65); text-align:center;">
+                    From your first conversation to the finished film, every step is designed to feel effortless and personal.
+                </p>
+            </div>
+            <div class="steps-grid reveal" style="transition-delay:0.1s">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3 class="step-title">Connect &amp; Consult</h3>
+                    <p class="step-desc">We start with a relaxed conversation to understand your story, your family, and what you'd like to preserve.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3 class="step-title">Plan &amp; Prepare</h3>
+                    <p class="step-desc">Together we craft thoughtful interview questions and a session plan so your subject feels completely at ease.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3 class="step-title">Film Your Story</h3>
+                    <p class="step-desc">A professional, comfortable recording session captures your voice, your memories, and the moments that matter most.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <h3 class="step-title">Deliver the Keepsake</h3>
+                    <p class="step-desc">Your beautifully edited film is delivered on a flash drive — a timeless family heirloom ready to be shared and cherished.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================================
+         TESTIMONIALS (placeholder — add real reviews when available)
+    ============================================================ --}}
+    <section id="testimonials">
+        <div class="container">
+            <div class="testimonials-header reveal">
+                <p class="section-eyebrow" style="justify-content:center;">Families We've Served</p>
+                <h2 class="section-title" style="text-align:center;">Stories That <em>Touched Hearts</em></h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card reveal">
+                    <p class="testimonial-quote">We had no idea how much my mother had to share. Shalyce made her feel so at ease — we now have something our grandchildren will treasure forever.</p>
+                    <p class="testimonial-author">— The Henderson Family, Utah</p>
+                </div>
+                <div class="testimonial-card reveal" style="transition-delay:0.12s">
+                    <p class="testimonial-quote">The film captured my grandfather exactly as we knew him. His laugh, his wisdom, his stories. We have watched it dozens of times. Worth every penny.</p>
+                    <p class="testimonial-author">— The Marchetti Family</p>
+                </div>
+                <div class="testimonial-card reveal" style="transition-delay:0.24s">
+                    <p class="testimonial-quote">Shalyce has a true gift for drawing out the stories people have carried quietly for decades. This was the best gift our family has ever given itself.</p>
+                    <p class="testimonial-author">— The Kimball Family, Salt Lake City</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================================
+         CONTACT
+    ============================================================ --}}
+    <section id="contact">
+        <div class="container">
+            <div class="contact-inner">
+                <div class="contact-info reveal">
+                    <p class="section-eyebrow">Get in Touch</p>
+                    <h2 class="section-title">Let's Preserve Your Story — <em>Together.</em></h2>
+                    <p class="section-body">
+                        Ready to get started, or just have questions? Reach out any time.
+                        I'd love to hear about your family and what you're hoping to create.
+                    </p>
+
+                    <a href="tel:8016451948" class="contact-detail">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </div>
+                        <div>
+                            <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.15rem;">Call or Text</p>
+                            <p style="font-weight:600;color:var(--navy);">801.645.1948</p>
+                        </div>
+                    </a>
+
+                    <a href="mailto:shalyce@memoriesareforsharing.com" class="contact-detail">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </div>
+                        <div>
+                            <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.15rem;">Email</p>
+                            <p style="font-weight:600;color:var(--navy);">shalyce@memoriesareforsharing.com</p>
+                        </div>
+                    </a>
+
+                    <a href="https://memoriesareforsharing.com" class="contact-detail">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <div>
+                            <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.15rem;">Website</p>
+                            <p style="font-weight:600;color:var(--navy);">memoriesareforsharing.com</p>
+                        </div>
+                    </a>
+
+                    <div class="contact-person" style="margin-top:2.2rem;">
+                        <div class="photo-placeholder contact-avatar" style="width:72px;height:72px;border-radius:50%;flex-shrink:0;font-size:0.65rem;text-align:center;padding:0.3rem;">
+                            {{-- Replace with: <img src="{{ asset('images/shalyce-avatar.jpg') }}" ... class="contact-avatar"> --}}
+                        </div>
+                        <div>
+                            <p class="contact-name">Shalyce</p>
+                            <p class="contact-title-text">Legacy Preservation Specialist</p>
                         </div>
                     </div>
-                    <p class="example-video-caption">Yours doesn&rsquo;t have to be perfect &mdash; just from the heart
-                    </p>
                 </div>
 
-                <div class="video-divider" style="margin-top:0;"></div>
+                {{-- ============ CONTACT FORM ============ --}}
+                <div class="contact-form reveal" style="transition-delay:0.15s">
+                    <h3 class="form-title">Send a Message</h3>
+                    <p class="form-subtitle">I'll get back to you within one business day.</p>
 
-                <div class="video-steps">
-                    <div class="video-step">
-                        <div class="video-step-num">1</div>
-                        <div class="video-step-text"><strong>Open your camera</strong>Record a selfie video on your
-                            phone or computer</div>
-                    </div>
-                    <div class="video-step">
-                        <div class="video-step-num">2</div>
-                        <div class="video-step-text"><strong>Speak from the heart</strong>Any length, any format
-                            &mdash; we want to see <em style="color:var(--gold-light);">you</em></div>
-                    </div>
-                    <div class="video-step">
-                        <div class="video-step-num">3</div>
-                        <div class="video-step-text"><strong>Upload it below</strong>Enter your name, choose your
-                            video, and tap Upload</div>
-                    </div>
-                </div>
-
-                <div class="video-divider"></div>
-
-                {{-- ── VIDEO UPLOAD FORM ── --}}
-                <div id="video-form-wrap">
-                    <div id="video-form-content">
-                        <div class="video-upload-form">
-
-                            <div style="margin-bottom:1.25rem;">
-                                <label class="video-form-label" for="v-name">Your Name <span>*</span></label>
-                                <input type="text" id="v-name" class="video-form-input"
-                                    placeholder="First &amp; last name" autocomplete="name">
+                    <div id="contact-form-wrap">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                <input type="text" id="first_name" name="first_name" placeholder="Jane" required>
                             </div>
-
-                            <div style="margin-bottom:1.25rem;">
-                                <label class="video-form-label">Your Video <span>*</span></label>
-                                <div class="video-drop-area" id="video-drop-area">
-                                    <input type="file" id="v-file"
-                                        accept="video/*,video/mp4,video/quicktime,video/x-msvideo,video/webm">
-                                    <div class="vda-icon" id="vda-icon">&#127909;</div>
-                                    <div class="vda-text" id="vda-text">
-                                        <strong>Tap here to choose your video</strong>
-                                        MP4, MOV, or any format &mdash; up to 500 MB
-                                    </div>
-                                    <div class="vda-filename" id="vda-filename"></div>
-                                </div>
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" id="last_name" name="last_name" placeholder="Smith">
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="(801) 555-0100">
+                        </div>
+                        <div class="form-group">
+                            <label for="package">Package of Interest</label>
+                            <select id="package" name="package">
+                                <option value="">— Select a package (optional) —</option>
+                                <option value="Package 1 — Legacy Session ($800–$1,200)">Package 1 — Legacy Session ($800–$1,200)</option>
+                                <option value="Package 2 — Family Legacy Film ($1,500–$3,000)">Package 2 — Family Legacy Film ($1,500–$3,000)</option>
+                                <option value="Package 3 — Heirloom Documentary ($3,500–$7,000)">Package 3 — Heirloom Documentary ($3,500–$7,000)</option>
+                                <option value="Not sure yet">Not sure yet — I'd love guidance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Tell Me About Your Story</label>
+                            <textarea id="message" name="message" placeholder="Who would you like to preserve? What feels most important to capture?"></textarea>
+                        </div>
 
-                            <div class="v-progress-wrap" id="v-progress-wrap">
-                                <div class="v-progress-track">
-                                    <div class="v-progress-bar" id="v-progress-bar"></div>
-                                </div>
-                                <p class="v-progress-text" id="v-progress-text">Uploading&hellip;</p>
-                            </div>
+                        <button type="button" class="btn-primary" id="submit-btn" style="width:100%; justify-content:center; padding-top:1.1rem; padding-bottom:1.1rem;">
+                            <span id="btn-text">Send My Message</span>
+                        </button>
 
-                            <button class="btn-upload-video" id="v-submit-btn" type="button">
-                                &#9654; &nbsp; Upload Video
-                            </button>
-                            <div class="video-error" id="video-error"></div>
-
+                        <div class="form-success" id="form-success">
+                            ✓ &nbsp;Thank you! Your message has been sent. Shalyce will be in touch soon.
+                        </div>
+                        <div class="form-error" id="form-error">
+                            Something went wrong. Please try again, or email directly at shalyce@memoriesareforsharing.com
                         </div>
                     </div>
-
-                    <div class="video-success" id="video-success">
-                        <div class="vs-icon">&#127881;</div>
-                        <h3>Video received!</h3>
-                        <p>Thank you so much. Your video will be treasured<br>and played for Mellody on her special day.
-                        </p>
-                        <p
-                            style="margin-top:0.5rem;color:var(--gold-light);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;">
-                            We can&rsquo;t wait to see you on May 2nd!</p>
-                        <button class="btn-upload-another" onclick="resetVideoForm()">&#43; &nbsp; Upload Another
-                            Video</button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════
-   SHARE A MEMORY — BIG SECTION
-═══════════════════════════════ -->
-    <section id="share-memory" class="memory-hero-section" style="margin-top:2rem;">
-        <div style="text-align:center;position:relative;z-index:1;">
-            <div class="reveal">
-                <span class="memory-hero-badge">&#10022; &nbsp; The Memory Book &nbsp; &#10022;</span>
-                <h2 class="memory-hero-title">Share a Memory<br>with Mellody</h2>
-                <p class="memory-hero-sub">
-                    Over the years the most treasured keepsakes Mom has kept have been the notes, cards, and memories
-                    shared with her. The greatest gift we can give her is for her to know she made a lasting impact.
-                    <br>Every story you share will be beautifully printed and bound into a keepsake book
-                    presented to Mellody on her birthday. Don&rsquo;t hold back &mdash;
-                    share as many memories as you&rsquo;d like!
-                </p>
-                <div class="memory-hero-accent">
-                    <div class="acc-line"></div>
-                    <div class="pulse-dot"></div>
-                    <div class="acc-line r"></div>
-                </div>
-            </div>
-
-            <div class="memory-form-container reveal">
-                <div class="form-card">
-                    <div id="form-content">
-                        <form id="memory-form" novalidate>
-
-                            <div class="form-section-label">About You</div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label" for="f-name">Your Name <span>*</span></label>
-                                    <input type="text" id="f-name" class="form-input"
-                                        placeholder="First &amp; last name" required autocomplete="name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="f-contact">Phone or Email <span>*</span></label>
-                                    <input type="text" id="f-contact" class="form-input"
-                                        placeholder="So we can reach you if needed" required>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label" for="f-year">Approximate Year of Memory</label>
-                                    <select id="f-year" class="form-select">
-                                        <option value="">Select a year or era...</option>
-                                        <option>1950s</option>
-                                        <option>1960s</option>
-                                        <option>1970s</option>
-                                        <option>1975</option>
-                                        <option>1976</option>
-                                        <option>1977</option>
-                                        <option>1978</option>
-                                        <option>1979</option>
-                                        <option>1980</option>
-                                        <option>1981</option>
-                                        <option>1982</option>
-                                        <option>1983</option>
-                                        <option>1984</option>
-                                        <option>1985</option>
-                                        <option>1986</option>
-                                        <option>1987</option>
-                                        <option>1988</option>
-                                        <option>1989</option>
-                                        <option>1990</option>
-                                        <option>1991</option>
-                                        <option>1992</option>
-                                        <option>1993</option>
-                                        <option>1994</option>
-                                        <option>1995</option>
-                                        <option>1996</option>
-                                        <option>1997</option>
-                                        <option>1998</option>
-                                        <option>1999</option>
-                                        <option>2000</option>
-                                        <option>2001</option>
-                                        <option>2002</option>
-                                        <option>2003</option>
-                                        <option>2004</option>
-                                        <option>2005</option>
-                                        <option>2006</option>
-                                        <option>2007</option>
-                                        <option>2008</option>
-                                        <option>2009</option>
-                                        <option>2010</option>
-                                        <option>2011</option>
-                                        <option>2012</option>
-                                        <option>2013</option>
-                                        <option>2014</option>
-                                        <option>2015</option>
-                                        <option>2016</option>
-                                        <option>2017</option>
-                                        <option>2018</option>
-                                        <option>2019</option>
-                                        <option>2020</option>
-                                        <option>2021</option>
-                                        <option>2022</option>
-                                        <option>2023</option>
-                                        <option>2024</option>
-                                        <option>2025</option>
-                                        <option>2026</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="f-relation">Your Relationship to Mellody</label>
-                                    <select id="f-relation" class="form-select">
-                                        <option value="">Select...</option>
-                                        <option>Family</option>
-                                        <option>Close Friend</option>
-                                        <option>Neighbor</option>
-                                        <option>Church Friend</option>
-                                        <option>Childhood Friend</option>
-                                        <option>Coworker / Colleague</option>
-                                        <option>Other</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-section-label" style="margin-top:0.5rem;">Your Story</div>
-                            <div class="form-group">
-                                <label class="form-label">Tap a prompt to use it, or write your own</label>
-                                <div class="prompt-chips" id="prompt-chips">
-                                    <div class="prompt-chip" onclick="usePrompt(this)">When you think of Mellody...
-                                    </div>
-                                    <div class="prompt-chip" onclick="usePrompt(this)">A time she helped me...</div>
-                                    <div class="prompt-chip" onclick="usePrompt(this)">A moment I&rsquo;ll never
-                                        forget...</div>
-                                    <div class="prompt-chip" onclick="usePrompt(this)">Something funny she did...
-                                    </div>
-                                    <div class="prompt-chip" onclick="usePrompt(this)">What I learned from her...
-                                    </div>
-                                    <div class="prompt-chip" onclick="usePrompt(this)">How she blessed my life...
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="f-story">Your Memory <span>*</span></label>
-                                <textarea id="f-story" class="form-textarea" required
-                                    placeholder="Take your time... This is your gift to Mellody. Every word will be treasured.&#10;&#10;Feel free to share more than one story &mdash; just separate them with a line break!"></textarea>
-                            </div>
-
-                            <div class="form-section-label">Your Photo <span
-                                    style="font-weight:400;letter-spacing:0;text-transform:none;font-size:0.7rem;color:var(--text-light);font-family:'Cormorant Garamond',serif;font-style:italic;">(Optional
-                                    — appears next to your memory in the printed book)</span></div>
-                            <div class="form-group">
-                                <div class="photo-upload-area" id="upload-area">
-                                    <input type="file" id="f-photo" accept="image/*">
-                                    <div class="upload-icon">&#128247;</div>
-                                    <p class="upload-text">Tap to upload a selfie or photo of yourself<br><small
-                                            style="opacity:0.7;">Saved securely &mdash; not attached to any
-                                            email</small></p>
-                                    <img class="upload-preview" id="photo-preview" src="" alt="Preview">
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn-submit" id="submit-btn">
-                                &#10022; &nbsp; Submit My Memory &nbsp; &#10022;
-                            </button>
-                            <div class="form-error" id="form-error"></div>
-                            <p class="add-another-teaser">
-                                Have more than one story? <a onclick="void(0)">You can submit as many as you like!</a>
-                                After submitting, you&rsquo;ll be able to add another.
-                            </p>
-                        </form>
-                    </div>
-
-                    <div class="success-message" id="success-msg">
-                        <div class="success-icon">&#10024;</div>
-                        <h3>Your memory has been received!</h3>
-                        <p>Thank you so much. Your story will be treasured and printed in Mellody&rsquo;s keepsake book.
-                        </p>
-                        <p
-                            style="margin-top:0.5rem;color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;">
-                            We can&rsquo;t wait to see you on May 2nd!</p>
-                        <button class="btn-another" onclick="resetForm()">&#43; &nbsp; Add Another Memory</button>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════
-   MEMORIES WALL (hidden until ready)
-═══════════════════════════════ -->
-    <div class="memories-section" style="display:none;">
-        <div class="memories-inner">
-            <div class="reveal" style="text-align:center;">
-                <h2 class="section-heading">Memories Already Shared</h2>
-                <p class="section-sub">These beautiful stories are waiting to be read by Mellody on her special day.
-                </p>
-            </div>
-            <div class="memories-grid" id="memories-grid">
-                <p class="no-memories">Be the first to share a memory! &#10022;</p>
-            </div>
-            <div style="text-align:center;margin-top:3rem;" class="reveal">
-                <a href="#share-memory" class="hero-cta-primary" style="text-decoration:none;">
-                    &#10022; &nbsp; Share Your Memory
-                </a>
-            </div>
-        </div>
-    </div>
-
+    {{-- ============================================================
+         FOOTER
+    ============================================================ --}}
     <footer>
-        <p class="footer-title">Celebrating 75 Years of Mellody</p>
-        <p>May 2nd, 2026 &nbsp;&#10022;&nbsp; Ogden, Utah</p>
-        <p style="margin-top:0.5rem;opacity:0.4;font-size:0.72rem;">Made with love &#9825;</p>
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <p class="footer-brand-name">Memories Are For Sharing</p>
+                    <p class="footer-brand-tag">Legacy Preservation</p>
+                    <p>Capturing the voices, wisdom, and memories of those you love — preserved beautifully for the generations who will come after.</p>
+                </div>
+                <div>
+                    <p class="footer-heading">Quick Links</p>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Shalyce</a></li>
+                        <li><a href="#packages">Packages &amp; Pricing</a></li>
+                        <li><a href="#process">How It Works</a></li>
+                        <li><a href="#contact">Get in Touch</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="footer-heading">Contact</p>
+                    <div class="footer-contact-line">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <a href="tel:8016451948">801.645.1948</a>
+                    </div>
+                    <div class="footer-contact-line">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <a href="mailto:shalyce@memoriesareforsharing.com">shalyce@memoriesareforsharing.com</a>
+                    </div>
+                    <div class="footer-contact-line" style="margin-top:1rem;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <a href="https://memoriesareforsharing.com">memoriesareforsharing.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; {{ date('Y') }} Memories Are For Sharing. All rights reserved.</p>
+                <p class="footer-tagline">Your story matters. Today. Tomorrow. Forever.</p>
+            </div>
+        </div>
     </footer>
 
+    {{-- ============================================================
+         SCRIPTS
+    ============================================================ --}}
     <script>
-        // ── Scroll-reveal ───────────────────────────────────────────────────
-        const revealEls = document.querySelectorAll('.reveal');
-        const obs = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                    obs.unobserve(e.target);
-                }
-            });
-        }, {
-            threshold: 0.08
-        });
-        revealEls.forEach(el => obs.observe(el));
+    // Nav scroll effect
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
 
-        // ── Photo preview ───────────────────────────────────────────────────
-        document.getElementById('f-photo').addEventListener('change', function() {
-            if (!this.files[0]) return;
-            const reader = new FileReader();
-            reader.onload = e => {
-                document.getElementById('photo-preview').src = e.target.result;
-                document.getElementById('photo-preview').style.display = 'block';
-                document.querySelector('.upload-icon').style.display = 'none';
-                document.querySelector('.upload-text').style.display = 'none';
-            };
-            reader.readAsDataURL(this.files[0]);
-        });
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('nav-links');
+    hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
 
-        // ── Video file picker display ────────────────────────────────────────
-        document.getElementById('v-file').addEventListener('change', function() {
-            const file = this.files[0];
-            const area = document.getElementById('video-drop-area');
-            const fname = document.getElementById('vda-filename');
-            const icon = document.getElementById('vda-icon');
-            const text = document.getElementById('vda-text');
-            if (file) {
-                area.classList.add('has-file');
-                fname.textContent = '✔ ' + file.name + ' (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB)';
-                fname.style.display = 'block';
-                icon.textContent = '🎬';
-                text.innerHTML = '<strong>Video selected!</strong>Tap Upload Video when you\'re ready';
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
             }
         });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
 
-        // ── Prompt chips ─────────────────────────────────────────────────────
-        function usePrompt(el) {
-            const ta = document.getElementById('f-story');
-            const text = el.textContent.replace(/\u2019/g, "'").replace(/\u2018/g, "'");
-            ta.value = text + ' ';
-            ta.focus();
-            ta.setSelectionRange(ta.value.length, ta.value.length);
+    // Contact form AJAX
+    document.getElementById('submit-btn').addEventListener('click', async function () {
+        const btn     = this;
+        const btnText = document.getElementById('btn-text');
+        const success = document.getElementById('form-success');
+        const error   = document.getElementById('form-error');
+
+        const firstName = document.getElementById('first_name').value.trim();
+        const email     = document.getElementById('email').value.trim();
+
+        if (!firstName || !email) {
+            error.style.display = 'block';
+            error.textContent   = 'Please fill in your name and email address.';
+            return;
         }
 
-        // ── VIDEO UPLOAD ─────────────────────────────────────────────────────
-        // Backend route: POST /upload-video → MemoryController@uploadVideo
-        // Uploads file to DigitalOcean Spaces, returns { success: true }
-        // Filename format: videos/{slug-name}_{timestamp}.{ext}
-        // ─────────────────────────────────────────────────────────────────────
-        document.getElementById('v-submit-btn').addEventListener('click', function() {
-            const name = document.getElementById('v-name').value.trim();
-            const file = document.getElementById('v-file').files[0];
-            const errEl = document.getElementById('video-error');
-            const btn = this;
+        btnText.textContent = 'Sending…';
+        btn.disabled = true;
+        success.style.display = 'none';
+        error.style.display   = 'none';
 
-            errEl.style.display = 'none';
+        const payload = {
+            first_name: firstName,
+            last_name:  document.getElementById('last_name').value.trim(),
+            email,
+            phone:   document.getElementById('phone').value.trim(),
+            package: document.getElementById('package').value,
+            message: document.getElementById('message').value.trim(),
+            _token:  document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        };
 
-            if (!name) {
-                errEl.textContent = 'Please enter your name before uploading.';
-                errEl.style.display = 'block';
-                document.getElementById('v-name').focus();
-                return;
-            }
-            if (!file) {
-                errEl.textContent = 'Please choose a video file first.';
-                errEl.style.display = 'block';
-                return;
-            }
-            const MAX_MB = 1024; // 1 GB limit
-            if (file.size > MAX_MB * 1024 * 1024) {
-                errEl.textContent = 'Video is too large (max ' + MAX_MB +
-                    ' MB). Try trimming it or text Shalyce at 801-645-1948.';
-                errEl.style.display = 'block';
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'Uploading…';
-
-            const progressWrap = document.getElementById('v-progress-wrap');
-            const progressBar = document.getElementById('v-progress-bar');
-            const progressText = document.getElementById('v-progress-text');
-            progressWrap.style.display = 'block';
-            progressBar.style.width = '0%';
-            progressText.textContent = '0%';
-
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('video', file);
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/upload-video');
-            xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-            xhr.setRequestHeader('Accept', 'application/json');
-
-            xhr.upload.addEventListener('progress', function(e) {
-                if (e.lengthComputable) {
-                    const pct = Math.round((e.loaded / e.total) * 100);
-                    progressBar.style.width = pct + '%';
-                    progressText.textContent = pct < 100 ? pct + '% uploaded…' : 'Processing…';
-                }
+        try {
+            const res = await fetch('/contact', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': payload._token },
+                body:    JSON.stringify(payload),
             });
 
-            xhr.onload = function() {
-                try {
-                    const data = JSON.parse(xhr.responseText);
-                    if (xhr.status === 200 && data.success) {
-                        document.getElementById('video-form-content').style.display = 'none';
-                        document.getElementById('video-success').style.display = 'block';
-                    } else {
-                        throw new Error(data.message || 'Upload failed. Please try again.');
-                    }
-                } catch (err) {
-                    progressWrap.style.display = 'none';
-                    errEl.textContent = err.message ||
-                        'Something went wrong. Please try again or text Shalyce at 801-645-1948.';
-                    errEl.style.display = 'block';
-                    btn.disabled = false;
-                    btn.innerHTML = '&#9654; &nbsp; Upload Video';
-                }
-            };
-
-            xhr.onerror = function() {
-                progressWrap.style.display = 'none';
-                errEl.textContent =
-                    'Network error. Please check your connection and try again, or text Shalyce at 801-645-1948.';
-                errEl.style.display = 'block';
-                btn.disabled = false;
-                btn.innerHTML = '&#9654; &nbsp; Upload Video';
-            };
-
-            xhr.send(formData);
-        });
-
-        function resetVideoForm() {
-            document.getElementById('v-name').value = '';
-            document.getElementById('v-file').value = '';
-            document.getElementById('vda-filename').style.display = 'none';
-            document.getElementById('vda-icon').textContent = '🎥';
-            document.getElementById('vda-text').innerHTML =
-                '<strong>Tap here to choose your video</strong>MP4, MOV, or any format — up to 1024 MB';
-            document.getElementById('video-drop-area').classList.remove('has-file');
-            document.getElementById('v-progress-wrap').style.display = 'none';
-            document.getElementById('v-progress-bar').style.width = '0%';
-            document.getElementById('video-error').style.display = 'none';
-            const btn = document.getElementById('v-submit-btn');
-            btn.disabled = false;
-            btn.innerHTML = '&#9654; &nbsp; Upload Video';
-            document.getElementById('video-form-content').style.display = 'block';
-            document.getElementById('video-success').style.display = 'none';
-        }
-
-        // ── MEMORY / STORY FORM ──────────────────────────────────────────────
-        // Backend route: POST /submit-memory → MemoryController@store
-        // - Photo (if included) is uploaded to DO Spaces, URL saved to DB
-        // - Email sent via Laravel SMTP contains only text fields + photo URL link
-        // - No attachments are emailed
-        // ─────────────────────────────────────────────────────────────────────
-        document.getElementById('memory-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('f-name').value.trim();
-            const contact = document.getElementById('f-contact').value.trim();
-            const story = document.getElementById('f-story').value.trim();
-            const year = document.getElementById('f-year').value || 'Unknown';
-            const relation = document.getElementById('f-relation').value || '';
-            const errEl = document.getElementById('form-error');
-
-            errEl.style.display = 'none';
-
-            if (!name || !contact || !story) {
-                errEl.textContent = 'Please fill in your name, contact info, and memory before submitting.';
-                errEl.style.display = 'block';
-                return;
-            }
-
-            const photoFile = document.getElementById('f-photo').files[0];
-
-            const btn = document.getElementById('submit-btn');
-            btn.disabled = true;
-            btn.innerHTML = '&#10004; &nbsp; Sending&hellip;';
-
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('contact', contact);
-            formData.append('story', story);
-            formData.append('year', year);
-            formData.append('relation', relation);
-            if (photoFile) formData.append('photo', photoFile);
-
-            try {
-                const res = await fetch('/submit-memory', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                    },
-                    body: formData,
+            if (res.ok) {
+                success.style.display = 'block';
+                // Reset fields
+                ['first_name','last_name','email','phone','package','message'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                    else el.value = '';
                 });
-
-                const contentType = res.headers.get('content-type') || '';
-                if (!contentType.includes('application/json')) {
-                    if (res.status === 413) {
-                        throw new Error('The photo is too large. Please try a smaller image.');
-                    }
-                    throw new Error('Something went wrong. Please try again or text Shalyce at 801-645-1948.');
-                }
-
-                const data = await res.json();
-                if (res.ok && data.success) {
-                    document.getElementById('form-content').style.display = 'none';
-                    document.getElementById('success-msg').style.display = 'block';
-                } else {
-                    throw new Error(data.message || 'Something went wrong.');
-                }
-            } catch (err) {
-                errEl.textContent = err.message || 'Something went wrong. Please try again.';
-                errEl.style.display = 'block';
-                btn.disabled = false;
-                btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
+            } else {
+                throw new Error('Server error');
             }
-        });
-
-        // ── Reset memory form for "Add Another Memory" ───────────────────────
-        function resetForm() {
-            document.getElementById('memory-form').reset();
-            document.getElementById('photo-preview').style.display = 'none';
-            document.querySelector('.upload-icon').style.display = 'block';
-            document.querySelector('.upload-text').style.display = 'block';
-            document.getElementById('form-error').style.display = 'none';
-            const btn = document.getElementById('submit-btn');
-            btn.disabled = false;
-            btn.innerHTML = '&#10022; &nbsp; Submit My Memory &nbsp; &#10022;';
-            document.getElementById('form-content').style.display = 'block';
-            document.getElementById('success-msg').style.display = 'none';
+        } catch {
+            error.style.display = 'block';
+            error.textContent   = 'Something went wrong. Please try again, or email directly at shalyce@memoriesareforsharing.com';
+        } finally {
+            btnText.textContent = 'Send My Message';
+            btn.disabled        = false;
         }
+    });
     </script>
-</body>
 
+</body>
 </html>

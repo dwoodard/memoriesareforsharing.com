@@ -1,5 +1,23 @@
 <?php
 
+
+use App\Http\Controllers\ContactController;
+ 
+    Route::get('/', fn() => view('welcome'));
+    Route::post('/contact', [ContactController::class, 'send']);
+
+
+
+
+
+
+
+
+
+
+
+
+
 use App\Http\Controllers\MemoryController;
 use Illuminate\Support\Facades\Route;
 
