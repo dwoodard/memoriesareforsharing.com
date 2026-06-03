@@ -8,6 +8,7 @@ use Filament\Schemas\Components\Form;
 use Filament\Schemas\Components\Image;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
 
 class MemoryForm
 {
@@ -51,10 +52,11 @@ class MemoryForm
                                     ->label('Photo URL')
                                     ->disabled(),
                                 Image::make(
-                                    fn ($get) => $get('photo_url'),
-                                    'Memory photo',
+                                    url: fn ($get) => $get('photo_url'),
+                                    alt: 'Memory photo',
                                 )
-                                    ->imageHeight('12rem'),
+                                    ->imageHeight('12rem')
+                                    ->hidden(fn (Get $get): bool => ! $get('photo_url')),
                             ]),
                     ]),
             ]);
