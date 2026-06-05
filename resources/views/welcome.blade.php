@@ -591,12 +591,14 @@
     <!-- ============ ABOUT ============ -->
     <section class="about section-pad" id="about">
         <div class="wrap about-grid">
-            <div class="about-portrait reveal">Portrait of Shalyce<br>— replace with a photo —</div>
+            <div class="about-portrait reveal">
+                <img src="{{ asset('images/Shalyce-Memories-Profile.jpg') }}" style="width: 425px;" alt="Shalyce, founder of Memories Are For Sharing">
+            </div>
             <div class="reveal">
                 <span class="gold-rule"><span class="eyebrow">Your Storyteller</span></span>
                 <h2>Hello, I'm Shalyce</h2>
                 <p>
-                    I believe the most precious things we own aren't things at all — they're the stories
+                    I believe the most precious things we own aren't things at all — they're people; and the stories
                     that get passed down at the dinner table, and far too often, lost.
                 </p>
                 <p>
