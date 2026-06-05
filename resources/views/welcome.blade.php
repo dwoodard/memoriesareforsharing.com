@@ -1,1759 +1,794 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Preserve your memories, your voice, and your legacy for the people you love. Legacy preservation services by Shalyce — professional interviews, films, and heirloom documentaries.">
-    <title>Memories Are For Sharing | Legacy Preservation by Shalyce</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Memories Are For Sharing — Heirloom Life-Story Recordings</title>
+    <meta name="description" content="Heirloom audio and video recordings of the people you love — their stories, their voice, their words — kept for the generations who come after. Legacy preservation by Shalyce.">
 
-    {{-- Fonts --}}
+    <meta property="og:title" content="Memories Are For Sharing">
+    <meta property="og:description" content="Heirloom life-story recordings — in their own voice, in their own words.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://memoriesareforsharing.com/">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 
-    {{-- CSRF for contact form --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    @verbatim
     <style>
-        /* ============================================================
-           CSS CUSTOM PROPERTIES
-        ============================================================ */
         :root {
-            --navy:       #1a2744;
-            --navy-light: #243260;
-            --forest:     #3d5c3a;
-            --forest-mid: #4e7549;
-            --sage:       #7a9e76;
-            --sage-light: #a8c4a4;
-            --cream:      #f7f3ec;
-            --parchment:  #ede8de;
-            --warm-white: #faf8f4;
-            --gold:       #b8955a;
-            --gold-light: #d4af7a;
-            --text-dark:  #1e1a14;
-            --text-mid:   #3d3628;
-            --text-soft:  #6b6254;
-
-            --serif: 'Cormorant Garamond', Georgia, serif;
-            --sans:  'Jost', system-ui, sans-serif;
-
-            --section-pad: clamp(4rem, 8vw, 7rem);
-            --container:   min(1180px, 92vw);
+            --ink: #0d0a09;
+            --ink-soft: #161010;
+            --burgundy: #5a1726;
+            --burgundy-deep: #3a0e18;
+            --gold: #c2a14e;
+            --gold-bright: #e7cb84;
+            --gold-deep: #93752f;
+            --cream: #f6eedd;
+            --cream-dim: #ece0c8;
+            --paper: #f3ead7;
+            --text-dark: #2c221c;
+            --text-muted: #6c5d4f;
+            --line: rgba(194, 161, 78, 0.32);
         }
 
-        /* ============================================================
-           RESET & BASE
-        ============================================================ */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html { scroll-behavior: smooth; font-size: 16px; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 
         body {
-            font-family: var(--sans);
-            background: var(--warm-white);
+            font-family: 'EB Garamond', Georgia, serif;
+            background: var(--paper);
             color: var(--text-dark);
-            overflow-x: hidden;
+            font-size: 19px;
             line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        img { display: block; max-width: 100%; }
+        /* film grain overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            line-height: 1.06;
+            letter-spacing: 0.01em;
+        }
+
+        .eyebrow {
+            font-family: 'Jost', sans-serif;
+            font-weight: 400;
+            font-size: 12.5px;
+            letter-spacing: 0.42em;
+            text-transform: uppercase;
+            color: var(--gold-deep);
+        }
+
+        .gold-rule {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--gold-deep);
+        }
+        .gold-rule::before, .gold-rule::after {
+            content: "";
+            width: 46px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold));
+        }
+        .gold-rule::after { background: linear-gradient(90deg, var(--gold), transparent); }
+
         a { color: inherit; text-decoration: none; }
 
-        .container {
-            width: var(--container);
-            margin-inline: auto;
-        }
+        .wrap { width: min(1180px, 90vw); margin: 0 auto; }
 
-        /* ============================================================
-           NAVIGATION
-        ============================================================ */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            background: rgba(26, 39, 68, 0.96);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(184, 149, 90, 0.25);
-            transition: box-shadow 0.3s;
-        }
-
-        nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,0.18); }
-
-        .nav-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 68px;
-            width: var(--container);
-            margin-inline: auto;
-        }
-
-        .nav-logo {
-            font-family: var(--serif);
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: var(--cream);
-            letter-spacing: 0.03em;
-            line-height: 1.2;
-        }
-
-        .nav-logo span {
-            display: block;
-            font-size: 0.65rem;
-            font-family: var(--sans);
-            font-weight: 400;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            margin-top: 1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-size: 0.78rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: rgba(247, 243, 236, 0.8);
-            transition: color 0.2s;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover { color: var(--gold-light); }
-
-        .nav-cta {
-            background: var(--gold);
-            color: var(--navy) !important;
-            padding: 0.5rem 1.2rem;
-            border-radius: 2px;
-            font-weight: 600 !important;
-            transition: background 0.2s !important;
-        }
-
-        .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy) !important; }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: var(--cream);
-            transition: all 0.3s;
-        }
-
-        /* ============================================================
-           HERO
-        ============================================================ */
-        #hero {
-            min-height: 100svh;
-            background: var(--navy);
-            position: relative;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .hero-bg-pattern {
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(ellipse 80% 60% at 70% 50%, rgba(61, 92, 58, 0.22) 0%, transparent 70%),
-                radial-gradient(ellipse 50% 80% at 20% 80%, rgba(184, 149, 90, 0.08) 0%, transparent 60%);
-        }
-
-        /* Decorative corner flourishes */
-        .hero-bg-pattern::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0;
-            width: 55%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent 40%, rgba(61,92,58,0.12) 100%);
-            clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
-        }
-
-        .hero-inner {
-            position: relative;
-            z-index: 2;
-            width: var(--container);
-            margin-inline: auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            padding-top: 80px;
-        }
-
-        .hero-text { animation: fadeUp 1s ease both; }
-
-        .hero-eyebrow {
-            font-family: var(--sans);
-            font-size: 0.72rem;
+        /* ---------- buttons ---------- */
+        .btn {
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
             letter-spacing: 0.22em;
             text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .hero-eyebrow::before,
-        .hero-eyebrow::after {
-            content: '';
-            display: block;
-            height: 1px;
-            width: 36px;
-            background: var(--gold);
-            opacity: 0.6;
-        }
-
-        .hero-headline {
-            font-family: var(--serif);
-            font-size: clamp(3rem, 5.5vw, 5.2rem);
-            font-weight: 600;
-            line-height: 1.05;
-            color: var(--cream);
-            margin-bottom: 0.4rem;
-        }
-
-        .hero-headline em {
-            font-style: italic;
-            font-weight: 300;
-            color: var(--sage-light);
-        }
-
-        .hero-subhead {
-            font-family: var(--serif);
-            font-size: clamp(1.15rem, 2vw, 1.5rem);
-            font-weight: 300;
-            font-style: italic;
-            color: var(--gold-light);
-            margin-bottom: 2rem;
-            letter-spacing: 0.02em;
-        }
-
-        .hero-body {
-            color: rgba(247, 243, 236, 0.75);
-            font-size: 1.05rem;
-            max-width: 480px;
-            margin-bottom: 2.8rem;
-            line-height: 1.8;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--gold);
-            color: var(--navy);
-            font-family: var(--sans);
-            font-size: 0.82rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 0.95rem 2rem;
-            border-radius: 2px;
-            border: none;
+            padding: 17px 38px;
+            display: inline-block;
             cursor: pointer;
-            transition: all 0.25s;
-        }
-
-        .btn-primary:hover {
-            background: var(--gold-light);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(184, 149, 90, 0.35);
-        }
-
-        .btn-outline {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            border: 1px solid var(--gold);
+            transition: all .4s ease;
             background: transparent;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold) 55%, var(--gold-deep));
+            color: var(--ink);
+            border-color: transparent;
+        }
+        .btn-gold:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.35); }
+        .btn-ghost { color: var(--cream); border-color: var(--line); }
+        .btn-ghost:hover { border-color: var(--gold); color: var(--gold-bright); transform: translateY(-2px); }
+        .btn-dark { color: var(--burgundy); border-color: var(--burgundy); }
+        .btn-dark:hover { background: var(--burgundy); color: var(--cream); transform: translateY(-2px); }
+
+        /* ---------- nav ---------- */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 26px 0;
+            transition: all .45s ease;
+        }
+        nav.scrolled {
+            padding: 16px 0;
+            background: rgba(13, 10, 9, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+        }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+        .brand {
+            font-family: 'Cormorant Garamond', serif;
             color: var(--cream);
-            font-family: var(--sans);
-            font-size: 0.82rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 0.95rem 2rem;
-            border-radius: 2px;
-            border: 1px solid rgba(247, 243, 236, 0.35);
-            cursor: pointer;
-            transition: all 0.25s;
-            text-decoration: none;
-        }
-
-        .btn-outline:hover {
-            border-color: var(--cream);
-            background: rgba(247, 243, 236, 0.06);
-        }
-
-        .hero-visual {
-            animation: fadeUp 1s 0.2s ease both;
-            position: relative;
-        }
-
-        .hero-photo-frame {
-            position: relative;
-            border-radius: 4px;
-            overflow: hidden;
-            aspect-ratio: 4/5;
-            background: var(--navy-light);
-        }
-
-        .hero-photo-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.88;
-        }
-
-        /* Decorative frame border */
-        .hero-photo-frame::after {
-            content: '';
-            position: absolute;
-            inset: 12px;
-            border: 1px solid rgba(184, 149, 90, 0.4);
-            border-radius: 2px;
-            pointer-events: none;
-        }
-
-        .hero-photo-caption {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: linear-gradient(transparent, rgba(26,39,68,0.9));
-            padding: 3rem 1.5rem 1.5rem;
-        }
-
-        .hero-photo-caption p {
-            font-family: var(--serif);
-            font-style: italic;
-            font-size: 1.1rem;
-            color: var(--cream);
-            text-align: center;
-            opacity: 0.9;
-        }
-
-        /* Decorative offset accent box */
-        .hero-accent-box {
-            position: absolute;
-            top: -16px; right: -16px;
-            width: 120px;
-            height: 120px;
-            border: 2px solid rgba(184, 149, 90, 0.3);
-            border-radius: 2px;
-            z-index: -1;
-        }
-
-        .hero-stats {
-            position: absolute;
-            bottom: -24px;
-            left: -24px;
-            background: var(--forest);
-            color: var(--cream);
-            padding: 1.2rem 1.6rem;
-            border-radius: 3px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-        }
-
-        .hero-stats strong {
-            display: block;
-            font-family: var(--serif);
-            font-size: 2rem;
-            font-weight: 600;
+            font-size: 23px;
+            letter-spacing: 0.04em;
             line-height: 1;
         }
-
-        .hero-stats span {
-            font-size: 0.72rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
-        /* ============================================================
-           VALUES STRIP
-        ============================================================ */
-        #values {
-            background: var(--forest);
-            padding: 2.5rem 0;
-        }
-
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-        }
-
-        .value-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 1.5rem 1.5rem;
-            border-right: 1px solid rgba(255,255,255,0.1);
-            gap: 0.7rem;
-        }
-
-        .value-item:last-child { border-right: none; }
-
-        .value-icon {
-            width: 44px;
-            height: 44px;
-            border: 1px solid rgba(255,255,255,0.35);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--cream);
-        }
-
-        .value-icon svg { width: 20px; height: 20px; }
-
-        .value-label {
-            font-size: 0.82rem;
-            color: rgba(255,255,255,0.85);
-            font-weight: 400;
-            letter-spacing: 0.03em;
-            line-height: 1.4;
-        }
-
-        /* ============================================================
-           ABOUT / INTRO
-        ============================================================ */
-        #about {
-            padding: var(--section-pad) 0;
-            background: var(--warm-white);
-        }
-
-        .about-inner {
-            display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: clamp(3rem, 6vw, 7rem);
-            align-items: center;
-        }
-
-        .about-photo-wrap {
-            position: relative;
-        }
-
-        .about-photo {
-            width: 100%;
-            aspect-ratio: 3/4;
-            object-fit: cover;
-            border-radius: 3px;
-            box-shadow: 0 24px 60px rgba(0,0,0,0.14);
-        }
-
-        .about-photo-bg {
-            position: absolute;
-            inset: -16px -16px 16px 16px;
-            background: var(--parchment);
-            border-radius: 3px;
-            z-index: -1;
-        }
-
-        .about-quote-card {
-            position: absolute;
-            bottom: -2rem;
-            right: -2rem;
-            background: var(--navy);
-            color: var(--cream);
-            padding: 1.4rem 1.6rem;
-            border-radius: 3px;
-            max-width: 200px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.2);
-        }
-
-        .about-quote-card blockquote {
-            font-family: var(--serif);
-            font-style: italic;
-            font-size: 1rem;
-            line-height: 1.5;
-            color: var(--cream);
-        }
-
-        .about-quote-card cite {
+        .brand span { color: var(--gold-bright); font-style: italic; }
+        .brand small {
             display: block;
-            margin-top: 0.6rem;
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
+            font-family: 'Jost', sans-serif;
+            font-size: 8.5px;
+            letter-spacing: 0.46em;
             text-transform: uppercase;
-            color: var(--gold-light);
-            font-style: normal;
-        }
-
-        .section-eyebrow {
-            font-size: 0.72rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--forest-mid);
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
-
-        .section-eyebrow::after {
-            content: '';
-            display: block;
-            height: 1px;
-            width: 32px;
-            background: var(--sage);
-        }
-
-        .section-title {
-            font-family: var(--serif);
-            font-size: clamp(2.2rem, 4vw, 3.4rem);
-            font-weight: 600;
-            line-height: 1.1;
-            color: var(--navy);
-            margin-bottom: 1.2rem;
-        }
-
-        .section-title em {
-            font-style: italic;
-            font-weight: 400;
-            color: var(--forest);
-        }
-
-        .section-body {
-            color: var(--text-soft);
-            font-size: 1.05rem;
-            line-height: 1.85;
-            margin-bottom: 1.4rem;
-        }
-
-        .ornament {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin: 1.8rem 0;
             color: var(--gold);
+            margin-top: 5px;
         }
-
-        .ornament::before,
-        .ornament::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--gold-light));
-        }
-
-        .ornament::after {
-            background: linear-gradient(to left, transparent, var(--gold-light));
-        }
-
-        .ornament svg { width: 18px; height: 18px; flex-shrink: 0; }
-
-        /* ============================================================
-           PACKAGES / PRICING
-        ============================================================ */
-        #packages {
-            padding: var(--section-pad) 0;
-            background: var(--cream);
-            position: relative;
-            overflow: hidden;
-        }
-
-        #packages::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--navy), var(--forest), var(--gold));
-        }
-
-        .packages-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 4rem;
-        }
-
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            align-items: start;
-        }
-
-        .package-card {
-            background: var(--warm-white);
-            border-radius: 4px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid rgba(0,0,0,0.06);
-            position: relative;
-        }
-
-        .package-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.12);
-        }
-
-        .package-card.featured {
-            border-color: var(--forest);
-            box-shadow: 0 8px 40px rgba(61,92,58,0.18);
-        }
-
-        .package-badge {
-            background: var(--forest);
-            color: var(--cream);
-            text-align: center;
-            padding: 0.45rem 1rem;
-            font-size: 0.68rem;
-            font-weight: 600;
+        .nav-links { display: flex; align-items: center; gap: 38px; }
+        .nav-links a {
+            font-family: 'Jost', sans-serif;
+            font-size: 12.5px;
             letter-spacing: 0.18em;
             text-transform: uppercase;
+            color: var(--cream-dim);
+            transition: color .3s;
         }
+        .nav-links a:hover { color: var(--gold-bright); }
+        .nav-links .btn { color: var(--ink); }
+        .nav-toggle { display: none; }
 
-        .package-card:not(.featured) .package-badge {
-            background: var(--navy);
-        }
-
-        .package-body {
-            padding: 2rem 1.8rem 2.2rem;
-        }
-
-        .package-number {
-            font-size: 0.68rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-soft);
-            margin-bottom: 0.4rem;
-        }
-
-        .package-name {
-            font-family: var(--serif);
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: var(--navy);
-            line-height: 1.1;
-            margin-bottom: 0.6rem;
-        }
-
-        .package-divider {
-            width: 32px;
-            height: 2px;
-            background: var(--gold);
-            margin: 0.8rem 0;
-        }
-
-        .package-price {
-            font-family: var(--serif);
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--forest);
-            margin-bottom: 1.4rem;
-            line-height: 1;
-        }
-
-        .package-price span {
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--text-soft);
-        }
-
-        .package-features {
-            list-style: none;
-            margin-bottom: 1.8rem;
-        }
-
-        .package-features li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.7rem;
-            font-size: 0.92rem;
-            color: var(--text-mid);
-            padding: 0.42rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            line-height: 1.5;
-        }
-
-        .package-features li:last-child { border-bottom: none; }
-
-        .feature-check {
-            color: var(--forest-mid);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .package-tagline {
-            text-align: center;
-            font-family: var(--serif);
-            font-style: italic;
-            font-size: 0.95rem;
-            color: var(--text-soft);
-            padding-top: 1rem;
-            border-top: 1px solid var(--parchment);
-        }
-
-        /* ============================================================
-           HOW IT WORKS
-        ============================================================ */
-        #process {
-            padding: var(--section-pad) 0;
-            background: var(--navy);
+        /* ---------- hero ---------- */
+        .hero {
+            min-height: 100vh;
             position: relative;
+            display: flex;
+            align-items: center;
+            background:
+                radial-gradient(120% 90% at 50% 8%, rgba(90, 23, 38, 0.55), transparent 60%),
+                radial-gradient(80% 70% at 80% 100%, rgba(146, 117, 47, 0.18), transparent 55%),
+                linear-gradient(160deg, #0d0a09, #1a0e12 55%, #0a0707);
+            color: var(--cream);
             overflow: hidden;
         }
-
-        #process::after {
-            content: '"';
+        .hero-frame {
             position: absolute;
-            right: -2%;
-            top: -10%;
-            font-family: var(--serif);
-            font-size: 40vw;
-            color: rgba(255,255,255,0.02);
-            line-height: 1;
+            inset: 26px;
+            border: 1px solid var(--line);
             pointer-events: none;
-            user-select: none;
         }
-
-        .process-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 4rem;
+        .hero-frame::before, .hero-frame::after {
+            content: "";
+            position: absolute;
+            width: 16px; height: 16px;
+            border: 1px solid var(--gold);
         }
+        .hero-frame::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+        .hero-frame::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
 
-        .process-header .section-title { color: var(--cream); }
-        .process-header .section-eyebrow { color: var(--gold-light); }
-        .process-header .section-eyebrow::after { background: var(--gold); }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .step {
-            background: var(--navy);
-            padding: 2.2rem 1.8rem;
-            position: relative;
-            transition: background 0.3s;
-        }
-
-        .step:hover { background: var(--navy-light); }
-
-        .step-number {
-            font-family: var(--serif);
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: rgba(184, 149, 90, 0.18);
-            line-height: 1;
-            margin-bottom: 0.8rem;
-        }
-
-        .step-title {
-            font-family: var(--serif);
-            font-size: 1.2rem;
-            font-weight: 600;
+        .hero-content { width: min(820px, 90vw); margin: 0 auto; text-align: center; position: relative; z-index: 2; padding: 120px 0; }
+        .hero .eyebrow { color: var(--gold); }
+        .hero h1 {
+            font-size: clamp(46px, 8.5vw, 104px);
+            font-weight: 300;
+            margin: 30px 0 8px;
             color: var(--cream);
-            margin-bottom: 0.7rem;
         }
-
-        .step-desc {
-            font-size: 0.9rem;
-            color: rgba(247, 243, 236, 0.6);
-            line-height: 1.7;
-        }
-
-        /* ============================================================
-           TESTIMONIAL / PULL QUOTE
-        ============================================================ */
-        #testimonials {
-            padding: var(--section-pad) 0;
-            background: var(--parchment);
-        }
-
-        .testimonials-header {
-            text-align: center;
+        .hero h1 em { font-style: italic; color: var(--gold-bright); font-weight: 400; }
+        .hero-sub {
+            font-size: clamp(18px, 2.4vw, 23px);
+            color: var(--cream-dim);
             max-width: 600px;
-            margin: 0 auto 3.5rem;
+            margin: 26px auto 44px;
+            font-weight: 400;
         }
+        .hero-cta { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
 
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+        .scroll-hint {
+            position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%);
+            font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 0.4em;
+            text-transform: uppercase; color: var(--gold); z-index: 3;
+            display: flex; flex-direction: column; align-items: center; gap: 12px;
         }
+        .scroll-hint .dot { width: 1px; height: 46px; background: linear-gradient(var(--gold), transparent); animation: drift 2.4s ease-in-out infinite; }
 
-        .testimonial-card {
-            background: var(--warm-white);
-            padding: 2rem;
-            border-radius: 3px;
-            border-left: 3px solid var(--forest);
-            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
-        }
+        /* ---------- reveal animation ---------- */
+        .reveal { opacity: 0; transform: translateY(34px); transition: opacity 1s ease, transform 1s ease; }
+        .reveal.in { opacity: 1; transform: none; }
+        [data-load] { opacity: 0; transform: translateY(26px); animation: rise 1.1s cubic-bezier(.2,.7,.2,1) forwards; }
+        @keyframes rise { to { opacity: 1; transform: none; } }
+        @keyframes drift { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
 
-        .testimonial-quote {
-            font-family: var(--serif);
-            font-size: 1.08rem;
-            font-style: italic;
-            line-height: 1.7;
-            color: var(--text-mid);
-            margin-bottom: 1.2rem;
-        }
+        /* ---------- sections ---------- */
+        section { position: relative; }
+        .section-pad { padding: 130px 0; }
+        .section-head { text-align: center; margin-bottom: 72px; }
+        .section-head h2 { font-size: clamp(38px, 5.5vw, 62px); margin: 22px 0 0; color: var(--burgundy-deep); }
+        .section-head .lede { max-width: 600px; margin: 22px auto 0; color: var(--text-muted); font-size: 20px; }
 
-        .testimonial-quote::before {
-            content: '\201C';
-            font-size: 2.5rem;
-            line-height: 0;
-            vertical-align: -0.5rem;
-            color: var(--gold);
-            margin-right: 0.2rem;
-        }
-
-        .testimonial-author {
-            font-size: 0.78rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-soft);
-            font-weight: 600;
-        }
-
-        /* ============================================================
-           CONTACT
-        ============================================================ */
-        #contact {
-            padding: var(--section-pad) 0;
-            background: var(--warm-white);
-        }
-
-        .contact-inner {
-            display: grid;
-            grid-template-columns: 1fr 1.4fr;
-            gap: clamp(3rem, 6vw, 6rem);
-            align-items: start;
-        }
-
-        .contact-info .section-title { font-size: clamp(1.8rem, 3.2vw, 2.8rem); }
-
-        .contact-detail {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--parchment);
-            color: var(--text-mid);
-            font-size: 0.98rem;
-            transition: color 0.2s;
-        }
-
-        .contact-detail:hover { color: var(--forest); }
-
-        .contact-detail:last-of-type { border-bottom: none; }
-
-        .contact-icon {
-            width: 42px;
-            height: 42px;
-            background: var(--parchment);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: var(--forest);
-        }
-
-        .contact-icon svg { width: 18px; height: 18px; }
-
-        .contact-person {
-            margin-top: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-        }
-
-        .contact-avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--gold-light);
-        }
-
-        .contact-name {
-            font-family: var(--serif);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--navy);
-        }
-
-        .contact-title-text {
-            font-size: 0.78rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-soft);
-        }
-
-        /* Form */
-        .contact-form {
-            background: var(--cream);
-            padding: 2.5rem;
-            border-radius: 4px;
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-
-        .form-title {
-            font-family: var(--serif);
-            font-size: 1.6rem;
-            color: var(--navy);
-            margin-bottom: 0.4rem;
-        }
-
-        .form-subtitle {
-            font-size: 0.9rem;
-            color: var(--text-soft);
-            margin-bottom: 1.8rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-mid);
-            margin-bottom: 0.4rem;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 0.78rem 1rem;
-            background: var(--warm-white);
-            border: 1px solid rgba(0,0,0,0.12);
-            border-radius: 3px;
-            font-family: var(--sans);
-            font-size: 0.95rem;
+        /* intro / statement */
+        .statement { background: var(--cream); text-align: center; }
+        .statement .big {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(28px, 4.6vw, 52px);
+            font-weight: 300;
+            line-height: 1.32;
             color: var(--text-dark);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-            -webkit-appearance: none;
+            max-width: 920px;
+            margin: 36px auto 0;
         }
+        .statement .big em { font-style: italic; color: var(--burgundy); }
 
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--forest);
-            box-shadow: 0 0 0 3px rgba(61, 92, 58, 0.1);
+        /* process */
+        .process { background: var(--paper); }
+        .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .step { padding: 38px 26px; border-top: 1px solid var(--line); position: relative; }
+        .step-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 58px; font-style: italic; font-weight: 400;
+            color: var(--gold); line-height: 1; margin-bottom: 18px;
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold-deep));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .step h3 { font-size: 27px; color: var(--burgundy-deep); margin-bottom: 12px; }
+        .step p { font-size: 17.5px; color: var(--text-muted); }
 
-        textarea { resize: vertical; min-height: 110px; }
-
-        .form-success, .form-error {
-            display: none;
-            padding: 0.9rem 1.2rem;
-            border-radius: 3px;
-            font-size: 0.9rem;
-            margin-top: 1rem;
+        /* packages */
+        .packages { background: linear-gradient(165deg, #120c0b, #1f1014 60%, #0d0908); color: var(--cream); }
+        .packages .section-head h2 { color: var(--cream); }
+        .packages .section-head .lede { color: var(--cream-dim); }
+        .pkg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; align-items: stretch; }
+        .pkg {
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.018);
+            padding: 40px 30px 36px;
+            display: flex; flex-direction: column;
+            transition: transform .45s ease, border-color .45s ease, box-shadow .45s ease;
+            position: relative;
         }
-
-        .form-success {
-            background: rgba(61, 92, 58, 0.1);
-            border: 1px solid var(--forest);
-            color: var(--forest);
+        .pkg:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 26px 60px rgba(0,0,0,.5); }
+        .pkg.featured { border-color: var(--gold); background: linear-gradient(180deg, rgba(194,161,78,0.10), rgba(90,23,38,0.18)); }
+        .pkg-tag {
+            position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold-deep));
+            color: var(--ink); font-family: 'Jost', sans-serif; font-size: 10px;
+            letter-spacing: 0.28em; text-transform: uppercase; padding: 7px 18px; white-space: nowrap;
         }
+        .pkg-name { font-size: 32px; color: var(--gold-bright); margin-bottom: 4px; }
+        .pkg-kind { font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--cream-dim); margin-bottom: 24px; }
+        .pkg-price { font-family: 'Cormorant Garamond', serif; font-size: 52px; color: var(--cream); line-height: 1; }
+        .pkg-price small { font-size: 18px; color: var(--gold); vertical-align: super; margin-right: 2px; }
+        .pkg-price .unit { display: block; font-family: 'Jost', sans-serif; font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 8px; }
+        .pkg ul { list-style: none; margin: 26px 0 30px; flex: 1; }
+        .pkg li { font-size: 16.5px; color: var(--cream-dim); padding: 9px 0 9px 26px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .pkg li::before { content: "✦"; position: absolute; left: 0; color: var(--gold); font-size: 12px; top: 11px; }
+        .pkg .btn { text-align: center; width: 100%; }
 
-        .form-error {
-            background: rgba(180, 60, 60, 0.08);
-            border: 1px solid rgba(180, 60, 60, 0.4);
-            color: #8b2c2c;
+        /* keepsake / what you receive band */
+        .receive { background: var(--burgundy-deep); color: var(--cream); text-align: center; }
+        .receive .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+        .receive .cell h3 { font-size: 27px; color: var(--gold-bright); margin-bottom: 10px; }
+        .receive .cell p { color: var(--cream-dim); font-size: 17px; }
+        .receive .section-head h2 { color: var(--cream); }
+
+        /* about */
+        .about { background: var(--cream); }
+        .about-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 70px; align-items: center; }
+        .about-portrait {
+            aspect-ratio: 4/5;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(194,161,78,0.22), transparent 70%),
+                linear-gradient(160deg, #2a1218, #140b0c);
+            border: 1px solid var(--line);
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold); font-family: 'Jost', sans-serif; font-size: 11px;
+            letter-spacing: 0.3em; text-transform: uppercase; text-align: center; padding: 20px;
         }
+        .about-portrait::after { content: ""; position: absolute; inset: 14px; border: 1px solid var(--line); }
+        .about h2 { font-size: clamp(34px, 4.8vw, 54px); color: var(--burgundy-deep); margin: 18px 0 24px; }
+        .about p { color: var(--text-muted); margin-bottom: 18px; }
+        .about .sig { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 30px; color: var(--burgundy); margin-top: 14px; }
 
-        /* ============================================================
-           FOOTER
-        ============================================================ */
-        footer {
-            background: var(--navy);
-            color: rgba(247, 243, 236, 0.6);
+        /* faq */
+        .faq { background: var(--paper); }
+        .faq-list { max-width: 820px; margin: 0 auto; }
+        .faq-item { border-top: 1px solid var(--line); }
+        .faq-item:last-child { border-bottom: 1px solid var(--line); }
+        .faq-q {
+            width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+            padding: 28px 4px; display: flex; justify-content: space-between; align-items: center; gap: 20px;
+            font-family: 'Cormorant Garamond', serif; font-size: 25px; color: var(--burgundy-deep);
         }
+        .faq-q .pm { color: var(--gold); font-size: 26px; transition: transform .4s ease; font-family: 'EB Garamond', serif; }
+        .faq-item.open .faq-q .pm { transform: rotate(45deg); }
+        .faq-a { max-height: 0; overflow: hidden; transition: max-height .5s ease; }
+        .faq-a p { padding: 0 4px 28px; color: var(--text-muted); font-size: 18px; }
 
-        .footer-main {
-            padding: 3.5rem 0 2.5rem;
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr;
-            gap: 3rem;
-        }
+        /* contact */
+        .contact { background: linear-gradient(160deg, #0d0a09, #1f0f14 60%, #0a0707); color: var(--cream); }
+        .contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 70px; align-items: start; }
+        .contact h2 { font-size: clamp(36px, 5vw, 58px); color: var(--cream); margin: 18px 0 22px; }
+        .contact-intro p { color: var(--cream-dim); margin-bottom: 34px; max-width: 420px; }
+        .contact-detail { display: flex; align-items: center; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); }
+        .contact-detail:last-child { border-bottom: 1px solid var(--line); }
+        .contact-detail .lbl { font-family: 'Jost', sans-serif; font-size: 10.5px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--gold); width: 70px; }
+        .contact-detail .val { font-size: 19px; color: var(--cream); }
+        .contact-detail a:hover { color: var(--gold-bright); }
 
-        .footer-brand-name {
-            font-family: var(--serif);
-            font-size: 1.4rem;
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .field { display: flex; flex-direction: column; }
+        .field.full { grid-column: 1 / -1; }
+        .field label { font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 9px; }
+        .field input, .field select, .field textarea {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--line);
             color: var(--cream);
-            font-weight: 500;
-            margin-bottom: 0.3rem;
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            padding: 15px 16px;
+            transition: border-color .3s, background .3s;
         }
-
-        .footer-brand-tag {
-            font-size: 0.72rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--gold-light);
-            margin-bottom: 1rem;
+        .field input:focus, .field select:focus, .field textarea:focus {
+            outline: none; border-color: var(--gold); background: rgba(255,255,255,0.05);
         }
+        .field select { appearance: none; cursor: pointer; }
+        .field select option { background: var(--ink); color: var(--cream); }
+        .field textarea { resize: vertical; min-height: 130px; }
+        .field .err { color: #e08a8a; font-size: 14px; margin-top: 7px; font-family: 'Jost', sans-serif; letter-spacing: 0.04em; }
+        .hp { position: absolute; left: -9999px; opacity: 0; }
+        .form-note { grid-column: 1/-1; font-size: 14px; color: var(--text-muted); }
 
-        .footer-brand p {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            max-width: 280px;
+        .flash {
+            grid-column: 1 / -1;
+            border: 1px solid var(--gold);
+            background: rgba(194,161,78,0.10);
+            color: var(--gold-bright);
+            padding: 18px 22px;
+            font-size: 18px;
+            display: flex; align-items: center; gap: 12px;
         }
+        .flash::before { content: "✦"; color: var(--gold); }
 
-        .footer-heading {
-            font-size: 0.72rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--cream);
-            font-weight: 600;
-            margin-bottom: 1.2rem;
-        }
+        /* footer */
+        footer { background: var(--ink); color: var(--cream-dim); padding: 64px 0 40px; text-align: center; }
+        footer .brand { display: inline-block; margin-bottom: 22px; }
+        footer .f-links { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+        footer .f-links a { font-family: 'Jost', sans-serif; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream-dim); transition: color .3s; }
+        footer .f-links a:hover { color: var(--gold-bright); }
+        footer .copy { font-size: 13px; color: var(--text-muted); font-family: 'Jost', sans-serif; letter-spacing: 0.08em; }
 
-        .footer-links { list-style: none; }
-
-        .footer-links li { margin-bottom: 0.55rem; }
-
-        .footer-links a {
-            font-size: 0.88rem;
-            color: rgba(247, 243, 236, 0.6);
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover { color: var(--gold-light); }
-
-        .footer-contact-line {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-size: 0.88rem;
-            margin-bottom: 0.6rem;
-        }
-
-        .footer-contact-line svg { width: 14px; height: 14px; color: var(--gold); flex-shrink: 0; }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding: 1.4rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.78rem;
-        }
-
-        .footer-tagline {
-            font-family: var(--serif);
-            font-style: italic;
-            color: var(--gold-light);
-            font-size: 0.95rem;
-        }
-
-        /* ============================================================
-           ANIMATIONS
-        ============================================================ */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(28px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ============================================================
-           RESPONSIVE
-        ============================================================ */
-        @media (max-width: 1024px) {
-            .packages-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-            .steps-grid { grid-template-columns: 1fr 1fr; }
-            .testimonial-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-        }
-
-        @media (max-width: 860px) {
-            .hero-inner { grid-template-columns: 1fr; }
-            .hero-visual { display: none; }
-            .about-inner { grid-template-columns: 1fr; }
-            .about-photo-wrap { max-width: 380px; margin-inline: auto; }
-            .contact-inner { grid-template-columns: 1fr; }
-            .footer-main { grid-template-columns: 1fr; gap: 2rem; }
-            .values-grid { grid-template-columns: repeat(2, 1fr); }
-            .value-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
-            .value-item:nth-child(2) { border-right: none; }
-            .value-item:nth-child(3) { border-bottom: none; border-right: none; }
-            .value-item:nth-child(4) { border-right: none; border-bottom: none; }
-        }
-
-        @media (max-width: 640px) {
+        /* ---------- responsive ---------- */
+        @media (max-width: 960px) {
+            .steps { grid-template-columns: repeat(2, 1fr); }
+            .pkg-grid { grid-template-columns: repeat(2, 1fr); }
+            .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 44px; }
+            .receive .row { grid-template-columns: 1fr; gap: 28px; }
             .nav-links { display: none; }
-            .nav-links.open {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 68px; left: 0; right: 0;
-                background: rgba(26,39,68,0.98);
-                padding: 1.5rem;
-                gap: 1.2rem;
-                z-index: 99;
+            .nav-links.show {
+                display: flex; flex-direction: column; gap: 22px;
+                position: absolute; top: 100%; left: 0; right: 0;
+                background: rgba(13,10,9,0.97); padding: 32px 7vw 38px; align-items: flex-start;
+                border-bottom: 1px solid var(--line);
             }
-            .hamburger { display: flex; }
-            .steps-grid { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
-            .footer-bottom { flex-direction: column; gap: 0.6rem; text-align: center; }
+            .nav-toggle { display: block; background: none; border: none; cursor: pointer; color: var(--gold); width: 30px; height: 22px; position: relative; }
+            .nav-toggle span { position: absolute; left: 0; right: 0; height: 1.5px; background: var(--gold); transition: .3s; }
+            .nav-toggle span:nth-child(1) { top: 0; }
+            .nav-toggle span:nth-child(2) { top: 10px; }
+            .nav-toggle span:nth-child(3) { top: 20px; }
         }
-
-        /* ============================================================
-           PLACEHOLDER PHOTO TREATMENT
-           (replace background-image with actual photos)
-        ============================================================ */
-        .photo-placeholder {
-            background: linear-gradient(135deg, var(--parchment) 0%, var(--sage-light) 60%, var(--forest) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255,255,255,0.5);
-            font-family: var(--serif);
-            font-size: 0.85rem;
-            text-align: center;
-            letter-spacing: 0.06em;
+        @media (max-width: 560px) {
+            body { font-size: 18px; }
+            .section-pad { padding: 90px 0; }
+            .steps, .pkg-grid { grid-template-columns: 1fr; }
+            form { grid-template-columns: 1fr; }
+            .hero-frame { inset: 14px; }
+            .hero-cta { flex-direction: column; }
+            .hero-cta .btn { width: 100%; }
         }
     </style>
+    @endverbatim
 </head>
 <body>
 
-    {{-- ============================================================
-         NAVIGATION
-    ============================================================ --}}
-    <nav id="main-nav">
-        <div class="nav-inner">
-            <a href="#hero" class="nav-logo">
-                Memories Are For Sharing
-                <span>Legacy Preservation</span>
+    <!-- ============ NAV ============ -->
+    <nav id="nav">
+        <div class="wrap nav-inner">
+            <a href="#top" class="brand">
+                Memories <span>&amp;</span> Sharing
+                <small>Legacy Preservation</small>
             </a>
-
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#packages">Packages</a></li>
-                <li><a href="#process">Process</a></li>
-                <li><a href="#contact" class="nav-cta">Get Started</a></li>
-            </ul>
-
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <div class="nav-links" id="navLinks">
+                <a href="#story">The Work</a>
+                <a href="#process">Process</a>
+                <a href="#packages">Packages</a>
+                <a href="#about">About</a>
+                <a href="#contact" class="btn btn-gold">Begin a Story</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">
                 <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
 
-    {{-- ============================================================
-         HERO
-    ============================================================ --}}
-    <section id="hero">
-        <div class="hero-bg-pattern"></div>
-        <div class="hero-inner container">
-            <div class="hero-text">
-                <p class="hero-eyebrow">Legacy Preservation</p>
-                <h1 class="hero-headline">
-                    Your Life.<br>
-                    Your Story.<br>
-                    <em>Forever.</em>
-                </h1>
-                <p class="hero-subhead">A Legacy Worth Sharing.</p>
-                <p class="hero-body">
-                    Let's preserve your memories, your voice, and your legacy
-                    for the people you love — captured in your own words,
-                    beautifully filmed and delivered as a timeless family keepsake.
-                </p>
-                <div class="hero-actions">
-                    <a href="#packages" class="btn-primary">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        View Packages
-                    </a>
-                    <a href="#contact" class="btn-outline">Start a Conversation</a>
-                </div>
-            </div>
-
-            <div class="hero-visual">
-                <div class="hero-accent-box"></div>
-                <div class="hero-photo-frame photo-placeholder" style="height:520px;">
-                        <img src="{{ asset('images/Ladywithphotosfromyouth.png') }}" alt="An sweet old lady sharing their story">
-                    <p style="padding:2rem;">Add your<br>hero photo here</p>
-                </div>
-                <div class="hero-stats">
-                    <strong>Your</strong>
-                    <span>Story Matters</span>
-                </div>
+    <!-- ============ HERO ============ -->
+    <header class="hero" id="top">
+        <div class="hero-frame"></div>
+        <div class="hero-content">
+            <div class="eyebrow" data-load style="animation-delay:.1s">Legacy Preservation</div>
+            <h1 data-load style="animation-delay:.25s">Every life is a<br><em>story worth keeping.</em></h1>
+            <p class="hero-sub" data-load style="animation-delay:.5s">
+                Heirloom recordings of the people you love — in their own voice, in their own words —
+                kept for the generations who come after.
+            </p>
+            <div class="hero-cta" data-load style="animation-delay:.7s">
+                <a href="#contact" class="btn btn-gold">Begin a Story</a>
+                <a href="#packages" class="btn btn-ghost">View Packages</a>
             </div>
         </div>
-    </section>
+        <div class="scroll-hint"><span>Scroll</span><span class="dot"></span></div>
+    </header>
 
-    {{-- ============================================================
-         VALUES STRIP
-    ============================================================ --}}
-    <section id="values">
-        <div class="container">
-            <div class="values-grid">
-                <div class="value-item reveal">
-                    <div class="value-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </div>
-                    <p class="value-label">Share your memories</p>
-                </div>
-                <div class="value-item reveal" style="transition-delay:0.1s">
-                    <div class="value-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-                    </div>
-                    <p class="value-label">Be heard and remembered</p>
-                </div>
-                <div class="value-item reveal" style="transition-delay:0.2s">
-                    <div class="value-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
-                    <p class="value-label">A legacy for your loved ones</p>
-                </div>
-                <div class="value-item reveal" style="transition-delay:0.3s">
-                    <div class="value-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </div>
-                    <p class="value-label">A beautiful way to connect generations</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================================
-         ABOUT
-    ============================================================ --}}
-    <section id="about">
-        <div class="container">
-            <div class="about-inner">
-                <div class="about-photo-wrap reveal">
-                    <div class="about-photo-bg"></div>
-                    <div class="photo-placeholder about-photo" style="height:460px; border-radius:3px;">
-                        {{--
-                            Replace with:
-                            <img src="{{ asset('images/shalyce-portrait.jpg') }}"
-                                 alt="Shalyce" class="about-photo">
-                        --}}
-                        <p style="padding:2rem;">Add Shalyce's<br>portrait here</p>
-                    </div>
-                    <div class="about-quote-card">
-                        <blockquote>Every life is a story worth telling beautifully.</blockquote>
-                        <cite>— Shalyce</cite>
-                    </div>
-                </div>
-
-                <div class="about-text reveal" style="transition-delay:0.15s">
-                    <p class="section-eyebrow">About Shalyce</p>
-                    <h2 class="section-title">Preserving Stories <em>with Care & Heart</em></h2>
-                    <p class="section-body">
-                        Every person carries a world of stories — hard-won wisdom, tender memories,
-                        and a voice that deserves to be heard by the people they love most. I created
-                        Memories Are For Sharing because I believe those stories shouldn't fade.
-                    </p>
-                    <p class="section-body">
-                        Through warm, unhurried interviews and professional video production,
-                        I help you — or the person you love — share their life on their own terms.
-                        The result is a beautifully crafted film your family will return to for
-                        generations.
-                    </p>
-
-                    <div class="ornament">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/></svg>
-                    </div>
-
-                    <p class="section-body">
-                        Based in Utah and serving families near and far, I bring a gentle,
-                        professional approach to every session — making the experience as meaningful
-                        as the finished film itself.
-                    </p>
-
-                    <a href="#contact" class="btn-primary" style="margin-top:1.4rem;">
-                        Let's Preserve Your Story
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================================
-         PACKAGES
-    ============================================================ --}}
-    <section id="packages">
-        <div class="container">
-            <div class="packages-header reveal">
-                <p class="section-eyebrow" style="justify-content:center; margin-bottom:0.8rem;">Pricing & Packages</p>
-                <h2 class="section-title" style="text-align:center;">Choose the Experience <em>That's Right for You</em></h2>
-                <p class="section-body" style="text-align:center; max-width:520px; margin-inline:auto;">
-                    Every family and every story is unique. Choose the package that fits your vision —
-                    from a single legacy session to a full heirloom documentary.
-                </p>
-            </div>
-
-            <div class="packages-grid">
-
-                {{-- Package 1 --}}
-                <div class="package-card reveal">
-                    <div class="package-badge">Package 1</div>
-                    <div class="package-body">
-                        <p class="package-number">Option One</p>
-                        <h3 class="package-name">Legacy Session</h3>
-                        <div class="package-divider"></div>
-                        <p class="package-price">$800 – $1,200</p>
-                        <ul class="package-features">
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                3–4 hour interview
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Professional audio &amp; video recording
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Lightly edited full interview
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Organized into topic chapters
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Files delivered on a flash drive
-                            </li>
-                        </ul>
-                        <a href="#contact" class="btn-outline" style="width:100%; justify-content:center;">Inquire About This Package</a>
-                        <p class="package-tagline">A wonderful way to preserve your memories.</p>
-                    </div>
-                </div>
-
-                {{-- Package 2 (Featured) --}}
-                <div class="package-card featured reveal" style="transition-delay:0.12s">
-                    <div class="package-badge">Most Popular — Package 2</div>
-                    <div class="package-body">
-                        <p class="package-number">Option Two</p>
-                        <h3 class="package-name">Family Legacy Film</h3>
-                        <div class="package-divider"></div>
-                        <p class="package-price">$1,500 – $3,000</p>
-                        <ul class="package-features">
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                2–3 interview days
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Pre-interview planning
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Professionally edited story chapters
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Photos &amp; memorabilia woven throughout
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Music, titles &amp; smooth transitions
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Files delivered on a flash drive
-                            </li>
-                        </ul>
-                        <a href="#contact" class="btn-primary" style="width:100%; justify-content:center;">Inquire About This Package</a>
-                        <p class="package-tagline">A lasting keepsake your family will treasure.</p>
-                    </div>
-                </div>
-
-                {{-- Package 3 --}}
-                <div class="package-card reveal" style="transition-delay:0.24s">
-                    <div class="package-badge">Package 3</div>
-                    <div class="package-body">
-                        <p class="package-number">Option Three</p>
-                        <h3 class="package-name">Heirloom Documentary</h3>
-                        <div class="package-divider"></div>
-                        <p class="package-price">$3,500 – $7,000</p>
-                        <ul class="package-features">
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Multiple interview sessions
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Family members included
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                B-roll of home, places &amp; memories
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Integration of photos, documents &amp; cherished items
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Custom storytelling &amp; timeline
-                            </li>
-                            <li>
-                                <svg class="feature-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                Up to 10 flash drives for family members
-                            </li>
-                        </ul>
-                        <a href="#contact" class="btn-outline" style="width:100%; justify-content:center;">Inquire About This Package</a>
-                        <p class="package-tagline">A timeless legacy for generations to come.</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <p style="text-align:center; margin-top:2.2rem; font-family:var(--serif); font-style:italic; color:var(--text-soft); font-size:1rem;">
-                Not sure which package fits your story? Reach out — we'll figure it out together.
+    <!-- ============ STATEMENT ============ -->
+    <section class="statement section-pad" id="story">
+        <div class="wrap reveal">
+            <span class="gold-rule"><span class="eyebrow">Why It Matters</span></span>
+            <p class="big">
+                The stories we mean to ask about are often the ones we never do — until the chance is gone.
+                I sit with the people who matter to you and capture <em>the laugh, the voice, the memory</em>,
+                so it lives on long after the moment passes.
             </p>
         </div>
     </section>
 
-    {{-- ============================================================
-         PROCESS
-    ============================================================ --}}
-    <section id="process">
-        <div class="container">
-            <div class="process-header reveal">
-                <p class="section-eyebrow">How It Works</p>
-                <h2 class="section-title" style="color:var(--cream);">Simple, <em style="color:var(--sage-light);">Warm,</em> Meaningful</h2>
-                <p class="section-body" style="color:rgba(247,243,236,0.65); text-align:center;">
-                    From your first conversation to the finished film, every step is designed to feel effortless and personal.
-                </p>
+    <!-- ============ PROCESS ============ -->
+    <section class="process section-pad" id="process">
+        <div class="wrap">
+            <div class="section-head reveal">
+                <span class="gold-rule"><span class="eyebrow">The Experience</span></span>
+                <h2>How a story unfolds</h2>
+                <p class="lede">Gentle, unhurried, and built around the comfort of the person whose story we're keeping.</p>
             </div>
-            <div class="steps-grid reveal" style="transition-delay:0.1s">
-                <div class="step">
-                    <div class="step-number">01</div>
-                    <h3 class="step-title">Connect &amp; Consult</h3>
-                    <p class="step-desc">We start with a relaxed conversation to understand your story, your family, and what you'd like to preserve.</p>
+            <div class="steps">
+                <div class="step reveal">
+                    <div class="step-num">01</div>
+                    <h3>We talk first</h3>
+                    <p>A relaxed conversation to understand whose story we're keeping and what matters most to your family.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">02</div>
-                    <h3 class="step-title">Plan &amp; Prepare</h3>
-                    <p class="step-desc">Together we craft thoughtful interview questions and a session plan so your subject feels completely at ease.</p>
+                <div class="step reveal" style="transition-delay:.1s">
+                    <div class="step-num">02</div>
+                    <h3>Thoughtful prompts</h3>
+                    <p>Questions tailored to a life — so the moments that should never be forgotten are gently drawn out.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">03</div>
-                    <h3 class="step-title">Film Your Story</h3>
-                    <p class="step-desc">A professional, comfortable recording session captures your voice, your memories, and the moments that matter most.</p>
+                <div class="step reveal" style="transition-delay:.2s">
+                    <div class="step-num">03</div>
+                    <h3>The recording</h3>
+                    <p>In the comfort of home, we capture the voice, the stories, and the laughter — patiently, on their terms.</p>
                 </div>
-                <div class="step">
-                    <div class="step-number">04</div>
-                    <h3 class="step-title">Deliver the Keepsake</h3>
-                    <p class="step-desc">Your beautifully edited film is delivered on a flash drive — a timeless family heirloom ready to be shared and cherished.</p>
+                <div class="step reveal" style="transition-delay:.3s">
+                    <div class="step-num">04</div>
+                    <h3>Your keepsake</h3>
+                    <p>Beautifully edited and delivered as an heirloom your family can return to for generations.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- ============================================================
-         TESTIMONIALS (placeholder — add real reviews when available)
-    ============================================================ --}}
-    <section id="testimonials">
-        <div class="container">
-            <div class="testimonials-header reveal">
-                <p class="section-eyebrow" style="justify-content:center;">Families We've Served</p>
-                <h2 class="section-title" style="text-align:center;">Stories That <em>Touched Hearts</em></h2>
+    <!-- ============ PACKAGES ============ -->
+    <section class="packages section-pad" id="packages">
+        <div class="wrap">
+            <div class="section-head reveal">
+                <span class="gold-rule"><span class="eyebrow">Keepsakes</span></span>
+                <h2>Choose how a life is kept</h2>
+                <p class="lede">Each session is unhurried and guided. Every keepsake is professionally recorded, edited, and delivered to you.</p>
             </div>
-            <div class="testimonial-grid">
-                <div class="testimonial-card reveal">
-                    <p class="testimonial-quote">We had no idea how much my mother had to share. Shalyce made her feel so at ease — we now have something our grandchildren will treasure forever.</p>
-                    <p class="testimonial-author">— The Henderson Family, Utah</p>
-                </div>
-                <div class="testimonial-card reveal" style="transition-delay:0.12s">
-                    <p class="testimonial-quote">The film captured my grandfather exactly as we knew him. His laugh, his wisdom, his stories. We have watched it dozens of times. Worth every penny.</p>
-                    <p class="testimonial-author">— The Marchetti Family</p>
-                </div>
-                <div class="testimonial-card reveal" style="transition-delay:0.24s">
-                    <p class="testimonial-quote">Shalyce has a true gift for drawing out the stories people have carried quietly for decades. This was the best gift our family has ever given itself.</p>
-                    <p class="testimonial-author">— The Kimball Family, Salt Lake City</p>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="pkg-grid">
 
-    {{-- ============================================================
-         CONTACT
-    ============================================================ --}}
-    <section id="contact">
-        <div class="container">
-            <div class="contact-inner">
-                <div class="contact-info reveal">
-                    <p class="section-eyebrow">Get in Touch</p>
-                    <h2 class="section-title">Let's Preserve Your Story — <em>Together.</em></h2>
-                    <p class="section-body">
-                        Ready to get started, or just have questions? Reach out any time.
-                        I'd love to hear about your family and what you're hoping to create.
-                    </p>
-
-                    <a href="tel:8016451948" class="contact-detail">
-                        <div class="contact-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        </div>
-                        <div>
-                            <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.15rem;">Call or Text</p>
-                            <p style="font-weight:600;color:var(--navy);">801.645.1948</p>
-                        </div>
-                    </a>
-
-                    <a href="mailto:shalyce@memoriesareforsharing.com" class="contact-detail">
-                        <div class="contact-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        </div>
-                        <div>
-                            <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.15rem;">Email</p>
-                            <p style="font-weight:600;color:var(--navy);">shalyce@memoriesareforsharing.com</p>
-                        </div>
-                    </a>
-
-                    <a href="https://memoriesareforsharing.com" class="contact-detail">
-                        <div class="contact-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                        </div>
-                        <div>
-                            <p style="font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-soft);margin-bottom:0.15rem;">Website</p>
-                            <p style="font-weight:600;color:var(--navy);">memoriesareforsharing.com</p>
-                        </div>
-                    </a>
-
-                    <div class="contact-person" style="margin-top:2.2rem;">
-                        <div class="photo-placeholder contact-avatar" style="width:72px;height:72px;border-radius:50%;flex-shrink:0;font-size:0.65rem;text-align:center;padding:0.3rem;">
-                            {{-- Replace with: <img src="{{ asset('images/shalyce-avatar.jpg') }}" ... class="contact-avatar"> --}}
-                        </div>
-                        <div>
-                            <p class="contact-name">Shalyce</p>
-                            <p class="contact-title-text">Legacy Preservation Specialist</p>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- ============ CONTACT FORM ============ --}}
-                <div class="contact-form reveal" style="transition-delay:0.15s">
-                    <h3 class="form-title">Send a Message</h3>
-                    <p class="form-subtitle">I'll get back to you within one business day.</p>
-
-                    <div id="contact-form-wrap">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="first_name">First Name</label>
-                                <input type="text" id="first_name" name="first_name" placeholder="Jane" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="last_name">Last Name</label>
-                                <input type="text" id="last_name" name="last_name" placeholder="Smith">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" placeholder="jane@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" placeholder="(801) 555-0100">
-                        </div>
-                        <div class="form-group">
-                            <label for="package">Package of Interest</label>
-                            <select id="package" name="package">
-                                <option value="">— Select a package (optional) —</option>
-                                <option value="Package 1 — Legacy Session ($800–$1,200)">Package 1 — Legacy Session ($800–$1,200)</option>
-                                <option value="Package 2 — Family Legacy Film ($1,500–$3,000)">Package 2 — Family Legacy Film ($1,500–$3,000)</option>
-                                <option value="Package 3 — Heirloom Documentary ($3,500–$7,000)">Package 3 — Heirloom Documentary ($3,500–$7,000)</option>
-                                <option value="Not sure yet">Not sure yet — I'd love guidance</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Tell Me About Your Story</label>
-                            <textarea id="message" name="message" placeholder="Who would you like to preserve? What feels most important to capture?"></textarea>
-                        </div>
-
-                        <button type="button" class="btn-primary" id="submit-btn" style="width:100%; justify-content:center; padding-top:1.1rem; padding-bottom:1.1rem;">
-                            <span id="btn-text">Send My Message</span>
-                        </button>
-
-                        <div class="form-success" id="form-success">
-                            ✓ &nbsp;Thank you! Your message has been sent. Shalyce will be in touch soon.
-                        </div>
-                        <div class="form-error" id="form-error">
-                            Something went wrong. Please try again, or email directly at shalyce@memoriesareforsharing.com
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================================
-         FOOTER
-    ============================================================ --}}
-    <footer>
-        <div class="container">
-            <div class="footer-main">
-                <div class="footer-brand">
-                    <p class="footer-brand-name">Memories Are For Sharing</p>
-                    <p class="footer-brand-tag">Legacy Preservation</p>
-                    <p>Capturing the voices, wisdom, and memories of those you love — preserved beautifully for the generations who will come after.</p>
-                </div>
-                <div>
-                    <p class="footer-heading">Quick Links</p>
-                    <ul class="footer-links">
-                        <li><a href="#about">About Shalyce</a></li>
-                        <li><a href="#packages">Packages &amp; Pricing</a></li>
-                        <li><a href="#process">How It Works</a></li>
-                        <li><a href="#contact">Get in Touch</a></li>
+                <div class="pkg reveal">
+                    <div class="pkg-name">The Keepsake</div>
+                    <div class="pkg-kind">Audio Story</div>
+                    <div class="pkg-price"><small>$</small>400<span class="unit">One 3-hour session</span></div>
+                    <ul>
+                        <li>A single 3-hour recording session</li>
+                        <li>Professional audio interview</li>
+                        <li>Guided, personalized story prompts</li>
+                        <li>Their story on a keepsake flash drive</li>
                     </ul>
+                    <a href="#contact" class="btn btn-ghost" data-pkg="The Keepsake — Audio ($400)">Choose Keepsake</a>
                 </div>
-                <div>
-                    <p class="footer-heading">Contact</p>
-                    <div class="footer-contact-line">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        <a href="tel:8016451948">801.645.1948</a>
-                    </div>
-                    <div class="footer-contact-line">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        <a href="mailto:shalyce@memoriesareforsharing.com">shalyce@memoriesareforsharing.com</a>
-                    </div>
-                    <div class="footer-contact-line" style="margin-top:1rem;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                        <a href="https://memoriesareforsharing.com">memoriesareforsharing.com</a>
-                    </div>
+
+                <div class="pkg reveal" style="transition-delay:.1s">
+                    <div class="pkg-name">The Portrait</div>
+                    <div class="pkg-kind">Audio &amp; Video</div>
+                    <div class="pkg-price"><small>$</small>800<span class="unit">One 4-hour session</span></div>
+                    <ul>
+                        <li>A single 4-hour recording session</li>
+                        <li>Professional audio <em>and</em> video</li>
+                        <li>Guided interview with gentle direction</li>
+                        <li>Edited keepsake film on a flash drive</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-ghost" data-pkg="The Portrait — Audio &amp; Video ($800)">Choose Portrait</a>
+                </div>
+
+                <div class="pkg featured reveal" style="transition-delay:.2s">
+                    <div class="pkg-tag">Most Loved</div>
+                    <div class="pkg-name">The Chronicle</div>
+                    <div class="pkg-kind">Two Days &amp; Photo Restoration</div>
+                    <div class="pkg-price"><small>$</small>1,200<span class="unit">Two days · up to 6 hours</span></div>
+                    <ul>
+                        <li>Two recording days, up to 6 hours total</li>
+                        <li>Professional audio &amp; video</li>
+                        <li>Photo restoration — cherished photos scanned &amp; restored</li>
+                        <li>Edited film &amp; restored photos on a keepsake flash drive</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-gold" data-pkg="The Chronicle — Two Days &amp; Photo Restoration ($1,200)">Choose Chronicle</a>
+                </div>
+
+                <div class="pkg reveal" style="transition-delay:.3s">
+                    <div class="pkg-name">The Heirloom</div>
+                    <div class="pkg-kind">Family &amp; Photo Restoration</div>
+                    <div class="pkg-price"><small>$</small>1,800<span class="unit">The complete keepsake</span></div>
+                    <ul>
+                        <li>Everything within The Chronicle</li>
+                        <li>Multiple family members included</li>
+                        <li>Extended, woven-together interviews</li>
+                        <li>Photo restoration of treasured family photos</li>
+                        <li>Plus 4 additional keepsake flash drives to share</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-ghost" data-pkg="The Heirloom — Family &amp; Photo Restoration ($1,500)">Choose Heirloom</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ WHAT YOU RECEIVE ============ -->
+    <section class="receive section-pad">
+        <div class="wrap reveal">
+            <div class="section-head" style="margin-bottom:0;">
+                <span class="gold-rule"><span class="eyebrow" style="color:var(--gold-bright)">The Promise</span></span>
+                <h2>More than a recording</h2>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <h3>Their true voice</h3>
+                    <p>Not a transcript or a summary — the actual voice, told the way only they could tell it.</p>
+                </div>
+                <div class="cell">
+                    <h3>Kept beautifully</h3>
+                    <p>Professionally edited with care and delivered on a keepsake flash drive your family will treasure.</p>
+                </div>
+                <div class="cell">
+                    <h3>Yours for generations</h3>
+                    <p>A keepsake that children and grandchildren can return to long into the future.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="about section-pad" id="about">
+        <div class="wrap about-grid">
+            <div class="about-portrait reveal">Portrait of Shalyce<br>— replace with a photo —</div>
+            <div class="reveal">
+                <span class="gold-rule"><span class="eyebrow">Your Storyteller</span></span>
+                <h2>Hello, I'm Shalyce</h2>
+                <p>
+                    I believe the most precious things we own aren't things at all — they're the stories
+                    that get passed down at the dinner table, and far too often, lost.
+                </p>
+                <p>
+                    I created Memories Are For Sharing to make sure those stories are kept. With patience and
+                    real care, I sit with your loved ones and help them share the moments that made them who they
+                    are — so your family can hold onto their voice for a lifetime.
+                </p>
+                <p>
+                    Whether it's a grandparent's childhood, a parent's love story, or a whole family's history,
+                    I'd be honored to help you keep it.
+                </p>
+                <p class="sig">— Shalyce</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="faq section-pad">
+        <div class="wrap">
+            <div class="section-head reveal">
+                <span class="gold-rule"><span class="eyebrow">Good To Know</span></span>
+                <h2>Questions, answered</h2>
+            </div>
+            <div class="faq-list reveal">
+                <div class="faq-item">
+                    <button class="faq-q">Where do the recordings take place? <span class="pm">+</span></button>
+                    <div class="faq-a"><p>Most often in the comfort of your own home, where people feel most at ease and the stories come naturally. I'm happy to discuss the right setting for your family.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">Do I need to prepare questions? <span class="pm">+</span></button>
+                    <div class="faq-a"><p>Not at all. I prepare thoughtful, personalized prompts ahead of time and guide the conversation gently — though you're always welcome to suggest the topics that matter most to you.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">What if my loved one is elderly or unwell? <span class="pm">+</span></button>
+                    <div class="faq-a"><p>Sessions are paced entirely around their comfort, with as many breaks as needed. Capturing a story while there's still time is one of the most meaningful things I do, and I treat it with great care.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">How soon will we receive the finished keepsake? <span class="pm">+</span></button>
+                    <div class="faq-a"><p>Timelines vary by package, but I'll always share a clear estimate before we begin so you know exactly what to expect.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">What happens to our original photos? <span class="pm">+</span></button>
+                    <div class="faq-a"><p>Your originals are treated as the irreplaceable treasures they are. I scan them carefully, restore the digital copies, and return every original photo to you safe and unaltered — they never leave your family for good.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q">Can we customize a package? <span class="pm">+</span></button>
+                    <div class="faq-a"><p>Absolutely. Every family is different — reach out and we'll shape something that fits your story and your budget.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="contact section-pad" id="contact">
+        <div class="wrap contact-grid">
+            <div class="contact-intro reveal">
+                <span class="gold-rule"><span class="eyebrow" style="color:var(--gold-bright)">Begin</span></span>
+                <h2>Let's keep their story</h2>
+                <p>Tell me a little about the story you'd like to preserve, and I'll be in touch to talk through the details — gently and with no pressure.</p>
+
+                <div class="contact-detail">
+                    <span class="lbl">Email</span>
+                    <span class="val"><a href="mailto:shalyce@memoriesareforsharing.com">shalyce@memoriesareforsharing.com</a></span>
+                </div>
+                <div class="contact-detail">
+                    <span class="lbl">Phone</span>
+                    <span class="val"><a href="tel:+18016451948">(801) 645-1948</a></span>
                 </div>
             </div>
 
-            <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} Memories Are For Sharing. All rights reserved.</p>
-                <p class="footer-tagline">Your story matters. Today. Tomorrow. Forever.</p>
+            <div class="reveal">
+                <form action="{{ route('contact.send') }}" method="POST">
+                    @csrf
+
+                    @if (session('success'))
+                        <div class="flash">{{ session('success') }}</div>
+                    @endif
+
+                    <!-- honeypot: hidden from people, catches bots -->
+                    <div class="hp" aria-hidden="true">
+                        <label>Company</label>
+                        <input type="text" name="company" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <div class="field">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}" required>
+                        @error('name') <span class="err">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                        @error('email') <span class="err">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" value="{{ old('phone') }}">
+                        @error('phone') <span class="err">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="field">
+                        <label for="package">Package of Interest</label>
+                        <select id="package" name="package">
+                            <option value="Not sure yet">Not sure yet — help me decide</option>
+                            <option value="The Keepsake — Audio ($400)" @selected(old('package')==='The Keepsake — Audio ($400)')>The Keepsake — Audio · $400</option>
+                            <option value="The Portrait — Audio & Video ($800)" @selected(old('package')==='The Portrait — Audio & Video ($800)')>The Portrait — Audio &amp; Video · $800</option>
+                            <option value="The Chronicle — Two Days & Photo Restoration ($1,200)" @selected(old('package')==='The Chronicle — Two Days & Photo Restoration ($1,200)')>The Chronicle — Two Days &amp; Photo Restoration · $1,200</option>
+                            <option value="The Heirloom — Family & Photo Restoration ($1,500)" @selected(old('package')==='The Heirloom — Family & Photo Restoration ($1,500)')>The Heirloom — Family &amp; Photo Restoration · $1,500</option>
+                        </select>
+                    </div>
+
+                    <div class="field full">
+                        <label for="message">Tell me about the story you'd like to keep</label>
+                        <textarea id="message" name="message" required>{{ old('message') }}</textarea>
+                        @error('message') <span class="err">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="field full">
+                        <button type="submit" class="btn btn-gold">Send My Inquiry</button>
+                    </div>
+                </form>
             </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+        <div class="wrap">
+            <a href="#top" class="brand">Memories <span>&amp;</span> Sharing<small>Legacy Preservation</small></a>
+            <div class="f-links">
+                <a href="#process">Process</a>
+                <a href="#packages">Packages</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <p class="copy">&copy; {{ date('Y') }} Memories Are For Sharing · Recording life stories with care.</p>
         </div>
     </footer>
 
-    {{-- ============================================================
-         SCRIPTS
-    ============================================================ --}}
+    @verbatim
     <script>
-    // Nav scroll effect
-    const nav = document.getElementById('main-nav');
-    window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 40);
-    });
+        // sticky nav
+        const nav = document.getElementById('nav');
+        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Hamburger menu
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('nav-links');
-    hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('open');
-    });
-    navLinks.querySelectorAll('a').forEach(a => {
-        a.addEventListener('click', () => navLinks.classList.remove('open'));
-    });
+        // mobile menu
+        const toggle = document.getElementById('navToggle');
+        const links = document.getElementById('navLinks');
+        toggle.addEventListener('click', () => links.classList.toggle('show'));
+        links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('show')));
 
-    // Reveal on scroll
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                e.target.classList.add('visible');
-                observer.unobserve(e.target);
-            }
-        });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => observer.observe(el));
+        // scroll reveals
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: 0.14 });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // Contact form AJAX
-    document.getElementById('submit-btn').addEventListener('click', async function () {
-        const btn     = this;
-        const btnText = document.getElementById('btn-text');
-        const success = document.getElementById('form-success');
-        const error   = document.getElementById('form-error');
-
-        const firstName = document.getElementById('first_name').value.trim();
-        const email     = document.getElementById('email').value.trim();
-
-        if (!firstName || !email) {
-            error.style.display = 'block';
-            error.textContent   = 'Please fill in your name and email address.';
-            return;
-        }
-
-        btnText.textContent = 'Sending…';
-        btn.disabled = true;
-        success.style.display = 'none';
-        error.style.display   = 'none';
-
-        const payload = {
-            first_name: firstName,
-            last_name:  document.getElementById('last_name').value.trim(),
-            email,
-            phone:   document.getElementById('phone').value.trim(),
-            package: document.getElementById('package').value,
-            message: document.getElementById('message').value.trim(),
-            _token:  document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        };
-
-        try {
-            const res = await fetch('/contact', {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': payload._token },
-                body:    JSON.stringify(payload),
-            });
-
-            if (res.ok) {
-                success.style.display = 'block';
-                // Reset fields
-                ['first_name','last_name','email','phone','package','message'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el.tagName === 'SELECT') el.selectedIndex = 0;
-                    else el.value = '';
+        // faq accordion
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const open = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('open');
+                    i.querySelector('.faq-a').style.maxHeight = null;
                 });
-            } else {
-                throw new Error('Server error');
-            }
-        } catch {
-            error.style.display = 'block';
-            error.textContent   = 'Something went wrong. Please try again, or email directly at shalyce@memoriesareforsharing.com';
-        } finally {
-            btnText.textContent = 'Send My Message';
-            btn.disabled        = false;
-        }
-    });
-    </script>
+                if (!open) {
+                    item.classList.add('open');
+                    const a = item.querySelector('.faq-a');
+                    a.style.maxHeight = a.scrollHeight + 'px';
+                }
+            });
+        });
 
+        // preselect package when a card button is clicked
+        document.querySelectorAll('[data-pkg]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const want = btn.getAttribute('data-pkg').replace(/&amp;/g, '&');
+                const sel = document.getElementById('package');
+                [...sel.options].forEach(o => { if (o.value === want) sel.value = want; });
+            });
+        });
+
+        // if redirected back to #contact with a success message, glide to it
+        if (window.location.hash === '#contact') {
+            setTimeout(() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' }), 300);
+        }
+    </script>
+    @endverbatim
 </body>
 </html>
