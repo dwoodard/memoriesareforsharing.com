@@ -1,6 +1,8 @@
 <?php
 
 
+use App\Http\Controllers\MemoryController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 
 Route::view('/', 'welcome')->name('home');
@@ -14,8 +16,6 @@ Route::post('/contact', [ContactController::class, 'send'])
 
 
 
-use App\Http\Controllers\MemoryController;
-use Illuminate\Support\Facades\Route;
 
 // ── Main birthday site ──
 Route::get('/', function () {
