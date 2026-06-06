@@ -26,7 +26,7 @@ class ContactInquiry extends Mailable
     public function content(): Content
 {
     return new Content(
-        view: 'emails.contact-inquiry',
+        view: 'emails.contact',
         with: ['data' => $this->data],
     );
 }
