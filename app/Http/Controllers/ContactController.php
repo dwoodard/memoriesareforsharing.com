@@ -12,7 +12,7 @@ class ContactController extends Controller
     public function send(Request $request)
     {
         // Honeypot — bots fill this, humans never see it.
-        if ($request->filled('company')) {
+        if ($request->filled('hp_token')) {
             return redirect('/#contact');
         }
 

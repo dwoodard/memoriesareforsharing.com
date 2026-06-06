@@ -680,8 +680,8 @@
 
                     <!-- honeypot: hidden from people, catches bots -->
                     <div class="hp" aria-hidden="true">
-                        <label>Company</label>
-                        <input type="text" name="company" tabindex="-1" autocomplete="off">
+                        <label>HP Token</label>
+                        <input type="text" name="hp_token" tabindex="-1" autocomplete="off">
                     </div>
 
                     <div class="field">
