@@ -24,7 +24,7 @@ class ContactFormSubmission extends Mailable
         $name = trim(($this->formData['first_name'] ?? '') . ' ' . ($this->formData['last_name'] ?? ''));
 
         return new Envelope(
-            subject: 'New Inquiry from ' . $name . ' — Memories Are For Sharing',
+            subject: 'Memories Website Submission : New Inquiry from ' . $name . ' — Memories Are For Sharing',
             replyTo: [
                 new \Illuminate\Mail\Mailables\Address(
                     $this->formData['email'],

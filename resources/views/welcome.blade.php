@@ -517,7 +517,7 @@
                         <li>Guided, personalized story prompts</li>
                         <li>Their story on a keepsake flash drive</li>
                     </ul>
-                    <a href="#contact" class="btn btn-ghost" data-pkg="The Keepsake — Audio ($400)">Choose Keepsake</a>
+                    <a href="https://buy.stripe.com/test_14A4gy6e0bK43U0cmsd3i00" class="btn btn-ghost" data-pkg="The Keepsake — Audio ($400)">Choose Keepsake</a>
                 </div>
 
                 <div class="pkg reveal" style="transition-delay:.1s">
@@ -530,7 +530,7 @@
                         <li>Guided interview with gentle direction</li>
                         <li>Edited keepsake film on a flash drive</li>
                     </ul>
-                    <a href="#contact" class="btn btn-ghost" data-pkg="The Portrait — Audio &amp; Video ($800)">Choose Portrait</a>
+                    <a href="https://buy.stripe.com/test_eVq7sK6e06pKeyEaekd3i01" class="btn btn-ghost" data-pkg="The Portrait — Audio &amp; Video ($800)">Choose Portrait</a>
                 </div>
 
                 <div class="pkg featured reveal" style="transition-delay:.2s">
@@ -544,7 +544,7 @@
                         <li>Photo restoration — cherished photos scanned &amp; restored</li>
                         <li>Edited film &amp; restored photos on a keepsake flash drive</li>
                     </ul>
-                    <a href="#contact" class="btn btn-gold" data-pkg="The Chronicle — Two Days &amp; Photo Restoration ($1,200)">Choose Chronicle</a>
+                    <a href="https://buy.stripe.com/test_00w8wO45S15qgGM728d3i02" class="btn btn-gold" data-pkg="The Chronicle — Two Days &amp; Photo Restoration ($1,200)">Choose Chronicle</a>
                 </div>
 
                 <div class="pkg reveal" style="transition-delay:.3s">
@@ -558,7 +558,7 @@
                         <li>Photo restoration of treasured family photos</li>
                         <li>Plus 4 additional keepsake flash drives to share</li>
                     </ul>
-                    <a href="#contact" class="btn btn-ghost" data-pkg="The Heirloom — Family &amp; Photo Restoration ($1,500)">Choose Heirloom</a>
+                    <a href="https://buy.stripe.com/test_eVq8wOfOAdSc3U0fyEd3i03" class="btn btn-ghost" data-pkg="The Heirloom — Family &amp; Photo Restoration ($1,500)">Choose Heirloom</a>
                 </div>
 
             </div>
@@ -709,7 +709,7 @@
                             <option value="The Keepsake — Audio ($400)" @selected(old('package')==='The Keepsake — Audio ($400)')>The Keepsake — Audio · $400</option>
                             <option value="The Portrait — Audio & Video ($800)" @selected(old('package')==='The Portrait — Audio & Video ($800)')>The Portrait — Audio &amp; Video · $800</option>
                             <option value="The Chronicle — Two Days & Photo Restoration ($1,200)" @selected(old('package')==='The Chronicle — Two Days & Photo Restoration ($1,200)')>The Chronicle — Two Days &amp; Photo Restoration · $1,200</option>
-                            <option value="The Heirloom — Family & Photo Restoration ($1,500)" @selected(old('package')==='The Heirloom — Family & Photo Restoration ($1,500)')>The Heirloom — Family &amp; Photo Restoration · $1,500</option>
+                            <option value="The Heirloom — Family & Photo Restoration ($1,800)" @selected(old('package')==='The Heirloom — Family & Photo Restoration ($1,500)')>The Heirloom — Family &amp; Photo Restoration · $1,500</option>
                         </select>
                     </div>
 
