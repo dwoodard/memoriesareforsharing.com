@@ -20,3 +20,5 @@ Route::post('/submit-memory', [MemoryController::class, 'store']);
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 });
+
+Route::view('/thank-you', 'thank-you')->name('checkout.success');
