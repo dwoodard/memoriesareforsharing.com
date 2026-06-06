@@ -7,10 +7,11 @@
     <title>Memories Are For Sharing — Heirloom Life-Story Recordings</title>
     <meta name="description" content="Heirloom audio and video recordings of the people you love — their stories, their voice, their words — kept for the generations who come after. Legacy preservation by Shalyce.">
 
-    <meta property="og:title" content="Memories Are For Sharing">
-    <meta property="og:description" content="Heirloom life-story recordings — in their own voice, in their own words.">
     <meta property="og:type" content="website">
+    <meta property="og:title" content="Memories are for Sharing">
     <meta property="og:url" content="https://memoriesareforsharing.com/">
+    <meta property="og:image" content="https://memoriesareforsharing.com/images/Memories-OG-image.png">
+    <meta property="og:description" content="Preserve the voices, stories, and memories of the people you love — captured with care and kept as an heirloom for the generations who come after.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -438,7 +439,7 @@
         <div class="hero-frame"></div>
         <div class="hero-content">
             <div class="eyebrow" data-load style="animation-delay:.1s">Legacy Preservation</div>
-            <h1 data-load style="animation-delay:.25s">Every life has <br><em>stories worth keeping.</em></h1>
+            <h1 data-load style="animation-delay:.25s">Every life is a <br><em>story worth keeping.</em></h1>
             <p class="hero-sub" data-load style="animation-delay:.5s">
                 Heirloom recordings of the people you love — in their own voice, in their own words —
                 kept for the generations who come after.
