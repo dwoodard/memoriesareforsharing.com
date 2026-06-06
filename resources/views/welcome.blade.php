@@ -438,7 +438,7 @@
         <div class="hero-frame"></div>
         <div class="hero-content">
             <div class="eyebrow" data-load style="animation-delay:.1s">Legacy Preservation</div>
-            <h1 data-load style="animation-delay:.25s">Every life is a<br><em>story worth keeping.</em></h1>
+            <h1 data-load style="animation-delay:.25s">Every life has <br><em>stories worth keeping.</em></h1>
             <p class="hero-sub" data-load style="animation-delay:.5s">
                 Heirloom recordings of the people you love — in their own voice, in their own words —
                 kept for the generations who come after.
