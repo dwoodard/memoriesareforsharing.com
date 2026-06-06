@@ -1,4 +1,6 @@
 <?php
+
+/*
 namespace App\Http\Controllers;
 
 use App\Mail\ContactInquiry;
@@ -28,9 +30,9 @@ class ContactController extends Controller
             ->with('success', 'Thank you — your message is on its way. Shalyce will be in touch soon.');
     }
 }
+*/
 
 
-/*
 
 
 namespace App\Http\Controllers;
@@ -58,4 +60,4 @@ class ContactController extends Controller
         return response()->json(['success' => true]);
     }
 }
-    */
+    
