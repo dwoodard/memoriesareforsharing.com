@@ -134,17 +134,11 @@
                 </div>
 
                 <a
-                    href="https://buy.stripe.com/test_00waEXfyHeIR0vc7bCcfK00?prefilled_promo_code=FAMILIESAREFOREVER"
-                    class="btn btn-gold"
-                >
-                    Book This Session
-                </a>
-                {{-- =======<a
                     href="https://buy.stripe.com/7sY00jfGB3u20HjeQC8so00?prefilled_promo_code=FAMILIESAREFOREVER"
                     class="btn btn-gold"
                 >
                     Book This Session
-                </a> ======= --}}
+                </a>
             </div>
         </div>
     </div>
