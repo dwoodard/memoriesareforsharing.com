@@ -1435,10 +1435,6 @@
                 font-size: 18px;
             }
 
-            .field.full.btn{
-                padding: 0 20px;
-            }
-
             .section-pad {
                 padding: 55px 0;
             }
@@ -1500,5 +1496,20 @@
             .contact-detail .lbl {
                 width: auto;
             }
+
+            .field input,
+            .field select,
+            .field textarea {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            }
+
+            .contact-grid,
+            form,
+            .field {
+                min-width: 0;
+            }
+
         }
 
