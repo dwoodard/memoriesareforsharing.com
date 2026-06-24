@@ -394,7 +394,7 @@
         <div class="wrap contact-grid">
             <div class="contact-intro reveal">
                 <span class="gold-rule"><span class="eyebrow" style="color:var(--gold-bright)">Begin</span></span>
-                <h2>Let's keep their story</h2>
+                <h2>Bring your family tree to life.</h2>
 
                 <p>
                     Tell me a little about the story you'd like to preserve, and I'll be in touch to talk through the details —
