@@ -1435,6 +1435,10 @@
                 font-size: 18px;
             }
 
+            .field.full{
+                padding: 0 20px;
+            }
+
             .section-pad {
                 padding: 55px 0;
             }
