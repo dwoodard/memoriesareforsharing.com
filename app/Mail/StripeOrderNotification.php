@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class StripeCustomerConfirmation extends Mailable
+class StripeOrderNotification extends Mailable
 {
     use Queueable;
     use SerializesModels;
@@ -20,14 +20,14 @@ class StripeCustomerConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Memories Are For Sharing order is confirmed',
+            subject: 'New Memories Are For Sharing order — ' . ($this->order['amount_total_formatted'] ?? 'Order received'),
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.stripe-customer-confirmation',
+            markdown: 'emails.stripe-order-notification',
             with: [
                 'order' => $this->order,
             ],
