@@ -219,7 +219,7 @@
             <h1>Thank you — your keepsake is reserved.</h1>
 
             <p class="lede">
-                Your order is complete, and a receipt is on its way to your inbox.
+                Your order is complete, and a confirmation is on its way to your inbox.
                 It's an honor to help you preserve the stories of the people you love.
             </p>
 

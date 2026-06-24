@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MemoryController;
+use App\Http\Controllers\ThankYouController;
 use Illuminate\Support\Facades\Route;
 
 // ── Main site ──
@@ -21,4 +22,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 });
 
-Route::view('/thank-you', 'thank-you')->name('checkout.success');
+//Route::view('/thank-you', 'thank-you')->name('checkout.success');
+
+Route::get('/thank-you', [ThankYouController::class, 'show'])->name('thank-you');
