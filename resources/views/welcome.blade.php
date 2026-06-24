@@ -1453,11 +1453,17 @@
                 </div>
 
                 <a
-                    href="https://buy.stripe.com/cNi8wPaZL7KK4JF8LQ3sI00?prefilled_promo_code=FAMILIESAREFOREVER"
+                    href="https://buy.stripe.com/test_00waEXfyHeIR0vc7bCcfK00?prefilled_promo_code=FAMILIESAREFOREVER"
                     class="btn btn-gold"
                 >
                     Book This Session
                 </a>
+                {{-- =======<a
+                    href="https://buy.stripe.com/7sY00jfGB3u20HjeQC8so00?prefilled_promo_code=FAMILIESAREFOREVER"
+                    class="btn btn-gold"
+                >
+                    Book This Session
+                </a> ======= --}}
             </div>
         </div>
     </div>
@@ -1527,7 +1533,7 @@
                         <li>Their story on a keepsake flash drive</li>
                     </ul>
 
-                    <a href="https://buy.stripe.com/14AbJ1d7T8OO5NJ8LQ3sI02" class="btn btn-ghost" data-pkg="The Keepsake — Audio ($400)">
+                    <a href="https://buy.stripe.com/bJe3cv0LH1lU61DcIu8so01" class="btn btn-ghost" data-pkg="The Keepsake — Audio ($400)">
                         Choose Keepsake
                     </a>
                 </div>
@@ -1544,7 +1550,7 @@
                         <li>Edited keepsake film on a flash drive</li>
                     </ul>
 
-                    <a href="https://buy.stripe.com/eVq14n9VHe985NJ4vA3sI01" class="btn btn-ghost" data-pkg="The Portrait — Audio & Video ($800)">
+                    <a href="https://buy.stripe.com/28E28r0LH5Ca9dP23Q8so02" class="btn btn-ghost" data-pkg="The Portrait — Audio & Video ($800)">
                         Choose Portrait
                     </a>
                 </div>
@@ -1562,7 +1568,7 @@
                         <li>Edited film &amp; restored photos on a keepsake flash drive</li>
                     </ul>
 
-                    <a href="https://buy.stripe.com/aFa3cv3xje98foj0fk3sI04" class="btn btn-gold" data-pkg="The Chronicle — Two Days & Photo Restoration ($1,200)">
+                    <a href="https://buy.stripe.com/3cIdR9gKFfcK1Ln9wi8so03" class="btn btn-gold" data-pkg="The Chronicle — Two Days & Photo Restoration ($1,200)">
                         Choose Chronicle
                     </a>
                 </div>
@@ -1580,7 +1586,7 @@
                         <li>Plus 4 additional keepsake flash drives to share</li>
                     </ul>
 
-                    <a href="https://buy.stripe.com/8x25kD0l76GG8ZV6DI3sI03" class="btn btn-ghost" data-pkg="The Heirloom — Family & Photo Restoration ($1,800)">
+                    <a href="https://buy.stripe.com/dRm8wPamhaWufCd23Q8so04" class="btn btn-ghost" data-pkg="The Heirloom — Family & Photo Restoration ($1,800)">
                         Choose Heirloom
                     </a>
                 </div>
