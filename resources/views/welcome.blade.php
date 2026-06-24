@@ -1349,7 +1349,7 @@
             </a>
 
             <div class="nav-links" id="navLinks">
-                <a href="#story">The Work</a>
+               
                 <a href="#short-session">30 Min Session</a>
                 <a href="#process">Process</a>
                 <a href="#packages">Packages</a>
